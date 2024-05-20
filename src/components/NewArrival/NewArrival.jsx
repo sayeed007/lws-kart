@@ -1,44 +1,11 @@
+import { getAllNewArrivalWithAverageRatingAndReviewCount } from '@/database/queries';
 import SingleProductCard from '../Common/SingleProductCard';
 
 
-const newArrivalItems = [
-    {
-        name: 'Guyer Chair',
-        image: 'Product1',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'BED KING SIZE',
-        image: 'Product2',
-        oldPrice: 71.00,
-        newPrice: 25.00,
-        rating: 2.2,
-        totalGivenRating: 140
-    },
-    {
-        name: 'BED KING SIZE',
-        image: 'Product3',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'MATTRASS X',
-        image: 'Product4',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    }
 
-];
+const NewArrival = async ({ lang, dictionary }) => {
 
-
-const NewArrival = ({ dictionary }) => {
+    const newArrivalItems = await getAllNewArrivalWithAverageRatingAndReviewCount();
 
     return (
         <>
@@ -51,9 +18,10 @@ const NewArrival = ({ dictionary }) => {
 
                     {newArrivalItems?.map((eachNewItem) => (
                         <SingleProductCard
-                            key={eachNewItem?.name}
+                            key={eachNewItem?.id}
                             eachNewItem={eachNewItem}
                             dictionary={dictionary}
+                            lang={lang}
                         />
                     ))
                     }

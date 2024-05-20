@@ -4,36 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 
-const category = [
-    {
-        name: 'Sofa',
-        image: 'assets/images/icons/sofa.svg'
-    },
-    {
-        name: 'Living Room',
-        image: 'assets/images/icons/terrace.svg'
-    },
-    {
-        name: 'Bedroom',
-        image: 'assets/images/icons/bed.svg'
-    },
-    {
-        name: 'Office',
-        image: 'assets/images/icons/office.svg'
-    },
-    {
-        name: 'Outdoor',
-        image: 'assets/images/icons/outdoor-cafe.svg'
-    },
-    {
-        name: 'Mattress',
-        image: 'assets/images/icons/bed-2.svg'
-    },
-];
 
 
-
-const CategoryInfo = ({ dictionary }) => {
+const CategoryInfo = ({ lang, dictionary, allCategory }) => {
 
 
 
@@ -59,21 +32,21 @@ const CategoryInfo = ({ dictionary }) => {
                     style={{ width: '300px' }}
                 >
 
-                    {category?.map((eachCategory, categoryIndex) => {
+                    {allCategory?.map((eachCategory, categoryIndex) => {
                         return (
                             <Link
                                 key={eachCategory?.name}
-                                href="#"
+                                href={`/${lang}/shop?category=${eachCategory?.name}`}
                                 className="flex items-center px-6 py-3 hover:bg-gray-100 transition">
                                 <Image
                                     src={eachCategory?.image}
                                     alt="sofa"
-                                    className="w-5 h-5 object-contain"
-                                    width={20}
-                                    height={20}
+                                    className="w-8 h-8 object-contain"
+                                    width={30}
+                                    height={30}
                                 />
                                 <span className="ml-6 text-gray-600 text-sm">
-                                    {dictionary?.[eachCategory?.name]}
+                                    {eachCategory?.name}
                                 </span>
                             </Link>
                         )

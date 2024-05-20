@@ -1,0 +1,20 @@
+[
+    {
+        "productId": "6649814c3ad3d3f4adb8906e",
+        "userId": "612345678901234567890123",
+        "price": 30000,
+        "count": 2,
+        "orderTime": 1613969925000,
+        "discount": 20,
+        "status": "Pending"
+    },
+    {
+        "productId": "6649814c3ad3d3f4adb8906f",
+        "userId": "612345678901234567890124",
+        "price": 18500,
+        "count": 1,
+        "orderTime": 1716104367562,
+        "discount": 20,
+        "status": "Delivered"
+    }
+]

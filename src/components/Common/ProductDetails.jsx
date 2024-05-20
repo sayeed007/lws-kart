@@ -1,86 +1,44 @@
-import Image from 'next/image'
-import React from 'react'
-import StarRating from '../Rating/StarRating'
+import { calculateNewPrice } from '@/utils/data-util'
 import Link from 'next/link'
+import StarRating from '../Rating/StarRating'
+import ImageComponent from './ImageComponent'
 import ShareComponent from './ShareComponent'
 
-const ProductDetails = ({ dictionary }) => {
+const ProductDetails = ({ dictionary, productInfo }) => {
+
+
+
+
     return (
         <>
 
 
             {/* product-detail */}
             <div className="container grid grid-cols-2 gap-6">
-                <div>
 
-                    <Image
-                        src="/assets/images/products/product1.jpg"
-                        alt="product"
-                        className="w-full"
-                        width={1000}
-                        height={1000}
-                    />
-
-                    <div className="grid grid-cols-5 gap-4 mt-4">
-
-                        <Image
-                            src="/assets/images/products/product2.jpg"
-                            alt="product2"
-                            className="w-full cursor-pointer border border-primary"
-                            width={1000}
-                            height={1000}
-                        />
-
-                        <Image
-                            src="/assets/images/products/product3.jpg"
-                            alt="product2"
-                            className="w-full cursor-pointer border"
-                            width={1000}
-                            height={1000}
-                        />
-
-                        <Image
-                            src="/assets/images/products/product4.jpg"
-                            alt="product2"
-                            className="w-full cursor-pointer border"
-                            width={1000}
-                            height={1000}
-                        />
-
-                        <Image
-                            src="/assets/images/products/product5.jpg"
-                            alt="product2"
-                            className="w-full cursor-pointer border"
-                            width={1000}
-                            height={1000}
-                        />
-
-                        <Image
-                            src="/assets/images/products/product6.jpg"
-                            alt="product2"
-                            className="w-full cursor-pointer border"
-                            width={1000}
-                            height={1000}
-                        />
-
-                    </div>
-                </div>
+                <ImageComponent
+                    rootProductInfo={JSON.stringify(productInfo)}
+                />
 
                 <div>
 
                     <h2 className="text-3xl font-medium uppercase mb-2">
-                        Italian L Shape Sofa
+                        {productInfo?.name}
                     </h2>
+
+                    <h6 className="text-lg font-medium uppercase mb-2">
+                        ( {productInfo?.shortName})
+                    </h6>
 
                     <div className="flex items-center mb-4">
                         <div className="flex gap-1 text-sm text-yellow-400">
                             <StarRating
-                                originalRating={4}
+                                originalRating={productInfo?.averageRating}
                                 ratingRange={5}
                             />
                         </div>
                         <div className="text-xs text-gray-500 ml-3">
-                            (150 {dictionary?.reviews})
+                            ({productInfo?.reviewCount} {dictionary?.reviews})
                         </div>
                     </div>
 
@@ -90,8 +48,8 @@ const ProductDetails = ({ dictionary }) => {
                             <span>
                                 {dictionary?.availability}:
                             </span>
-                            <span className="text-green-600">
-                                In Stock
+                            <span className={`${productInfo?.availableCount > 0 ? "text-green-600" : "text-red-600"}`}>
+                                {productInfo?.availableCount > 0 ? "Available" : "Not Available"}
                             </span>
                         </p>
 
@@ -100,7 +58,7 @@ const ProductDetails = ({ dictionary }) => {
                                 {dictionary?.brand}:
                             </span>
                             <span className="text-gray-600">
-                                Apex
+                                {productInfo?.brand}
                             </span>
                         </p>
 
@@ -109,7 +67,32 @@ const ProductDetails = ({ dictionary }) => {
                                 {dictionary?.category}:
                             </span>
                             <span className="text-gray-600">
-                                Sofa
+                                {productInfo?.categoryInfo?.name}
+                            </span>
+                        </p>
+
+                        <p className="space-x-2">
+                            <span className="text-gray-800 font-semibold">
+                                {dictionary?.size}:
+                            </span>
+                            <span className="text-gray-600">
+                                {productInfo?.sizeInfo?.visibleName}
+                            </span>
+                        </p>
+
+                        <p className="space-x-2">
+                            <span className="text-gray-800 font-semibold">
+                                {dictionary?.color}:
+                            </span>
+
+                            <span
+                                className="inline-block w-4 h-4 rounded-full"
+                                style={{ backgroundColor: productInfo?.colorInfo?.hex }}
+                            ></span>
+
+
+                            <span className="text-gray-600">
+                                {productInfo?.colorInfo?.name}
                             </span>
                         </p>
 
@@ -118,25 +101,31 @@ const ProductDetails = ({ dictionary }) => {
                                 {dictionary?.sku}:
                             </span>
                             <span className="text-gray-600">
-                                BE45VGRT
+                                {productInfo?.productCode}
                             </span>
                         </p>
 
                     </div>
 
                     <div className="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
-                        <p className="text-xl text-primary font-semibold">
-                            $45.00
-                        </p>
-                        <p className="text-base text-gray-400 line-through">
-                            $55.00
-                        </p>
+                        {productInfo?.discountAvailable ?
+                            <>
+                                <p className="text-xl text-primary font-semibold">
+                                    ${calculateNewPrice(productInfo?.price, productInfo?.discountPercent)}
+                                </p>
+                                <p className="text-sm text-gray-400 line-through">
+                                    ${productInfo?.price}
+                                </p>
+                            </>
+                            :
+                            <p className="text-xl text-primary font-semibold">
+                                ${productInfo?.price}
+                            </p>
+                        }
                     </div>
 
                     <p className="mt-4 text-gray-600">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos eius eum
-                        reprehenderit dolore vel mollitia optio consequatur hic asperiores inventore suscipit, velit
-                        consequuntur, voluptate doloremque iure necessitatibus adipisci magnam porro.
+                        {productInfo?.description}
                     </p>
 
                     <div className="mt-4">
@@ -175,7 +164,7 @@ const ProductDetails = ({ dictionary }) => {
                     <div className="flex gap-3 mt-4">
                         <ShareComponent
                             recipeInfo={
-                                { name: 'ABC' }
+                                { name: productInfo?.name }
                             }
                         />
                     </div>

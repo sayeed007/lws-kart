@@ -1,81 +1,16 @@
 import React from 'react'
 import SingleProductCard from './SingleProductCard';
-
-
-
-const relatedProducts = [
-    {
-        name: 'Guyer Chair',
-        image: 'Product1',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'BED KING SIZE',
-        image: 'Product2',
-        oldPrice: 71.00,
-        newPrice: 25.00,
-        rating: 2.2,
-        totalGivenRating: 140
-    },
-    {
-        name: 'BED KING SIZE',
-        image: 'Product3',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'MATTRASS X',
-        image: 'Product4',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'Guyer Chair',
-        image: 'Product1',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'BED KING SIZE',
-        image: 'Product2',
-        oldPrice: 71.00,
-        newPrice: 25.00,
-        rating: 2.2,
-        totalGivenRating: 140
-    },
-    {
-        name: 'BED KING SIZE',
-        image: 'Product3',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'MATTRASS X',
-        image: 'Product4',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    }
-
-
-];
+import { getCategoryWiseProducts } from '@/database/queries';
 
 
 
 
-const RelatedProducts = ({ dictionary }) => {
+
+const RelatedProducts = async ({ lang, dictionary, productInfo }) => {
+
+    const relatedProductList = await getCategoryWiseProducts(productInfo?.category);
+
+
     return (
         <>
 
@@ -89,11 +24,12 @@ const RelatedProducts = ({ dictionary }) => {
 
                 <div className="grid grid-cols-4 gap-6">
 
-                    {relatedProducts?.map((eachNewItem) => (
+                    {relatedProductList?.map((eachNewItem) => (
                         <SingleProductCard
                             key={eachNewItem?.name}
                             eachNewItem={eachNewItem}
                             dictionary={dictionary}
+                            lang={lang}
                         />
                     ))
                     }

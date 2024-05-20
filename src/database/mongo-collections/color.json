@@ -1,0 +1,37 @@
+[
+    {
+        "name": "Red",
+        "hex": "#FF0000",
+        "description": "A vibrant and bold shade of red"
+    },
+    {
+        "name": "Orange",
+        "hex": "#FFA500",
+        "description": "A bright and energetic shade of orange"
+    },
+    {
+        "name": "Yellow",
+        "hex": "#FFFF00",
+        "description": "A cheerful and sunny shade of yellow"
+    },
+    {
+        "name": "Green",
+        "hex": "#008000",
+        "description": "A refreshing and natural shade of green"
+    },
+    {
+        "name": "Blue",
+        "hex": "#0000FF",
+        "description": "A calming and serene shade of blue"
+    },
+    {
+        "name": "Indigo",
+        "hex": "#4B0082",
+        "description": "A deep and mysterious shade of indigo"
+    },
+    {
+        "name": "Violet",
+        "hex": "#EE82EE",
+        "description": "A rich and luxurious shade of violet"
+    }
+]

@@ -2,6 +2,7 @@
 import React from 'react'
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
 import Link from 'next/link';
+import SocialLogins from '@/components/Auth/SocialLogins';
 
 const LoginPage = async ({ params: { lang } }) => {
 
@@ -103,7 +104,12 @@ const LoginPage = async ({ params: { lang } }) => {
 
 
                     <div className="mt-4 flex gap-4">
-                        <Link
+
+                        <SocialLogins
+                            mode={"login"}
+                        />
+
+                        {/* <Link
                             href="#"
                             className="w-1/2 py-2 text-center text-white bg-blue-800 rounded uppercase font-roboto font-medium text-sm hover:bg-blue-700">
                             facebook
@@ -113,7 +119,7 @@ const LoginPage = async ({ params: { lang } }) => {
                             href="#"
                             className="w-1/2 py-2 text-center text-white bg-red-600 rounded uppercase font-roboto font-medium text-sm hover:bg-red-500">
                             google
-                        </Link>
+                        </Link> */}
 
                     </div>
                     {/* login with */}

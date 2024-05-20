@@ -1,79 +1,14 @@
 import React from 'react'
 import SingleProductCard from '../Common/SingleProductCard';
+import { getAllTrendingWithAverageRatingAndReviewCount } from '@/database/queries';
 
 
 
-const trendingProducts = [
-    {
-        name: 'Guyer Chair',
-        image: 'Product1',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'BED KING SIZE',
-        image: 'Product2',
-        oldPrice: 71.00,
-        newPrice: 25.00,
-        rating: 2.2,
-        totalGivenRating: 140
-    },
-    {
-        name: 'BED KING SIZE',
-        image: 'Product3',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'MATTRASS X',
-        image: 'Product4',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'Guyer Chair',
-        image: 'Product1',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'BED KING SIZE',
-        image: 'Product2',
-        oldPrice: 71.00,
-        newPrice: 25.00,
-        rating: 2.2,
-        totalGivenRating: 140
-    },
-    {
-        name: 'BED KING SIZE',
-        image: 'Product3',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    },
-    {
-        name: 'MATTRASS X',
-        image: 'Product4',
-        oldPrice: 55.00,
-        newPrice: 45.00,
-        rating: 3.2,
-        totalGivenRating: 150
-    }
+const Product = async ({ lang, dictionary }) => {
+
+    const newArrivalItems = await getAllTrendingWithAverageRatingAndReviewCount();
 
 
-];
-
-
-const Product = ({ dictionary }) => {
     return (
         <>
             {/* product */}
@@ -84,11 +19,12 @@ const Product = ({ dictionary }) => {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
 
-                    {trendingProducts?.map((eachNewItem) => (
+                    {newArrivalItems?.map((eachNewItem) => (
                         <SingleProductCard
-                            key={eachNewItem?.name}
+                            key={eachNewItem?.id}
                             eachNewItem={eachNewItem}
                             dictionary={dictionary}
+                            lang={lang}
                         />
                     ))
                     }

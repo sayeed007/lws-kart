@@ -1,0 +1,36 @@
+[{
+  "_id": {
+    "$oid": "6649b02f87452f0159733478"
+  },
+  "productId": {
+    "$oid": "6649814c3ad3d3f4adb8906e"
+  },
+  "userId": {
+    "$oid": "612345678901234567890123"
+  },
+  "price": 30000,
+  "count": 2,
+  "orderTime": {
+    "$numberLong": "1613969925000"
+  },
+  "discount": 20,
+  "status": "Pending"
+},
+{
+  "_id": {
+    "$oid": "6649b02f87452f0159733479"
+  },
+  "productId": {
+    "$oid": "6649814c3ad3d3f4adb8906f"
+  },
+  "userId": {
+    "$oid": "612345678901234567890124"
+  },
+  "price": 18500,
+  "count": 1,
+  "orderTime": {
+    "$numberLong": "1716104367562"
+  },
+  "discount": 20,
+  "status": "Delivered"
+}]

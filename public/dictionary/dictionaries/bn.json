@@ -47,6 +47,7 @@
   "categories": "বিভাগসমূহ",
   "price": "মূল্য",
   "size": "আকার",
+  "color": "রং",
   "checkout": "চেকআউট",
   "firstName": "প্রথম নাম",
   "lastName": "শেষ নাম",

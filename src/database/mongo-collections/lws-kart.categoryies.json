@@ -1,0 +1,45 @@
+[{
+  "_id": {
+    "$oid": "664975ab3ad3d3f4adb89062"
+  },
+  "name": "Bed",
+  "description": "A single bed for bachelor or a double bed for the couple - All are available here. Whether you crave a designer wooden bed or a minimalist one, beds need to strike the proper balance between style and luxury. Our beds are perfect for sleeping or when you both need more room to stretch. Some of our beds also have smart storage systems to keep extra pillows and quilts. And guests are always welcome to remain overnight, with our collection of sofa-bedss",
+  "image": "https://admin.regalfurniturebd.com/storage/uploads/fullsize/2021-03/500-x-660-h.jpg",
+  "totalProductCount": 13
+},
+{
+  "_id": {
+    "$oid": "664975ab3ad3d3f4adb89063"
+  },
+  "name": "Bed Side Table",
+  "description": "Bedside tables are unrecognized heroes, keeping your nighttime essentials within reach. Ours come in quite a few designs, so you can comfortably find a bedside table to match your other bedroom appliances. Some have doors or lockers where you can charge your phone and keep bedtime necessities too.",
+  "image": "https://admin.regalfurniturebd.com/storage/uploads/fullsize/2021-05/500-x-660-a.jpg",
+  "totalProductCount": 10
+},
+{
+  "_id": {
+    "$oid": "664975ab3ad3d3f4adb89064"
+  },
+  "name": "Almirah",
+  "description": "Almirah with Locker",
+  "image": "https://admin.regalfurniturebd.com/storage/uploads/fullsize/2021-03/500-x-660-c.jpg",
+  "totalProductCount": 13
+},
+{
+  "_id": {
+    "$oid": "664975ab3ad3d3f4adb89065"
+  },
+  "name": "Dressing Table",
+  "description": "For someone with a lot of appliances – whether that means make-up, jewelry, ties or Cosmetics – finding the perfect place to store, display, and classify your items can be catchy! Regal’s dressing table collection is smart, classy, and functional. Our dressing tables have plenty of space for your cosmetics and styling products. The drawers are deep and smooth running with stops to prevent them from being dragged out when you are in a hurry. Our collection comes with a glass and has accessible hooks on the side. Regal dressing table is designed to keep your dressing needs and necessary stuff secure.",
+  "image": "https://admin.regalfurniturebd.com/storage/uploads/fullsize/2022-01/dressing-table13.jpg",
+  "totalProductCount": 12
+},
+{
+  "_id": {
+    "$oid": "664975ab3ad3d3f4adb89066"
+  },
+  "name": "Mattress",
+  "description": "",
+  "image": "https://admin.regalfurniturebd.com/storage/uploads/fullsize/2023-07/catagory-banner.jpg",
+  "totalProductCount": 12
+}]

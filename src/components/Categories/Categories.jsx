@@ -1,44 +1,14 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
 
-import Category1 from '../../../public/assets/images/category/category-1.jpg';
-import Category2 from '../../../public/assets/images/category/category-2.jpg';
-import Category3 from '../../../public/assets/images/category/category-3.jpg';
-import Category4 from '../../../public/assets/images/category/category-4.jpg';
-import Category5 from '../../../public/assets/images/category/category-5.jpg';
-import Category6 from '../../../public/assets/images/category/category-6.jpg';
+import { getAllCategories } from '@/database/queries';
 
 
-const category = [
-    {
-        name: 'Bedroom',
-        image: Category1
-    },
-    {
-        name: 'Living Room',
-        image: Category2
-    },
-    {
-        name: 'Kitchen',
-        image: Category3
-    },
-    {
-        name: 'Office',
-        image: Category4
-    },
-    {
-        name: 'Outdoor',
-        image: Category5
-    },
-    {
-        name: 'Mattress',
-        image: Category6
-    },
-];
 
+const Categories = async ({ lang, dictionary }) => {
 
-const Categories = ({ dictionary }) => {
+    const allCategory = await getAllCategories();
+
     return (
         <>
             {/* categories */}
@@ -49,11 +19,11 @@ const Categories = ({ dictionary }) => {
 
                 <div className="grid grid-cols-3 gap-3">
 
-                    {category?.map((eachCategory, categoryIndex) => {
+                    {allCategory?.map((eachCategory, categoryIndex) => {
                         return (
                             <div
                                 className="relative rounded-sm overflow-hidden group"
-                                key={eachCategory?.name}
+                                key={eachCategory?.id}
                             >
                                 <Image
                                     src={eachCategory?.image}
@@ -63,9 +33,9 @@ const Categories = ({ dictionary }) => {
                                     height={1000}
                                 />
                                 <Link
-                                    href="#"
+                                    href={`/${lang}/shop?category=${eachCategory?.name}`}
                                     className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-xl text-white font-roboto font-medium group-hover:bg-opacity-60 transition">
-                                    {dictionary?.[eachCategory?.name]}
+                                    {eachCategory?.name}
                                 </Link>
                             </div>
                         )

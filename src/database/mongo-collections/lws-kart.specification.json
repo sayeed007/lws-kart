@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "6648f50a3ad3d3f4adb8903d"
+  },
+  "description": "Weight: 1.5 lbs"
+},
+{
+  "_id": {
+    "$oid": "6648f50a3ad3d3f4adb8903c"
+  },
+  "description": "Dimensions: 10 x 5 x 2 inches"
+},
+{
+  "_id": {
+    "$oid": "6648f50a3ad3d3f4adb8903e"
+  },
+  "description": "Material: Stainless steel"
+}]

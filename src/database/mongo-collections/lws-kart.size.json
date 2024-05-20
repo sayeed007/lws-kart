@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "6649747e3ad3d3f4adb8905f"
+  },
+  "sizeName": "Large",
+  "visibleName": "L",
+  "description": "Size suitable for large individuals"
+},
+{
+  "_id": {
+    "$oid": "6649747e3ad3d3f4adb8905d"
+  },
+  "sizeName": "Small",
+  "visibleName": "S",
+  "description": "Size suitable for small individuals"
+},
+{
+  "_id": {
+    "$oid": "6649747e3ad3d3f4adb8905e"
+  },
+  "sizeName": "Medium",
+  "visibleName": "M",
+  "description": "Size suitable for average individuals"
+},
+{
+  "_id": {
+    "$oid": "6649747e3ad3d3f4adb89060"
+  },
+  "sizeName": "Extra Large",
+  "visibleName": "XL",
+  "description": "Size suitable for extra-large individuals"
+}]

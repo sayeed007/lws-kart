@@ -1,0 +1,56 @@
+[{
+  "_id": {
+    "$oid": "664974123ad3d3f4adb89055"
+  },
+  "name": "Red",
+  "hex": "#FF0000",
+  "description": "A vibrant and bold shade of red"
+},
+{
+  "_id": {
+    "$oid": "664974123ad3d3f4adb89056"
+  },
+  "name": "Orange",
+  "hex": "#FFA500",
+  "description": "A bright and energetic shade of orange"
+},
+{
+  "_id": {
+    "$oid": "664974123ad3d3f4adb89058"
+  },
+  "name": "Green",
+  "hex": "#008000",
+  "description": "A refreshing and natural shade of green"
+},
+{
+  "_id": {
+    "$oid": "664974123ad3d3f4adb89059"
+  },
+  "name": "Blue",
+  "hex": "#0000FF",
+  "description": "A calming and serene shade of blue"
+},
+{
+  "_id": {
+    "$oid": "664974123ad3d3f4adb8905b"
+  },
+  "name": "Violet",
+  "hex": "#EE82EE",
+  "description": "A rich and luxurious shade of violet"
+},
+{
+  "_id": {
+    "$oid": "664974123ad3d3f4adb89057"
+  },
+  "name": "Yellow",
+  "hex": "#FFFF00",
+  "description": "A cheerful and sunny shade of yellow"
+},
+{
+  "_id": {
+    "$oid": "664974123ad3d3f4adb8905a"
+  },
+  "name": "Indigo",
+  "hex": "#4B0082",
+  "description": "A deep and mysterious shade of indigo"
+}]

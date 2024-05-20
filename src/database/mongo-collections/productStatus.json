@@ -1,0 +1,10 @@
+[
+    {
+        "statusName": "Available",
+        "description": "Product is currently available for purchase"
+    },
+    {
+        "statusName": "Out of Stock",
+        "description": "Product is currently out of stock"
+    }
+]

@@ -17,6 +17,7 @@ export default async function HomePage({ params: { lang } }) {
     <>
 
       <HeroBanner
+        lang={lang}
         dictionary={dictionary}
       />
 
@@ -25,16 +26,19 @@ export default async function HomePage({ params: { lang } }) {
       />
 
       <Categories
+        lang={lang}
         dictionary={dictionary}
       />
 
       <NewArrival
+        lang={lang}
         dictionary={dictionary}
       />
 
       <Ads />
 
       <Product
+        lang={lang}
         dictionary={dictionary}
       />
 
