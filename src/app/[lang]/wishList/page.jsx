@@ -1,5 +1,5 @@
 import BreadCrumb from '@/components/Common/BreadCrumb';
-import SingleWishEdProduct from '@/components/WishList/SingleWishEdProduct';
+import WishListContainer from '@/components/WishList/WishListContainer';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
 const WishListPage = async ({ params: { lang } }) => {
@@ -26,16 +26,9 @@ const WishListPage = async ({ params: { lang } }) => {
                 {/* wishlist */}
                 <div className="mx-auto space-y-4 max-w-6xl">
 
-
-                    {[1, 2, 3, 4]?.map((wishedProduct) => {
-                        return (
-                            <SingleWishEdProduct
-                                dictionary={dictionary}
-                                key={wishedProduct}
-                            />
-                        )
-                    })
-                    }
+                    <WishListContainer
+                        dictionary={dictionary}
+                    />
 
                 </div>
                 {/* wishlist */}

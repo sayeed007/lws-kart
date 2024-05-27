@@ -7,16 +7,3 @@ const wishlistSchema = new Schema({
 });
 
 export const wishlistModel = mongoose.models.wishlist ?? mongoose.model("wishlist", wishlistSchema);
-
-const sampleWishlistData = [
-    {
-        productId: "612345678901234567890123",
-        userId: "612345678901234567890123",
-        addedTime: new Date()
-    },
-    {
-        productId: "612345678901234567890124",
-        userId: "612345678901234567890123",
-        addedTime: new Date()
-    }
-];

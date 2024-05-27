@@ -5,6 +5,8 @@ import HeroBanner from "@/components/HeroSection/HeroBanner";
 import NewArrival from "@/components/NewArrival/NewArrival";
 import Product from "@/components/Product/Product";
 import { getDictionary } from "../../../public/dictionary/dictionaries";
+import { auth } from "../../../auth";
+import { getUserAccountByEmail, getUserByEmail } from "@/database/queries";
 
 
 

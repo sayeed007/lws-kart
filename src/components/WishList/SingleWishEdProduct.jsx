@@ -1,18 +1,21 @@
+import { calculateNewPrice } from '@/utils/data-util'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import DeleteSingleWishItem from './DeleteSingleWishItem'
 
-const SingleWishEdProduct = ({ dictionary }) => {
+const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
+
+
     return (
         <>
             <div className="flex items-center justify-between border gap-6 p-4 border-gray-200 rounded">
 
                 <div className="w-28">
                     <Image
-                        src="/assets/images/products/product6.jpg"
-                        alt="product 6"
+                        src={wishedProduct?.images?.[0]}
+                        alt={wishedProduct?.name}
                         className="w-full"
                         width={1000}
                         height={1000}
@@ -21,18 +24,27 @@ const SingleWishEdProduct = ({ dictionary }) => {
 
                 <div className="w-1/3">
                     <h2 className="text-gray-800 text-xl font-medium uppercase">
-                        Italian L shape
+                        {wishedProduct?.name}
                     </h2>
                     <p className="text-gray-500 text-sm">
                         {dictionary?.availability}:
-                        <span className="text-green-600">
-                            In Stock
-                        </span>
+
+                        {wishedProduct?.availableCount > 0 ?
+                            <span className="text-green-600">
+                                In Stock
+                            </span>
+                            :
+                            <span className="text-red-600">
+                                Out of Stock
+                            </span>
+                        }
                     </p>
                 </div>
 
                 <div className="text-primary text-lg font-semibold">
-                    $320.00
+                    <p>
+                        ${calculateNewPrice(wishedProduct?.price, wishedProduct?.discountPercent)}
+                    </p>
                 </div>
 
                 <Link href="#"
@@ -40,14 +52,11 @@ const SingleWishEdProduct = ({ dictionary }) => {
                     {dictionary?.addToCart}
                 </Link>
 
-                <div className="flex text-gray-600 cursor-pointer hover:text-primary">
-                    <FontAwesomeIcon
-                        icon={faTrash}
-                        width={20}
-                        height={20}
-                        color={'#FD3D57'}
-                    />
-                </div>
+
+                <DeleteSingleWishItem
+                    wishedProduct={wishedProduct}
+                />
+
             </div>
         </>
     )

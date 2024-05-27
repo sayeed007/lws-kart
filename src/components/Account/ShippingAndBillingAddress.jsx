@@ -1,40 +1,86 @@
-import Link from 'next/link'
+"use client"
 
-const ShippingAndBillingAddress = ({ lang, userId, type }) => {
+
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import AddOrEditAddress from './AddOrEditAddress';
+import { useAuth } from '@/hooks/useAuth';
+
+const ShippingAndBillingAddress = ({ lang, dictionary, userId, type, userAddress, refetchData, setRefetchData }) => {
+
+    const { auth } = useAuth();
+    console.log(auth);
+
+    const [modalVisible, setModalVisible] = useState(false);
+
+    console.log(userAddress);
+
     return (
         <>
+
+            {modalVisible &&
+                <AddOrEditAddress
+                    dictionary={dictionary}
+                    previousData={userAddress}
+                    type={type}
+                    userId={userId}
+                    setModalVisible={setModalVisible}
+                    modalVisible={modalVisible}
+                    refetchData={refetchData}
+                    setRefetchData={setRefetchData}
+                />
+
+            }
+
             <div className="shadow rounded bg-white px-4 pt-6 pb-8">
                 <div className="flex items-center justify-between mb-4">
 
-                    <h3 className="font-medium text-gray-800 text-lg">
-                        {type} Address
+                    <h3 className="font-medium text-gray-800 text-lg cursor-pointer">
+                        {type === 'shippingAddress' ? 'Shipping' : 'Billing'} Address
                     </h3>
 
-                    <Link
-                        href={`/${lang}/account/${userId}/${'edit' + type + 'Address'}`}
-                        className="text-primary">
-                        Edit
-                    </Link>
+                    <div
+                        onClick={() => setModalVisible(true)}
+                    >
+                        {userAddress?.[type]?.division ?
+                            <span className="text-primary">
+                                Edit
+                            </span>
+                            :
+                            <span className="text-blue-500">
+                                Add
+                            </span>
+                        }
+                    </div>
 
                 </div>
 
                 <div className="space-y-1">
 
                     <h4 className="text-gray-700 font-medium">
-                        John Doe
+                        {auth?.sessionInfo?.user?.name}
                     </h4>
 
-                    <p className="text-gray-800">
-                        Medan, North Sumatera
-                    </p>
 
-                    <p className="text-gray-800">
-                        20371
-                    </p>
 
-                    <p className="text-gray-800">
-                        0811 8877 988
-                    </p>
+                    {userAddress?.[type]?.division ?
+                        Object.entries(userAddress?.[type])?.map(([key, value], index) => {
+                            if (key !== '_id') {
+                                return (
+                                    <p
+                                        className="text-gray-800"
+                                        key={key}
+                                    >
+                                        {dictionary?.[key]}:  <span className='font-bold'>{value ? value : 'N/A'}</span>
+                                    </p>
+                                )
+                            }
+                        })
+                        :
+                        <div className='font-bold'>
+                            You do not add address yet.
+                        </div>
+                    }
 
                 </div>
             </div>

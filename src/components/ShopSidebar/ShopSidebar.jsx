@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import FilterByCategory from './FilterByCategory';
 import FilterByColor from './FilterByColor';

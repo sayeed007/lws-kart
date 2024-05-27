@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 
 import { faSearch } from '@fortawesome/free-solid-svg-icons'

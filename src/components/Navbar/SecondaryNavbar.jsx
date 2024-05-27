@@ -2,6 +2,7 @@ import Link from 'next/link';
 import CategoryInfo from './CategoryInfo';
 import NavText from './NavText';
 import { getAllCategories } from '@/database/queries';
+import LogInDetails from './LogInDetails';
 
 const SecondaryNavbar = async ({ lang, dictionary }) => {
 
@@ -66,11 +67,12 @@ const SecondaryNavbar = async ({ lang, dictionary }) => {
 
                         </div>
 
-                        <Link
-                            href={`/${lang}/login`}
-                            className={`text-gray-200 hover:text-white transition`}>
-                            {dictionary?.log_in}
-                        </Link>
+                        <LogInDetails
+                            lang={lang}
+                            dictionary={dictionary}
+                        />
+
+
 
                     </div>
                 </div>

@@ -87,5 +87,15 @@
   "quantity": "পরিমাণ",
   "wishList": "ইচ্ছা তালিকা",
   "productDetails": "পণ্যের বিবরণ",
-  "relatedProducts": "সম্পর্কিত পণ্য"
+  "relatedProducts": "সম্পর্কিত পণ্য",
+  "house": "বাড়ি",
+  "road": "রাস্তা",
+  "division": "বিভাগ",
+  "district": "জেলা",
+  "thana": "থানা",
+  "postOffice": "পোস্ট অফিস",
+  "village": "গ্রাম",
+  "mobile": "মোবাইল",
+  "note": "নোট",
+  "submit": "জমা দিন"
 }

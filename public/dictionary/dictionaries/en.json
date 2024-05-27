@@ -87,5 +87,15 @@
   "quantity": "Quantity",
   "wishList": "Wishlist",
   "productDetails": "Product Details",
-  "relatedProducts": "Related Products"
+  "relatedProducts": "Related Products",
+  "house": "House",
+  "road": "Road",
+  "division": "Division",
+  "district": "District",
+  "thana": "Thana",
+  "postOffice": "Post Office",
+  "village": "Village",
+  "mobile": "Mobile",
+  "note": "Note",
+  "submit": "Submit"
 }

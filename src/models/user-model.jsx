@@ -12,25 +12,3 @@ const userSchema = new Schema({
 
 
 export const userModel = mongoose.models.user ?? mongoose.model("user", userSchema);
-
-
-const sampleUsersData = [
-  {
-    name: "John Doe",
-    email: "john@example.com",
-    mobileNumber: "1234567890",
-    username: "johndoe",
-    password: "password123",
-    gender: "Male",
-    photo: "https://example.com/profile.jpg"
-  },
-  {
-    name: "Jane Smith",
-    email: "jane@example.com",
-    mobileNumber: "9876543210",
-    username: "janesmith",
-    password: "password456",
-    gender: "Female",
-    photo: "https://example.com/profile2.jpg"
-  }
-];

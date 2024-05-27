@@ -1,6 +1,7 @@
 import PersonalInfo from "@/components/Account/PersonalInfo";
-import ShippingAndBillingAddress from "@/components/Account/ShippingAndBillingAddress";
+import UserAddress from "@/components/Account/UserAddress";
 import BreadCrumb from "@/components/Common/BreadCrumb";
+import { getUserAddress } from "@/database/queries";
 import { getDictionary } from "../../../../../public/dictionary/dictionaries";
 
 
@@ -8,11 +9,8 @@ const AccountPage = async ({ params: { lang, userId } }) => {
 
     const dictionary = await getDictionary(lang);
 
-    console.log(userId);
-
     return (
         <>
-
 
             {/* breadcrumb */}
             <BreadCrumb
@@ -20,7 +18,6 @@ const AccountPage = async ({ params: { lang, userId } }) => {
                 route={dictionary?.account}
             />
             {/* breadcrumb */}
-
 
 
             {/* account wrapper */}
@@ -36,18 +33,11 @@ const AccountPage = async ({ params: { lang, userId } }) => {
                     />
 
 
-                    {/* SHIPPING ADDRESS */}
-                    <ShippingAndBillingAddress
+                    {/* USER ADDRESS */}
+                    <UserAddress
                         lang={lang}
+                        dictionary={dictionary}
                         userId={userId}
-                        type={'Shipping'}
-                    />
-
-                    {/* BILLING ADDRESS */}
-                    <ShippingAndBillingAddress
-                        lang={lang}
-                        userId={userId}
-                        type={'Billing'}
                     />
 
                 </div>

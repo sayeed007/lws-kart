@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 
 import { faArrowRight, faClose, faInfoCircle, faTh } from '@fortawesome/free-solid-svg-icons';

@@ -1,4 +1,5 @@
 
+import AuthProvider from "@/providers/AuthProvider";
 import "../../public/assets/css/main.css";
 import "./globals.css";
 
@@ -20,14 +21,17 @@ export default async function RootLayout({ children }) {
 
 
       <body>
-        <div id="modal-root" />
+        <AuthProvider>
+          <div id="modal-root"></div>
 
-        {/*  Begin Main  */}
-        <main>
+          {/*  Begin Main  */}
+          <main>
 
-          {children}
+            {children}
 
-        </main>
+          </main>
+        </AuthProvider>
+
       </body>
     </html>
   );

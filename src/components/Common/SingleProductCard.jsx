@@ -1,23 +1,14 @@
 
 
-import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { calculateNewPrice } from '@/utils/data-util';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from 'next/image';
 import Link from 'next/link';
-import Product1 from '../../../public/assets/images/products/product1.jpg';
-import Product2 from '../../../public/assets/images/products/product2.jpg';
-import Product3 from '../../../public/assets/images/products/product3.jpg';
-import Product4 from '../../../public/assets/images/products/product4.jpg';
 import StarRating from '../Rating/StarRating';
-import { calculateNewPrice } from '@/utils/data-util';
+import AddToWishListFromImageCard from './AddToWishListFromImageCard';
 
 
-const nameWiseImageMap = {
-    'Product1': Product1,
-    'Product2': Product2,
-    'Product3': Product3,
-    'Product4': Product4,
-};
 
 
 const SingleProductCard = (props) => {
@@ -54,17 +45,10 @@ const SingleProductCard = (props) => {
 
 
                         {/* ADD TO WISHED LIST */}
-                        <Link
-                            href="#"
-                            className="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
-                            title="add to wishlist">
-                            <FontAwesomeIcon
-                                icon={faHeart}
-                                width={16}
-                                height={16}
-                                color={'#FD3D57'}
-                            />
-                        </Link>
+                        <AddToWishListFromImageCard
+                            productId={props?.eachNewItem?.id}
+                        />
+
 
                     </div>
 

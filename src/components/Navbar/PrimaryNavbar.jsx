@@ -43,6 +43,7 @@ function PrimaryNavbar({ dictionary, lang }) {
                         {/* WISHLIST */}
                         <WishList
                             dictionary={dictionary}
+                            lang={lang}
                         />
 
                         {/* CART */}

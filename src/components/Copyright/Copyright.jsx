@@ -15,9 +15,9 @@ const Copyright = ({ dictionary }) => {
                         <Image
                             src={Methods}
                             alt="methods"
-                            className="h-5"
+                            // className="h-5"
                             width={250}
-                            height={50}
+                            height={'auto'}
                         />
                     </div>
                 </div>
