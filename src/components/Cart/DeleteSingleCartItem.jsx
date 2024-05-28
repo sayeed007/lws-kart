@@ -8,7 +8,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
 
-const DeleteSingleWishItem = ({ wishedProduct }) => {
+const DeleteSingleCartItem = ({ cartProduct }) => {
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
@@ -21,7 +21,7 @@ const DeleteSingleWishItem = ({ wishedProduct }) => {
             setLoading(true);
             setError(null);
 
-            const response = await axios.delete(`/api/auth/wishlist/${wishedProduct?.wishlistData?.id}`, {
+            const response = await axios.delete(`/api/auth/cart/${cartProduct?.cartData?.id}`, {
                 headers: {
                     'Authorization': `Bearer ${modifiedAuth?.loggedInUserInfo?.access_token}`, // Replace YOUR_TOKEN_HERE with the user's bearer token
                     'Content-Type': 'application/json'
@@ -33,15 +33,15 @@ const DeleteSingleWishItem = ({ wishedProduct }) => {
             if (response?.data) {
                 setModifiedAuth({
                     ...modifiedAuth,
-                    wishlistItems: [
-                        ...modifiedAuth?.wishlistItems?.filter((wishListItem) => wishListItem?.wishlistData?.id !== wishedProduct?.wishlistData?.id)
+                    cartItems: [
+                        ...modifiedAuth?.cartItems?.filter((cartItem) => cartItem?.cartData?.id !== cartProduct?.cartData?.id)
                     ]
                 });
 
                 Cookies.set('auth', JSON.stringify({
                     ...modifiedAuth,
-                    wishlistItems: [
-                        ...modifiedAuth?.wishlistItems?.filter((wishListItem) => wishListItem?.wishlistData?.id !== wishedProduct?.wishlistData?.id)
+                    cartItems: [
+                        ...modifiedAuth?.cartItems?.filter((cartItem) => cartItem?.cartData?.id !== cartProduct?.cartData?.id)
                     ]
                 }));
             } else {
@@ -61,6 +61,7 @@ const DeleteSingleWishItem = ({ wishedProduct }) => {
             <div
                 className="flex text-gray-600 cursor-pointer hover:text-primary"
                 onClick={() => removeFromWishlist()}
+                title={'Delete from cart'}
             >
                 <FontAwesomeIcon
                     icon={faTrash}
@@ -73,4 +74,4 @@ const DeleteSingleWishItem = ({ wishedProduct }) => {
     )
 }
 
-export default DeleteSingleWishItem
+export default DeleteSingleCartItem

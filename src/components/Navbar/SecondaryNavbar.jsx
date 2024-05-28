@@ -3,6 +3,7 @@ import CategoryInfo from './CategoryInfo';
 import NavText from './NavText';
 import { getAllCategories } from '@/database/queries';
 import LogInDetails from './LogInDetails';
+import { auth } from '../../../auth';
 
 const SecondaryNavbar = async ({ lang, dictionary }) => {
 

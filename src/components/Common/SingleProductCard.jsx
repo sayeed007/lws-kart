@@ -7,9 +7,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import StarRating from '../Rating/StarRating';
 import AddToWishListFromImageCard from './AddToWishListFromImageCard';
+import AddToCartFromProductCard from './AddToCartFromProductCard';
 
 
-
+// key = { eachNewItem?.id }
+// eachNewItem = { eachNewItem }
+// dictionary = { dictionary }
+// lang = { lang }
 
 const SingleProductCard = (props) => {
 
@@ -98,10 +102,10 @@ const SingleProductCard = (props) => {
                 </div>
 
                 {/* ADD TO CART FUNCTIONALITY */}
-                <Link href="#"
-                    className="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
-                    {props?.dictionary?.addToCart}
-                </Link>
+                <AddToCartFromProductCard
+                    dictionary={props?.dictionary}
+                    itemInfo={props?.eachNewItem}
+                />
             </div>
         </>
     )

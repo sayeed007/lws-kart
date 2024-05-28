@@ -5,38 +5,23 @@ import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { AuthContext } from '@/contexts';
 import axios from 'axios';
+// import { auth } from "../../auth";
 
 export default function AuthProvider({ children }) {
-    const [auth, setAuth] = useState(null);
+    // const session = await auth();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('/api/auth/userSession');
-
-                // Handle response.data as needed
-                Cookies.set('auth', JSON.stringify(response.data));
-                setAuth(response.data);
-            } catch (error) {
-                console.error('Fetch error:', error);
-            }
-        };
-
-        fetchData();
-    }, []); // Empty dependency array ensures useEffect runs only once on component mount
-
-
+    const [modifiedAuth, setModifiedAuth] = useState(null);
 
     useEffect(() => {
         let authData = null;
         if (typeof window !== 'undefined' && Cookies?.get('auth')) {
             authData = JSON?.parse(Cookies?.get('auth'));
-            setAuth(authData);
+            setModifiedAuth(authData);
         }
     }, []);
 
     return (
-        <AuthContext.Provider value={{ auth, setAuth }}>
+        <AuthContext.Provider value={{ modifiedAuth, setModifiedAuth }}>
             {children}
         </AuthContext.Provider>
     )

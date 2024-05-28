@@ -1,16 +1,16 @@
-import { addToUserAddress } from "@/database/queries";
+import { addToCartList, addToWishlist, removeFromWishlist } from "@/database/queries";
 
 export const POST = async (request) => {
   try {
 
     const requestData = await request.json();
+    console.log(requestData);
 
-    const userAddress = requestData?.userAddress;
+    // Add productId to user's cart
+    const createdCartItem = await addToCartList(requestData);
+    console.log(createdCartItem);
 
-    // 
-    const createdAddress = await addToUserAddress(userAddress);
-
-    return new Response(JSON.stringify(createdAddress), {
+    return new Response(JSON.stringify(createdCartItem), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
@@ -26,7 +26,3 @@ export const POST = async (request) => {
     });
   }
 };
-
-
-
-

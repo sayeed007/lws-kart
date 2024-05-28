@@ -97,5 +97,11 @@
   "village": "Village",
   "mobile": "Mobile",
   "note": "Note",
-  "submit": "Submit"
+  "submit": "Submit",
+  "name": "Name",
+  "username": "Username",
+  "gender": "Gender",
+  "male": "Male",
+  "female": "Female",
+  "photo": "Photo"
 }

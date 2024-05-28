@@ -7,9 +7,13 @@ import FilterByText from "../ShopSidebar/FilterByText";
 import AccountInfo from "./AccountInfo";
 import Cart from "./Cart";
 import WishList from "./WishList";
+import { auth } from "../../../auth";
 
 
-function PrimaryNavbar({ dictionary, lang }) {
+async function PrimaryNavbar({ dictionary, lang }) {
+
+    const session = await auth();
+    console.log(session);
 
     return (
         <>
@@ -49,6 +53,7 @@ function PrimaryNavbar({ dictionary, lang }) {
                         {/* CART */}
                         <Cart
                             dictionary={dictionary}
+                            lang={lang}
                         />
 
 
@@ -56,6 +61,7 @@ function PrimaryNavbar({ dictionary, lang }) {
                         <AccountInfo
                             lang={lang}
                             dictionary={dictionary}
+                            session={session}
                         />
 
                     </div>

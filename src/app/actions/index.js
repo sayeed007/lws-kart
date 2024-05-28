@@ -1,15 +1,32 @@
 "use server"
 
-import { signIn } from "../../../auth";
+import { getUserAccountByUserId } from "@/database/queries";
+import { auth, signIn } from "../../../auth";
 
 export async function login(formData) {
     try {
         const response = await signIn("credentials", {
-            email: formData.get("email"),
-            password: formData.get("password"),
+            ...formData,
             redirect: false
-        })
-        return response;
+        });
+
+        if (response) {
+            console.log(response);
+
+            const session = await auth();
+            console.log(session);
+
+            // Fetch user account
+            const userInfo = await getUserAccountByUserId(session?.user?.id);
+
+            console.log(session, userInfo, "After Log In response");
+
+
+            return {
+                sessionInfo: session,
+                wishlistItems: userInfo.wishlistItems
+            };
+        }
     } catch (error) {
         throw new Error(error);
     }

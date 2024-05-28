@@ -440,5 +440,5 @@ const modifiedData = originalData?.map(data => {
     })
 });
 
-console.log(modifiedData)
+console.dir(modifiedData)
 

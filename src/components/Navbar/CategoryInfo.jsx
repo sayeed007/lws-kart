@@ -14,7 +14,6 @@ const CategoryInfo = ({ lang, dictionary, allCategory }) => {
         <>
             <div className="px-8 py-4 bg-primary md:flex items-center cursor-pointer relative group hidden">
                 <span className="text-white">
-                    <i className="fa-solid fa-bars"></i>
                     <FontAwesomeIcon
                         icon={faBars}
                         width={24}

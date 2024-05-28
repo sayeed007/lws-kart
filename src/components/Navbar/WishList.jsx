@@ -1,18 +1,21 @@
 "use client";
 
-import { useAuth } from '@/hooks/useAuth';
+import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
 const WishList = ({ lang, dictionary }) => {
 
-    const { auth } = useAuth();
+    const { modifiedAuth } = useModifiedAuth();
 
     return (
         <>
-            <Link href={auth ? `/${lang}/wishList` : `/${lang}/login`}
-                className="flex justify-center items-center text-center text-gray-700 hover:text-primary transition relative mx-3">
+            <Link
+                href={modifiedAuth ? `/${lang}/wishList` : `/${lang}/login`}
+                className="flex justify-center items-center text-center text-gray-700 hover:text-primary transition relative mx-3"
+                title="Wish List"
+            >
 
                 <div className="text-2xl">
                     <FontAwesomeIcon
@@ -29,7 +32,7 @@ const WishList = ({ lang, dictionary }) => {
 
                 <div
                     className="absolute right-[-12px] top-[-10px] w-4 h-4 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                    {auth?.wishlistItems?.length ? auth?.wishlistItems?.length : 0}
+                    {modifiedAuth?.wishlistItems?.length ? modifiedAuth?.wishlistItems?.length : 0}
                 </div>
             </Link>
         </>

@@ -1,5 +1,6 @@
 
 
+import { cartModel } from "@/models/cart-model";
 import { categoryModel } from "@/models/category-model";
 import { colorModel } from "@/models/color-model";
 import { orderDetailsModel } from "@/models/order-details-model";
@@ -374,23 +375,48 @@ export async function getUserByEmail(email) {
 };
 
 
-export async function getUserAccountByEmail(email) {
+// export async function getUserAccountByEmail(email) {
+//     try {
+//         // Find the user by email
+//         // const user = await userModel.findOne({ email }).lean();
+
+//         // if (!user) {
+//         //     throw new Error('User not found');
+//         // }
+
+//         // Find the account associated with the user
+//         // const account = await accountModel.findOne({ userId: user._id }).lean();
+
+//         // if (!account) {
+//         //     throw new Error('Account not found for this user');
+//         // }
+
+//         const wishlistItems = await wishlistModel.find({ userId: user._id.toString() }).lean();
+
+//         const wishlistItemsDetail = await getWishlistItemsDetail(wishlistItems);
+
+//         // Join the two arrays based on productId from array1 and id from array2
+//         const wishListWithProductData = (await replaceMongoIdInArray(wishlistItems)).map(wishlistData => {
+//             const productData = wishlistItemsDetail.find(product => product.id === wishlistData.productId.toString());
+//             return { ...productData, wishlistData };
+//         });
+
+//         return ({
+//             account: replaceMongoIdInObject(account),
+//             wishlistItems: wishListWithProductData
+//         });
+
+
+//     } catch (error) {
+//         console.error('Error fetching user account by email:', error);
+//         throw error;
+//     }
+// };
+
+export async function getUserAccountByUserId(userId) {
     try {
-        // Find the user by email
-        const user = await userModel.findOne({ email }).lean();
 
-        if (!user) {
-            throw new Error('User not found');
-        }
-
-        // Find the account associated with the user
-        const account = await accountModel.findOne({ userId: user._id }).lean();
-
-        if (!account) {
-            throw new Error('Account not found for this user');
-        }
-
-        const wishlistItems = await wishlistModel.find({ userId: user._id.toString() }).lean();
+        const wishlistItems = await wishlistModel.find({ userId: userId }).lean();
 
         const wishlistItemsDetail = await getWishlistItemsDetail(wishlistItems);
 
@@ -400,9 +426,20 @@ export async function getUserAccountByEmail(email) {
             return { ...productData, wishlistData };
         });
 
+
+        const cartItems = await cartModel.find({ userId: userId }).lean();
+
+        const cartItemsDetail = await getWishlistItemsDetail(cartItems);
+
+        // Join the two arrays based on productId from array1 and id from array2
+        const cartWithProductData = (await replaceMongoIdInArray(cartItems)).map(cartData => {
+            const productData = cartItemsDetail.find(product => product.id === cartData.productId.toString());
+            return { ...productData, cartData };
+        });
+
         return ({
-            account: replaceMongoIdInObject(account),
-            wishlistItems: wishListWithProductData
+            wishlistItems: wishListWithProductData,
+            cartItems: cartWithProductData
         });
 
 
@@ -412,7 +449,7 @@ export async function getUserAccountByEmail(email) {
     }
 };
 
-
+// WISHLIST
 export const addToWishlist = async (userId, productId) => {
     try {
 
@@ -436,6 +473,7 @@ export const addToWishlist = async (userId, productId) => {
 
         const newItemDetails = await getWishlistItemsDetail([{ productId: newItem?.productId }]);
 
+
         const generatedResponse = {
             ...newItemDetails?.[0],
             wishlistData: await replaceMongoIdInObject(newItem)
@@ -450,7 +488,6 @@ export const addToWishlist = async (userId, productId) => {
     }
 };
 
-
 // Function to delete an item from the wishlist in the database
 export const removeFromWishlist = async (wishlistItemId) => {
     try {
@@ -464,13 +501,6 @@ export const removeFromWishlist = async (wishlistItemId) => {
     }
 };
 
-
-
-
-
-
-
-
 // user profile
 export const getUserAddress = async (userId) => {
     try {
@@ -478,8 +508,7 @@ export const getUserAddress = async (userId) => {
         // Delete the item from the database
         const userAddress = await userAddressModel.findOne({ userId }).lean();
 
-        console.log(userAddress);
-
+        // console.log(userAddress);
         return userAddress ? userAddress : {};
     } catch (error) {
         throw new Error('Error getting user address: ' + error.message);
@@ -498,11 +527,8 @@ export const addToUserAddress = async (userGivenAddress) => {
     }
 };
 
-
 export const updateUserAddress = async (addressId, userGivenAddress) => {
     try {
-        console.log(userGivenAddress);
-
         // Find the user address document by addressId
         let userAddress = await userAddressModel.findById(addressId);
 
@@ -526,6 +552,64 @@ export const updateUserAddress = async (addressId, userGivenAddress) => {
         return userAddress ? userAddress.toObject() : {};
     } catch (error) {
         throw new Error('Error updating user address: ' + error.message);
+    }
+};
+
+// CART LIST
+export const addToCartList = async (requestData) => {
+    try {
+
+        console.log(requestData);
+
+        // Check if the product is already in the cart
+        const existingWishlistItem = await cartModel.findOne({ userId: requestData?.userId, productId: requestData?.productId });
+
+        console.log(existingWishlistItem);
+        if (existingWishlistItem) {
+            // If the product is already in the cart, you can handle this scenario based on your requirements.
+            // For example, you might want to update the addedTime or return a message indicating that the product is already in the cart.
+            // Here, I'm just returning without doing anything.
+            return {
+                message: "Product is already in cart.",
+                newItem: null
+            };
+        }
+
+        // If the product is not already in the cart, add it
+        const newItemResponse = await cartModel.create(requestData);
+        console.log(newItemResponse);
+
+        const newItem = newItemResponse.toObject()
+        console.log(newItem);
+
+        const newItemDetails = await getWishlistItemsDetail([{ productId: newItem?.productId }]);
+        console.log(newItemDetails);
+
+        const generatedResponse = {
+            ...newItemDetails?.[0],
+            cartListData: await replaceMongoIdInObject(newItem)
+        };
+
+        console.log(generatedResponse);
+        return {
+            message: "Product added to cart successfully.",
+            newItem: generatedResponse
+        }; // Return the newly created item
+    } catch (error) {
+        throw new Error('Error adding product to cart: ' + error.message);
+    }
+};
+
+// Function to delete an item from the wishlist in the database
+export const removeFromCartList = async (cartId) => {
+    try {
+
+        // Delete the item from the database
+        await cartModel.findByIdAndDelete(cartId);
+
+        return true;
+    } catch (error) {
+        throw new Error('Error deleting item from wishlist: ' + error.message);
     }
 };
 

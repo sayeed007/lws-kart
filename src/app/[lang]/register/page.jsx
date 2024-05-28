@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react'
-import { getDictionary } from '../../../../public/dictionary/dictionaries';
+import RegistrationForm from '@/components/Auth/RegistrationForm';
 import Link from 'next/link';
+import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
 const RegisterPage = async ({ params: { lang } }) => {
 
@@ -23,124 +23,11 @@ const RegisterPage = async ({ params: { lang } }) => {
                         {dictionary?.registerForCustomer}
                     </p>
 
-                    <form action="#" method="post" autocomplete="off">
-
-                        <div className="space-y-2">
-
-                            {/* First Name */}
-                            <div>
-                                <label
-                                    htmlFor="name"
-                                    className="text-gray-600 mb-2 block"
-                                >
-                                    {dictionary?.firstName}
-                                </label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    id="name"
-                                    className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                                    placeholder="fulan"
-                                />
-                            </div>
-
-                            {/* Last Name */}
-                            <div>
-                                <label
-                                    htmlFor="name"
-                                    className="text-gray-600 mb-2 block"
-                                >
-                                    {dictionary?.lastName}
-                                </label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    id="name"
-                                    className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                                    placeholder="fulana"
-                                />
-                            </div>
-
-                            {/* EMAIL */}
-                            <div>
-                                <label
-                                    htmlFor="email"
-                                    className="text-gray-600 mb-2 block">
-                                    {dictionary?.email}
-                                </label>
-
-                                <input
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                                    placeholder="youremail.@domain.com"
-                                />
-                            </div>
-
-                            {/* PASSWORD */}
-                            <div>
-                                <label
-                                    htmlFor="password"
-                                    className="text-gray-600 mb-2 block">
-                                    {dictionary?.password}
-                                </label>
-                                <input
-                                    type="password"
-                                    name="password"
-                                    id="password"
-                                    className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                                    placeholder="*******"
-                                />
-                            </div>
-
-                            {/* CONFIRM PASSWORD */}
-                            <div>
-                                <label
-                                    htmlFor="confirm"
-                                    className="text-gray-600 mb-2 block">
-                                    {dictionary?.confirmPassword}
-                                </label>
-                                <input
-                                    type="password"
-                                    name="confirm"
-                                    id="confirm"
-                                    className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                                    placeholder="*******"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="mt-6">
-                            <div className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    name="aggrement"
-                                    id="aggrement"
-                                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                                />
-                                <label
-                                    htmlFor="aggrement"
-                                    className="text-gray-600 ml-3 cursor-pointer">
-                                    {dictionary?.iAgree}
-                                    <Link
-                                        href="#"
-                                        className="text-primary mx-1">
-                                        {dictionary?.termsAndCondition}
-                                    </Link>
-                                </label>
-                            </div>
-                        </div>
-
-
-                        <div className="mt-4">
-                            <button type="submit"
-                                className="block w-full py-2 text-center text-white bg-primary border border-primary rounded hover:bg-transparent hover:text-primary transition uppercase font-roboto font-medium">
-                                {dictionary?.createAccount}
-                            </button>
-                        </div>
-
-                    </form>
+                    {/* REGISTRATION FORM */}
+                    <RegistrationForm
+                        lang={lang}
+                        dictionary={dictionary}
+                    />
 
                     {/*  login with  */}
                     <div className="mt-6 flex justify-center relative">

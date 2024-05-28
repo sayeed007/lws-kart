@@ -1,4 +1,4 @@
-import { getUserAccountByEmail } from "@/database/queries";
+import { getUserAccountByUserId } from "@/database/queries";
 import { auth } from "../../../../../auth";
 
 export const GET = async () => {
@@ -7,18 +7,13 @@ export const GET = async () => {
     const session = await auth();
 
     // Fetch user account
-    const userInfo = await getUserAccountByEmail(session?.user?.email);
-
-    // If user account not found, return 404
-    if (!userInfo) {
-      return new Response("User account not found", { status: 404 });
-    }
+    const userInfo = await getUserAccountByUserId(session?.user?.id);
 
     // Return user data
     return new Response(JSON.stringify({
       sessionInfo: session,
-      loggedInUserInfo: userInfo?.account,
-      wishlistItems: userInfo.wishlistItems
+      wishlistItems: userInfo.wishlistItems,
+      cartItems: userInfo.cartItems,
     }), {
       status: 200,
       headers: {

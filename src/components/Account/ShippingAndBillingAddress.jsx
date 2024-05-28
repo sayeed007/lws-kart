@@ -4,16 +4,13 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import AddOrEditAddress from './AddOrEditAddress';
-import { useAuth } from '@/hooks/useAuth';
+import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 
 const ShippingAndBillingAddress = ({ lang, dictionary, userId, type, userAddress, refetchData, setRefetchData }) => {
 
-    const { auth } = useAuth();
-    console.log(auth);
+    const { modifiedAuth } = useModifiedAuth();
 
     const [modalVisible, setModalVisible] = useState(false);
-
-    console.log(userAddress);
 
     return (
         <>
@@ -58,7 +55,7 @@ const ShippingAndBillingAddress = ({ lang, dictionary, userId, type, userAddress
                 <div className="space-y-1">
 
                     <h4 className="text-gray-700 font-medium">
-                        {auth?.sessionInfo?.user?.name}
+                        {modifiedAuth?.sessionInfo?.user?.name}
                     </h4>
 
 

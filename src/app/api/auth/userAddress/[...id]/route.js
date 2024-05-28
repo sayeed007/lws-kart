@@ -36,9 +36,8 @@ export const PUT = async (request) => {
     const requestData = await request.json();
 
     const modifiedAddress = requestData?.userAddress;
-    console.log(modifiedAddress);
 
-    // 
+    //
     const userAddress = await updateUserAddress(userAddressId, modifiedAddress);
 
     return new Response(JSON.stringify(userAddress), {

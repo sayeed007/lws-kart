@@ -1,8 +1,6 @@
-import React from 'react'
-import LWSLogo from '../../../public/assets/images/logo.svg';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FaFacebookSquare, FaGithubSquare, FaInstagramSquare, FaTwitterSquare } from 'react-icons/fa';
 import Link from 'next/link';
+import { FaFacebookSquare, FaGithubSquare, FaInstagramSquare, FaTwitterSquare } from 'react-icons/fa';
+import LWSLogo from '../../../public/assets/images/logo.svg';
 
 
 const footerCategory = {

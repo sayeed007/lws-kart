@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import Modal from '../Common/utilities/Modal';
-import { useFormik } from 'formik';
-import { Form, Field } from 'formik';
-import ErrorTooltip from '../Common/utilities/ErrorToltip';
-import * as Yup from 'yup';
+import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 import axios from 'axios';
-import { useAuth } from '@/hooks/useAuth';
+import { useFormik } from 'formik';
+import { useState } from 'react';
+import * as Yup from 'yup';
+import ErrorTooltip from '../Common/utilities/ErrorToltip';
+import Modal from '../Common/utilities/Modal';
 
 
 const initialFormData = {
@@ -85,9 +84,8 @@ const addressAttributes = [
 
 const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisible, modalVisible, refetchData, setRefetchData }) => {
 
-    const { auth } = useAuth();
+    const { modifiedAuth } = useModifiedAuth();
 
-    console.log(type);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
@@ -129,12 +127,11 @@ const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisi
 
             // EDIT MODE
             if (previousData?._id) {
-                console.log(value);
                 const response = await axios.put(`/api/auth/userAddress/${previousData?._id}`, {
                     userAddress: value,
                 }, {
                     headers: {
-                        'Authorization': `Bearer ${auth?.loggedInUserInfo?.access_token}`, // Replace YOUR_TOKEN_HERE with the user's bearer token
+                        'Authorization': `Bearer ${modifiedAuth?.loggedInUserInfo?.access_token}`, // Replace YOUR_TOKEN_HERE with the user's bearer token
                         'Content-Type': 'application/json'
                     }
                 });
@@ -144,7 +141,7 @@ const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisi
                     userAddress: value,
                 }, {
                     headers: {
-                        'Authorization': `Bearer ${auth?.loggedInUserInfo?.access_token}`, // Replace YOUR_TOKEN_HERE with the user's bearer token
+                        'Authorization': `Bearer ${modifiedAuth?.loggedInUserInfo?.access_token}`, // Replace YOUR_TOKEN_HERE with the user's bearer token
                         'Content-Type': 'application/json'
                     }
                 });
@@ -162,8 +159,6 @@ const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisi
             console.error('Add New Address error:', error);
         }
     };
-
-    console.log(values);
 
     return (
 

@@ -9,21 +9,3 @@ const cartSchema = new Schema({
 });
 
 export const cartModel = mongoose.models.cart ?? mongoose.model("cart", cartSchema);
-
-
-const sampleCartData = [
-    {
-        productId: "612345678901234567890123",
-        userId: "612345678901234567890123",
-        addedTime: new Date(),
-        expirationTime: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours from now
-        productCount: 2
-    },
-    {
-        productId: "612345678901234567890124",
-        userId: "612345678901234567890124",
-        addedTime: new Date(),
-        productCount: 1
-    }
-];
-

@@ -1,24 +1,24 @@
 "use client"
 
 import { useModifiedAuth } from '@/hooks/useModifiedAuth';
-import SingleWishEdProduct from './SingleWishEdProduct';
 
-import NoProductFound from '../../../public/assets/images/NoProductFound.png';
 import Image from 'next/image';
+import NoProductFound from '../../../public/assets/images/NoProductFound.png';
+import SingleCartProduct from './SingleCartProduct';
 
-const WishListContainer = ({ dictionary }) => {
+const CartContainer = ({ dictionary }) => {
 
     const { modifiedAuth } = useModifiedAuth();
 
     return (
         <>
-            {(modifiedAuth?.wishlistItems?.length > 0) ?
-                modifiedAuth?.wishlistItems?.map((wishedProduct) => {
+            {(modifiedAuth?.cartItems?.length > 0) ?
+                modifiedAuth?.cartItems?.map((cartProduct) => {
                     return (
-                        <SingleWishEdProduct
+                        <SingleCartProduct
                             dictionary={dictionary}
-                            key={wishedProduct?.id}
-                            wishedProduct={wishedProduct}
+                            key={cartProduct?.id}
+                            cartProduct={cartProduct}
                         />
                     )
                 })
@@ -36,4 +36,4 @@ const WishListContainer = ({ dictionary }) => {
     )
 }
 
-export default WishListContainer
+export default CartContainer

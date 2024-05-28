@@ -28,12 +28,6 @@ const UserAddress = ({ lang, dictionary, userId }) => {
         fetchUserAddressData();
     }, [refetchData]);
 
-
-    // const userAddress = await getUserAddress(userId);
-    // console.log(userAddress);
-
-
-
     return (
         <>
             {/* SHIPPING ADDRESS */}
