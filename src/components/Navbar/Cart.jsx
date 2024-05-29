@@ -9,7 +9,6 @@ import Link from "next/link";
 const Cart = ({ lang, dictionary }) => {
 
     const { modifiedAuth } = useModifiedAuth();
-    console.log(modifiedAuth);
 
     return (
         <>

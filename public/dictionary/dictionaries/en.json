@@ -103,5 +103,7 @@
   "gender": "Gender",
   "male": "Male",
   "female": "Female",
-  "photo": "Photo"
+  "photo": "Photo",
+  "shippingAddress": "Shipping Address",
+  "billingAddress": "Billing Address"
 }

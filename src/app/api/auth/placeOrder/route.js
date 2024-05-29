@@ -1,14 +1,20 @@
-import { addToCartList, addToWishlist, removeFromWishlist } from "@/database/queries";
+import { createOrder } from "@/database/queries";
 
 export const POST = async (request) => {
   try {
 
     const requestData = await request.json();
+    console.log(requestData);
 
-    // Add productId to user's cart
-    const createdCartItem = await addToCartList(requestData);
 
-    return new Response(JSON.stringify(createdCartItem), {
+    // Add productId to user's wishlist
+    const createdOrder = await createOrder(requestData);
+    console.log(createdOrder);
+
+    return new Response(JSON.stringify({
+      message: 'Order created successfully',
+      data: true
+    }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });

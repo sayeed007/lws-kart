@@ -1,11 +1,89 @@
+"use client"
+
+
 import { calculateNewPrice } from '@/utils/data-util'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from 'axios'
 import Image from 'next/image'
-import Link from 'next/link'
+import { useState } from 'react'
 import DeleteSingleWishItem from './DeleteSingleWishItem'
+import { useModifiedAuth } from '@/hooks/useModifiedAuth'
 
 const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
+
+    const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(false);
+
+    const addToCart = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const response = await axios.post('/api/auth/cart', {
+                productId: wishedProduct?.wishlistData?.productId,
+                userId: wishedProduct?.wishlistData?.userId,
+                addedTime: new Date(),
+                expirationTime: new Date(new Date().getTime() + 30 * 60 * 1000), // 30 minutes later,
+                productCount: 1
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${modifiedAuth?.loggedInUserInfo?.access_token}`, // Replace YOUR_TOKEN_HERE with the user's bearer token
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response?.data?.newItem) {
+
+                // AS IT IS ADDED TO CART LETS REMOVE IT FROM WISHLIST
+                const wishResponse = await axios.delete(`/api/auth/wishlist/${wishedProduct?.wishlistData?.id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${modifiedAuth?.loggedInUserInfo?.access_token}`, // Replace YOUR_TOKEN_HERE with the user's bearer token
+                        'Content-Type': 'application/json'
+                    }
+                });
+                setLoading(false);
+                setSuccess(true);
+
+                if (response?.data) {
+                    setModifiedAuth({
+                        ...modifiedAuth,
+                        wishlistItems: [
+                            ...modifiedAuth?.wishlistItems?.filter((wishListItem) => wishListItem?.wishlistData?.id !== wishedProduct?.wishlistData?.id)
+                        ],
+                        cartItems: [
+                            ...modifiedAuth?.cartItems,
+                            response?.data?.newItem
+                        ]
+                    });
+
+                    Cookies.set('auth', JSON.stringify({
+                        ...modifiedAuth,
+                        wishlistItems: [
+                            ...modifiedAuth?.wishlistItems?.filter((wishListItem) => wishListItem?.wishlistData?.id !== wishedProduct?.wishlistData?.id)
+                        ],
+                        cartItems: [
+                            ...modifiedAuth?.cartItems,
+                            response?.data?.newItem
+                        ]
+                    }));
+
+                } else {
+
+                }
+
+
+            } else {
+
+            }
+
+        } catch (error) {
+            setLoading(false);
+            setError(error?.response?.data?.message || 'Something went wrong');
+            console.error('Add to wishlist error:', error);
+        }
+    };
 
 
     return (
@@ -47,10 +125,11 @@ const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
                     </p>
                 </div>
 
-                <Link href="#"
-                    className="px-6 py-2 text-center text-sm text-white bg-primary border border-primary rounded hover:bg-transparent hover:text-primary transition uppercase font-roboto font-medium">
+                <div
+                    onClick={() => addToCart()}
+                    className="px-6 py-2 text-center text-sm text-white bg-primary border border-primary rounded hover:bg-transparent hover:text-primary transition uppercase font-roboto font-medium cursor-pointer">
                     {dictionary?.addToCart}
-                </Link>
+                </div>
 
 
                 <DeleteSingleWishItem

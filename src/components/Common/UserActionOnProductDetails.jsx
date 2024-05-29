@@ -7,6 +7,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import IncrementOrDecrement from './utilities/IncrementOrDecrement'
 import { useModifiedAuth } from '@/hooks/useModifiedAuth'
+import axios from 'axios'
 
 const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
 
@@ -22,8 +23,9 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
         try {
             setLoading(true);
             setError(null);
+
             const response = await axios.post('/api/auth/cart', {
-                productId: itemInfo?.id,
+                productId: productInfo?.id,
                 userId: modifiedAuth?.sessionInfo?.user?.id,
                 addedTime: new Date(),
                 expirationTime: new Date(new Date().getTime() + 30 * 60 * 1000), // 30 minutes later,
@@ -36,8 +38,6 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
             });
             setLoading(false);
             setSuccess(true);
-
-            console.log(response);
 
             if (response?.data?.newItem) {
                 setModifiedAuth({
@@ -70,7 +70,7 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
             setLoading(true);
             setError(null);
             const response = await axios.post('/api/auth/wishlist', {
-                productId: productId,
+                productId: productInfo?.id,
                 userId: modifiedAuth?.sessionInfo?.user?.id,
             }, {
                 headers: {
@@ -128,21 +128,9 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
 
             <div className="mt-6 flex gap-3 border-b border-gray-200 pb-5 pt-2">
 
-                {/* <Link
-                    href="#"
-                    className="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
-                    <FontAwesomeIcon
-                        icon={faShoppingBag}
-                        width={24}
-                        height={24}
-                        color={'white'}
-                    />
-                    {dictionary?.addToCart}
-                </Link> */}
-
                 <div
                     onClick={() => addToCart()}
-                    className="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
+                    className="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition cursor-pointer">
                     <FontAwesomeIcon
                         icon={faShoppingBag}
                         width={24}
@@ -152,20 +140,10 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
                     {dictionary?.addToCart}
                 </div>
 
-                {/* <Link href="#"
-                    className="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
-                    <FontAwesomeIcon
-                        icon={faHeart}
-                        width={24}
-                        height={24}
-                        color={'black'}
-                    />
-                    {dictionary?.wishList}
-                </Link> */}
 
                 <div
                     onClick={() => addToWishlist()}
-                    className="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
+                    className="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition cursor-pointer">
                     <FontAwesomeIcon
                         icon={faHeart}
                         width={24}

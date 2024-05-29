@@ -5,18 +5,16 @@ import { categoryModel } from "@/models/category-model";
 import { colorModel } from "@/models/color-model";
 import { orderDetailsModel } from "@/models/order-details-model";
 import { productModel } from "@/models/product-model";
-import { productOrdersModel } from "@/models/product-orders-model";
 import { ratingModel } from "@/models/rating-model";
 import { reviewModel } from "@/models/review-model";
 import { sizeModel } from "@/models/size-model";
 import { specificationModel } from "@/models/specification-model";
-import { accountModel } from "@/models/user-account-model";
 import { userAddressModel } from "@/models/user-addreess-model";
 import { userModel } from "@/models/user-model";
+import { userOrderModel } from "@/models/user-order-model";
 import { wishlistModel } from "@/models/wishlist-model";
 import connectMongo from "@/service/connectMongo";
-import { filterByAll, replaceMongoIdInArray, replaceMongoIdInArrayDuringFiltering, replaceMongoIdInObject } from "@/utils/data-util";
-import mongoose, { Mongoose } from "mongoose";
+import { replaceMongoIdInArray, replaceMongoIdInObject } from "@/utils/data-util";
 
 
 const LAST_DAY_TO_CONSIDER_AS_NEW_ARRIVAL = 15;
@@ -194,7 +192,7 @@ export async function getAllTrendingWithAverageRatingAndReviewCount() {
         // console.log(fifteenDaysAgo)
         // console.log(fifteenDaysAgoInMilliseconds)
 
-        const latestOrders = await productOrdersModel
+        const latestOrders = await orderDetailsModel
             .find()
             // .find({ orderDate: { $gte: fifteenDaysAgoInMilliseconds } })
             .limit(8)
@@ -559,42 +557,51 @@ export const updateUserAddress = async (addressId, userGivenAddress) => {
 export const addToCartList = async (requestData) => {
     try {
 
-        console.log(requestData);
-
         // Check if the product is already in the cart
-        const existingWishlistItem = await cartModel.findOne({ userId: requestData?.userId, productId: requestData?.productId });
+        const existingCartItem = await cartModel.findOne({ userId: requestData?.userId, productId: requestData?.productId }).lean();
 
-        console.log(existingWishlistItem);
-        if (existingWishlistItem) {
-            // If the product is already in the cart, you can handle this scenario based on your requirements.
-            // For example, you might want to update the addedTime or return a message indicating that the product is already in the cart.
-            // Here, I'm just returning without doing anything.
+
+        if (existingCartItem) {
+            // If the product is already in the cart, update the productCount
+            const updatedCartItem = await cartModel.findOneAndUpdate(
+                { userId: requestData.userId, productId: requestData.productId },
+                { $inc: { productCount: requestData.productCount } }, // Increment productCount by 1
+                { new: true } // Return the updated document
+            ).lean();
+
+
+            if (updatedCartItem) {
+                // If the item is successfully updated, return the updated item details
+                const updatedItemDetails = await getWishlistItemsDetail([{ productId: updatedCartItem.productId }]);
+
+                const generatedResponse = {
+                    ...updatedItemDetails?.[0],
+                    cartListData: await replaceMongoIdInObject(updatedCartItem)
+                };
+
+                return {
+                    message: "Product quantity updated in cart.",
+                    newItem: generatedResponse
+                };
+            }
+        } else {
+            // If the product is not already in the cart, add it
+            const newItemResponse = await cartModel.create(requestData);
+
+            const newItem = newItemResponse.toObject();
+
+            const newItemDetails = await getWishlistItemsDetail([{ productId: newItem?.productId }]);
+
+            const generatedResponse = {
+                ...newItemDetails?.[0],
+                cartListData: await replaceMongoIdInObject(newItem)
+            };
+
             return {
-                message: "Product is already in cart.",
-                newItem: null
+                message: "Product added to cart successfully.",
+                newItem: generatedResponse
             };
         }
-
-        // If the product is not already in the cart, add it
-        const newItemResponse = await cartModel.create(requestData);
-        console.log(newItemResponse);
-
-        const newItem = newItemResponse.toObject()
-        console.log(newItem);
-
-        const newItemDetails = await getWishlistItemsDetail([{ productId: newItem?.productId }]);
-        console.log(newItemDetails);
-
-        const generatedResponse = {
-            ...newItemDetails?.[0],
-            cartListData: await replaceMongoIdInObject(newItem)
-        };
-
-        console.log(generatedResponse);
-        return {
-            message: "Product added to cart successfully.",
-            newItem: generatedResponse
-        }; // Return the newly created item
     } catch (error) {
         throw new Error('Error adding product to cart: ' + error.message);
     }
@@ -610,6 +617,93 @@ export const removeFromCartList = async (cartId) => {
         return true;
     } catch (error) {
         throw new Error('Error deleting item from wishlist: ' + error.message);
+    }
+};
+
+
+
+
+
+
+
+
+// CREATE ORDER
+export const createOrder = async (requestData) => {
+    try {
+
+        console.log(requestData);
+
+
+        // UPDATE USER ADDRESS IF USER UPDATE ITS
+        const updateAddress = updateUserAddress(requestData?.userAddress?._id,
+            {
+                shippingAddress: requestData?.userAddress?.shippingAddress,
+                billingAddress: requestData?.userAddress?.billingAddress
+            }
+        );
+        console.log(updateAddress);
+
+        // CREATE ORDER
+        const orders = {};
+        for (const order of requestData?.userOrderList) {
+            const newOrder = new orderDetailsModel({
+                productId: order.cartData.productId,
+                userId: order.cartData.userId,
+                price: order.price,
+                count: order.cartData.productCount,
+                status: 'pending' // You might want to adjust this
+            });
+            const savedOrder = await newOrder.save();
+
+            orders[order.cartData.productId] = savedOrder.toObject();
+        }
+        console.log(orders);
+
+
+        // Create user orders
+        const userOrders = [];
+        for (const productId in orders) {
+            const order = orders[productId];
+            const totalPrice = order.price * order.count;
+            const newUserOrder = new userOrderModel({
+                orderDetailsId: [order._id],
+                userId: order.userId,
+                status: order.status,
+                totalPrice: totalPrice,
+                orderTime: order.orderTime,
+                invoiceImage: '' // You can fill this with the invoice image path if available
+            });
+            const savedUserOrder = await newUserOrder.save();
+            userOrders.push(savedUserOrder.toObject());
+        }
+        console.log(userOrders);
+
+
+        // Remove The Products from Cart
+        // Delete all cart entries for the given user
+        const result = await cartModel.deleteMany({ userId: requestData?.userAddress?.userId });
+        console.log(`Cleared ${result.deletedCount} cart entries for user ${requestData?.userAddress?.userId}`);
+
+
+        // REDUCE PRODUCT'S AVAILABLE COUNT
+        for (const productId in orders) {
+            const order = orders[productId];
+            const product = await productModel.findById(productId);
+            if (!product) {
+                console.error(`Product with ID ${productId} not found.`);
+                continue;
+            }
+            product.availableCount -= order.count;
+            await product.save();
+            console.log(`Updated available count for product ${productId}`);
+        }
+
+
+        return true;
+
+
+    } catch (error) {
+        throw new Error('Error Creating Order: ' + error);
     }
 };
 

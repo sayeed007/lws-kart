@@ -103,5 +103,7 @@
   "gender": "লিঙ্গ",
   "male": "পুরুষ",
   "female": "মহিলা",
-  "photo": "ছবি"
+  "photo": "ছবি",
+  "shippingAddress": "শিপিং ঠিকানা",
+  "billingAddress": "বিলিং ঠিকানা"
 }

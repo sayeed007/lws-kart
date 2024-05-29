@@ -58,7 +58,7 @@ export const {
                         );
 
                         if (isMatch) {
-                            console.log(user);
+                            // console.log(user);
                             return user;
                         } else {
                             throw new Error('Email or password mismatch');
@@ -85,7 +85,7 @@ export const {
     callbacks: {
         jwt: async ({ token, user }) => {
             // user is only available the first time a user signs in authorized
-            console.log(user)
+            // console.log(user)
             if (user) {
 
                 token.username = user.username;
@@ -94,7 +94,7 @@ export const {
 
                 return token;
             }
-            console.log(token)
+            // console.log(token)
             return token;
         },
         session: async ({ session, token }) => {
@@ -104,7 +104,7 @@ export const {
                 session.user.id = token.id;
             }
 
-            console.log(session)
+            // console.log(session)
             return session;
         },
     },

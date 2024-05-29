@@ -12,7 +12,6 @@ import React, { useState } from 'react'
 const AddToWishListFromImageCard = ({ productId }) => {
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
-    console.log(modifiedAuth);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);

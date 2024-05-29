@@ -208,6 +208,7 @@ const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisi
                                             className="float-right mr-2 -mt-8 relative z-50 text-red-500"
                                         >
                                             <ErrorTooltip
+                                                origin={`${type}-${attribute?.name}`}
                                                 content={errors?.[type]?.[attribute?.name]}
                                                 placement="right"
                                             />

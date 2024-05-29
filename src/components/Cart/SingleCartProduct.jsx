@@ -4,9 +4,6 @@ import DeleteSingleCartItem from './DeleteSingleCartItem'
 
 const SingleCartProduct = ({ dictionary, cartProduct }) => {
 
-    console.log(cartProduct);
-
-
     return (
         <>
             <div className="flex items-center justify-between border gap-6 p-4 border-gray-200 rounded">
@@ -51,7 +48,6 @@ const SingleCartProduct = ({ dictionary, cartProduct }) => {
                         {cartProduct?.cartData?.productCount}
                     </p>
                 </div>
-
 
                 <DeleteSingleCartItem
                     cartProduct={cartProduct}

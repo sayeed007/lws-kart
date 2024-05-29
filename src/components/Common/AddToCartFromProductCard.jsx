@@ -15,7 +15,6 @@ const AddToCartFromProductCard = ({ dictionary, itemInfo }) => {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
-    console.log(modifiedAuth);
 
     const addToCart = async () => {
         try {
@@ -35,8 +34,6 @@ const AddToCartFromProductCard = ({ dictionary, itemInfo }) => {
             });
             setLoading(false);
             setSuccess(true);
-
-            console.log(response);
 
             if (response?.data?.newItem) {
                 setModifiedAuth({
@@ -63,10 +60,6 @@ const AddToCartFromProductCard = ({ dictionary, itemInfo }) => {
             console.error('Add to wishlist error:', error);
         }
     };
-
-
-
-
 
 
     return (

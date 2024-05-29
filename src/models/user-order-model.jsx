@@ -10,24 +10,3 @@ const userOrderSchema = new Schema({
 });
 
 export const userOrderModel = mongoose.models.userOrder ?? mongoose.model("userOrder", userOrderSchema);
-
-
-const sampleUserOrderData = [
-    {
-        orderDetailsId: ["612345678901234567890123", "612345678901234567890124"],
-        userId: "612345678901234567890123",
-        status: "Pending",
-        totalPrice: 100.50,
-        orderTime: new Date(),
-        invoiceImage: "https://example.com/invoice123.jpg"
-    },
-    {
-        orderDetailsId: ["612345678901234567890125"],
-        userId: "612345678901234567890124",
-        status: "Delivered",
-        totalPrice: 75.25,
-        orderTime: new Date(),
-        invoiceImage: "https://example.com/invoice456.jpg"
-    }
-];
-

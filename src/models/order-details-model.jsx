@@ -11,3 +11,5 @@ const orderDetailsSchema = new Schema({
 });
 
 export const orderDetailsModel = mongoose.models.orderDetails ?? mongoose.model("orderDetails", orderDetailsSchema);
+
+

@@ -27,6 +27,7 @@ const CartPage = async ({ params: { lang } }) => {
                 <div className="mx-auto space-y-4 max-w-6xl">
 
                     <CartContainer
+                        lang={lang}
                         dictionary={dictionary}
                     />
 
