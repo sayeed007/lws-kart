@@ -5,7 +5,7 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   mobile: { type: String, required: true },
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, },
   gender: { type: String, enum: ['Male', 'Female', 'Other'], required: true },
   photo: { type: String },// You can store the path to the photo or use a cloud storage URL
   agreement: { type: Boolean, required: true }

@@ -94,9 +94,6 @@ async function getWishlistItemsDetail(wishlists) {
 
 
 
-
-
-
 export async function getAllCategories() {
 
     try {
@@ -373,44 +370,6 @@ export async function getUserByEmail(email) {
 };
 
 
-// export async function getUserAccountByEmail(email) {
-//     try {
-//         // Find the user by email
-//         // const user = await userModel.findOne({ email }).lean();
-
-//         // if (!user) {
-//         //     throw new Error('User not found');
-//         // }
-
-//         // Find the account associated with the user
-//         // const account = await accountModel.findOne({ userId: user._id }).lean();
-
-//         // if (!account) {
-//         //     throw new Error('Account not found for this user');
-//         // }
-
-//         const wishlistItems = await wishlistModel.find({ userId: user._id.toString() }).lean();
-
-//         const wishlistItemsDetail = await getWishlistItemsDetail(wishlistItems);
-
-//         // Join the two arrays based on productId from array1 and id from array2
-//         const wishListWithProductData = (await replaceMongoIdInArray(wishlistItems)).map(wishlistData => {
-//             const productData = wishlistItemsDetail.find(product => product.id === wishlistData.productId.toString());
-//             return { ...productData, wishlistData };
-//         });
-
-//         return ({
-//             account: replaceMongoIdInObject(account),
-//             wishlistItems: wishListWithProductData
-//         });
-
-
-//     } catch (error) {
-//         console.error('Error fetching user account by email:', error);
-//         throw error;
-//     }
-// };
-
 export async function getUserAccountByUserId(userId) {
     try {
 
@@ -446,6 +405,7 @@ export async function getUserAccountByUserId(userId) {
         throw error;
     }
 };
+
 
 // WISHLIST
 export const addToWishlist = async (userId, productId) => {
@@ -553,6 +513,33 @@ export const updateUserAddress = async (addressId, userGivenAddress) => {
     }
 };
 
+export const updateUserInfo = async (userId, userProvidedData) => {
+    try {
+        // Find the user document by userId
+        let userData = await userModel.findById(userId);
+
+        if (!userData) {
+            throw new Error('User not found');
+        }
+
+        // Exclude password field from the update
+        delete userProvidedData.password;
+
+        // Update user data with provided data
+        Object.assign(userData, userProvidedData);
+
+        console.log(userData.toObject());
+
+        // Save the updated user document
+        const modifiedUserData = await userData.save();
+
+        return modifiedUserData ? modifiedUserData.toObject() : {};
+    } catch (error) {
+        throw new Error('Error updating user information: ' + error.message);
+    }
+};
+
+
 // CART LIST
 export const addToCartList = async (requestData) => {
     try {
@@ -622,6 +609,50 @@ export const removeFromCartList = async (cartId) => {
 
 
 
+// GET USER Ongoing Order
+export const getUserOngoingOrder = async (userId) => {
+    try {
+
+        const ongoingOrders = await userOrderModel.find({ userId: userId, status: { $in: ['pending', 'shipping'] } }).populate({
+            path: 'orderDetailsId',
+            populate: {
+                path: 'productId',
+                model: 'product',
+                select: ['name', 'discountPercent', 'images']
+            }
+        }).lean();
+
+
+        return replaceMongoIdInArray(ongoingOrders);
+    } catch (error) {
+        console.error('Error fetching ongoing orders:', error);
+        throw error;
+    }
+};
+
+
+// GET USER Previous Order
+export const getUserPreviousOrder = async (userId) => {
+    try {
+
+        const previousOrders = await userOrderModel.find({ userId: userId, status: { $in: ['delivered', 'canceled'] } }).populate({
+            path: 'orderDetailsId',
+            populate: {
+                path: 'productId',
+                model: 'product',
+                select: ['name', 'discountPercent', 'images']
+            }
+        }).lean();
+
+        return replaceMongoIdInArray(previousOrders);
+    } catch (error) {
+        console.error('Error fetching ongoing orders:', error);
+        throw error;
+    }
+};
+
+
+
 
 
 
@@ -630,80 +661,76 @@ export const removeFromCartList = async (cartId) => {
 // CREATE ORDER
 export const createOrder = async (requestData) => {
     try {
+        const orders = {}; // Object to store orders grouped by user
+        const userOrders = []; // Array to store user orders
 
-        console.log(requestData);
-
-
-        // UPDATE USER ADDRESS IF USER UPDATE ITS
-        const updateAddress = updateUserAddress(requestData?.userAddress?._id,
-            {
-                shippingAddress: requestData?.userAddress?.shippingAddress,
-                billingAddress: requestData?.userAddress?.billingAddress
-            }
-        );
-        console.log(updateAddress);
-
-        // CREATE ORDER
-        const orders = {};
+        // Iterate over each order item
         for (const order of requestData?.userOrderList) {
-            const newOrder = new orderDetailsModel({
-                productId: order.cartData.productId,
-                userId: order.cartData.userId,
+            const productId = order.cartData.productId;
+            const userId = order.cartData.userId;
+
+            // Create order details
+            const newOrderDetail = new orderDetailsModel({
+                productId: productId,
+                userId: userId,
                 price: order.price,
                 count: order.cartData.productCount,
-                status: 'pending' // You might want to adjust this
+                status: 'pending'
             });
-            const savedOrder = await newOrder.save();
+            const savedOrderDetail = await newOrderDetail.save();
 
-            orders[order.cartData.productId] = savedOrder.toObject();
+            // Add order detail to respective user's order
+            if (!orders[userId]) {
+                orders[userId] = {
+                    userId: userId,
+                    totalPrice: 0,
+                    orderDetailsId: []
+                };
+            }
+            orders[userId].totalPrice += order.price * order.cartData.productCount;
+            orders[userId].orderDetailsId.push(savedOrderDetail._id);
         }
-        console.log(orders);
-
 
         // Create user orders
-        const userOrders = [];
-        for (const productId in orders) {
-            const order = orders[productId];
-            const totalPrice = order.price * order.count;
+        for (const userId in orders) {
+            const userData = orders[userId];
             const newUserOrder = new userOrderModel({
-                orderDetailsId: [order._id],
-                userId: order.userId,
-                status: order.status,
-                totalPrice: totalPrice,
-                orderTime: order.orderTime,
+                orderDetailsId: userData.orderDetailsId,
+                userId: userData.userId,
+                status: 'pending',
+                totalPrice: userData.totalPrice,
+                orderTime: new Date(), // You might want to adjust this
                 invoiceImage: '' // You can fill this with the invoice image path if available
             });
             const savedUserOrder = await newUserOrder.save();
             userOrders.push(savedUserOrder.toObject());
         }
-        console.log(userOrders);
-
 
         // Remove The Products from Cart
-        // Delete all cart entries for the given user
         const result = await cartModel.deleteMany({ userId: requestData?.userAddress?.userId });
-        console.log(`Cleared ${result.deletedCount} cart entries for user ${requestData?.userAddress?.userId}`);
 
-
-        // REDUCE PRODUCT'S AVAILABLE COUNT
-        for (const productId in orders) {
-            const order = orders[productId];
-            const product = await productModel.findById(productId);
-            if (!product) {
-                console.error(`Product with ID ${productId} not found.`);
-                continue;
+        // Update product available count
+        for (const userId in orders) {
+            const userData = orders[userId];
+            for (const orderDetailId of userData.orderDetailsId) {
+                const orderDetail = await orderDetailsModel.findById(orderDetailId);
+                if (!orderDetail) {
+                    console.error(`Order detail with ID ${orderDetailId} not found.`);
+                    continue;
+                }
+                const product = await productModel.findById(orderDetail.productId);
+                if (!product) {
+                    console.error(`Product with ID ${orderDetail.productId} not found.`);
+                    continue;
+                }
+                product.availableCount -= orderDetail.count;
+                await product.save();
+                console.log(`Updated available count for product ${orderDetail.productId}`);
             }
-            product.availableCount -= order.count;
-            await product.save();
-            console.log(`Updated available count for product ${productId}`);
         }
 
-
         return true;
-
-
     } catch (error) {
         throw new Error('Error Creating Order: ' + error);
     }
 };
-

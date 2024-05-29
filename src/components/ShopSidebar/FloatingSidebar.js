@@ -147,7 +147,7 @@ const FloatingSidebar = () => {
                                 name="min"
                                 id="min"
                                 className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                                placeholder="min"
+                                placeholder="Ex: 100"
                             />
                             <span className="mx-3 text-gray-500">-</span>
                             <input
@@ -155,7 +155,7 @@ const FloatingSidebar = () => {
                                 name="max"
                                 id="max"
                                 className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                                placeholder="max"
+                                placeholder="Ex: 1500"
                             />
                         </div>
                     </div>

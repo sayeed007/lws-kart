@@ -103,7 +103,19 @@
   "gender": "লিঙ্গ",
   "male": "পুরুষ",
   "female": "মহিলা",
+  "other": "অন্যান্য",
   "photo": "ছবি",
   "shippingAddress": "শিপিং ঠিকানা",
-  "billingAddress": "বিলিং ঠিকানা"
+  "billingAddress": "বিলিং ঠিকানা",
+  "ongoingOrders": "চলমান অর্ডার",
+  "invoiceNumber": "চালান নম্বর",
+  "status": "অবস্থা",
+  "previousOrders": "আগের অর্ডারগুলি",
+  "noPreviousOrder": "কোনো আগের অর্ডার নেই",
+  "noOngoingOrder": "কোনো চলমান অর্ডার নেই",
+  "editUserProfile": "ব্যবহারকারীর প্রোফাইল সম্পাদনা করুন",
+  "updateAccount": "অ্যাকাউন্ট আপডেট করুন",
+  "personalProfile": "ব্যক্তিগত প্রোফাইল",
+  "edit": "সম্পাদনা করুন",
+  "add": "যোগ করুন"
 }

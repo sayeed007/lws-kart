@@ -102,8 +102,20 @@
   "username": "Username",
   "gender": "Gender",
   "male": "Male",
+  "other": "Other",
   "female": "Female",
   "photo": "Photo",
   "shippingAddress": "Shipping Address",
-  "billingAddress": "Billing Address"
+  "billingAddress": "Billing Address",
+  "ongoingOrders": "Ongoing Orders",
+  "invoiceNumber": "Invoice Number",
+  "status": "Status",
+  "previousOrders": "Previous Orders",
+  "noPreviousOrder": "No Previous Order",
+  "noOngoingOrder": "No Ongoing Order",
+  "editUserProfile": "Edit User Profile",
+  "updateAccount": "Update Account",
+  "personalProfile": "Personal Profile",
+  "edit": "Edit",
+  "add": "Add"
 }

@@ -104,7 +104,7 @@ const RegistrationForm = ({ lang, dictionary }) => {
                             onBlur={handleBlur}
                             className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                             style={{ border: (touched?.name && errors?.name) ? '2px solid red' : '' }}
-                            placeholder="yourName"
+                            placeholder="Ex: yourName"
                         />
                         {(touched?.name && errors?.name) && (
                             <span
@@ -136,7 +136,7 @@ const RegistrationForm = ({ lang, dictionary }) => {
                             onBlur={handleBlur}
                             className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                             style={{ border: (touched?.email && errors?.email) ? '2px solid red' : '' }}
-                            placeholder="youremail.@domain.com"
+                            placeholder="Ex: youremail.@domain.com"
                         />
                         {(touched?.email && errors?.email) && (
                             <span
@@ -168,7 +168,7 @@ const RegistrationForm = ({ lang, dictionary }) => {
                             onBlur={handleBlur}
                             className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                             style={{ border: (touched?.mobile && errors?.mobile) ? '2px solid red' : '' }}
-                            placeholder="01701234567"
+                            placeholder="Ex: 01701234567"
                         />
                         {(touched?.mobile && errors?.mobile) && (
                             <span
@@ -200,7 +200,7 @@ const RegistrationForm = ({ lang, dictionary }) => {
                             onBlur={handleBlur}
                             className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                             style={{ border: (touched?.username && errors?.username) ? '2px solid red' : '' }}
-                            placeholder="YName"
+                            placeholder="Ex: YName"
                         />
                         {(touched?.username && errors?.username) && (
                             <span
@@ -231,7 +231,7 @@ const RegistrationForm = ({ lang, dictionary }) => {
                             onBlur={handleBlur}
                             className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                             style={{ border: (touched?.password && errors?.password) ? '2px solid red' : '' }}
-                            placeholder="*******"
+                            placeholder="Ex: *******"
                         />
                         {(touched?.password && errors?.password) && (
                             <span
@@ -258,7 +258,7 @@ const RegistrationForm = ({ lang, dictionary }) => {
                                     name="confirm"
                                     id="confirm"
                                     className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                                    placeholder="*******"
+                                    placeholder="Ex: *******"
                                 />
                             </div> */}
 
@@ -369,7 +369,7 @@ const RegistrationForm = ({ lang, dictionary }) => {
                             onBlur={handleBlur}
                             className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                             style={{ border: (touched?.photo && errors?.photo) ? '2px solid red' : '' }}
-                            placeholder=""
+                            placeholder="Ex: https://photos.google.com"
                         />
                         {(touched?.photo && errors?.photo) && (
                             <span

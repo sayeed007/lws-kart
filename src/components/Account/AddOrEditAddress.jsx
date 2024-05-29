@@ -200,7 +200,7 @@ const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisi
 
                                         style={{ border: (touched?.[type]?.[attribute?.name] && errors?.[type]?.[attribute?.name]) ? '2px solid red' : '' }}
 
-                                        placeholder={attribute?.name}
+                                        placeholder={`Ex: ${attribute?.name}`}
                                     />
 
                                     {(touched?.[type]?.[attribute?.name] && errors?.[type]?.[attribute?.name]) && (

@@ -93,7 +93,7 @@ const LogInForm = ({ lang, dictionary }) => {
                             onBlur={handleBlur}
                             className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                             style={{ border: (touched?.email && errors?.email) ? '2px solid red' : '' }}
-                            placeholder="youremail.@domain.com"
+                            placeholder="Ex: youremail.@domain.com"
                         />
                         {(touched?.email && errors?.email) && (
                             <span
@@ -124,7 +124,7 @@ const LogInForm = ({ lang, dictionary }) => {
                             onBlur={handleBlur}
                             className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                             style={{ border: (touched?.password && errors?.password) ? '2px solid red' : '' }}
-                            placeholder="*******"
+                            placeholder="Ex: *******"
                         />
                         {(touched?.password && errors?.password) && (
                             <span

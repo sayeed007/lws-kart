@@ -56,7 +56,7 @@ const FilterByText = ({ dictionary, lang }) => {
                     name="search"
                     id="search"
                     className="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none hidden md:flex"
-                    placeholder={dictionary?.type_here}
+                    placeholder={`Ex: ${dictionary?.type_here}`}
                     value={searchText}
                     onChange={(e) => {
                         setSearchText(e?.target?.value);

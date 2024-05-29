@@ -77,7 +77,7 @@ const FilterByPrice = ({ dictionary, filterObject }) => {
                         name="min"
                         id="min"
                         className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                        placeholder="min"
+                        placeholder="Ex: 100"
                         value={minPrice}
                         onChange={(e) => {
                             setMinPrice(e.target.value);
@@ -90,7 +90,7 @@ const FilterByPrice = ({ dictionary, filterObject }) => {
                         name="max"
                         id="max"
                         className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                        placeholder="max"
+                        placeholder="Ex: 1500"
                         value={maxPrice}
                         onChange={(e) => {
                             setMaxPrice(e.target.value);

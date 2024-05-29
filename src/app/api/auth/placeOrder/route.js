@@ -4,16 +4,13 @@ export const POST = async (request) => {
   try {
 
     const requestData = await request.json();
-    console.log(requestData);
-
 
     // Add productId to user's wishlist
     const createdOrder = await createOrder(requestData);
-    console.log(createdOrder);
 
     return new Response(JSON.stringify({
       message: 'Order created successfully',
-      data: true
+      data: createdOrder
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }

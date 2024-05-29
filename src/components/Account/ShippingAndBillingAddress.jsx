@@ -33,19 +33,21 @@ const ShippingAndBillingAddress = ({ lang, dictionary, userId, type, userAddress
                 <div className="flex items-center justify-between mb-4">
 
                     <h3 className="font-medium text-gray-800 text-lg cursor-pointer">
-                        {type === 'shippingAddress' ? 'Shipping' : 'Billing'} Address
+                        {/* {type === 'shippingAddress' ? 'Shipping' : 'Billing'} Address */}
+                        {dictionary?.[type]}
                     </h3>
 
                     <div
                         onClick={() => setModalVisible(true)}
+                        className='cursor-pointer'
                     >
                         {userAddress?.[type]?.division ?
                             <span className="text-primary">
-                                Edit
+                                {dictionary?.edit}
                             </span>
                             :
                             <span className="text-blue-500">
-                                Add
+                                {dictionary?.add}
                             </span>
                         }
                     </div>

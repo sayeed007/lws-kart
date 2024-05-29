@@ -11,6 +11,7 @@ import Modal from '../Common/utilities/Modal';
 import Link from 'next/link';
 import { calculateNewPrice } from '@/utils/data-util';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const initialFormData = {
     shippingAddress: {
@@ -188,10 +189,10 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
         };
 
         if (modifiedAuth?.sessionInfo?.user?.id) {
-
-            if (modifiedAuth?.cartItems?.length > 0) {
-                router.push(`/${lang}`);
-            };
+            // debugger
+            // if (modifiedAuth?.cartItems?.length && modifiedAuth?.cartItems?.length > 0) {
+            //     router.push(`/${lang}`);
+            // };
 
             fetchUserAddressData();
         };
@@ -219,8 +220,6 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
                 });
 
 
-            console.log(response);
-
             setLoading(false);
             setSuccess(true);
 
@@ -234,6 +233,8 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
                     ...modifiedAuth,
                     cartItems: []
                 }));
+
+                router.push(`/${lang}/account/${value?.userId}`);
             }
 
 
@@ -246,13 +247,13 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
 
 
     const calculateSubtotal = () => {
-
         // Calculate total sum with discount
         const totalSumWithDiscount = modifiedAuth?.cartItems.reduce((total, item) => {
+
             // Calculate discounted price
-            const discountedPrice = item.price - (item.price * (item.discountPercent / 100));
+            const discountedPrice = item?.price - (item?.price * (item?.discountPercent / 100));
             // Multiply discounted price by productCount and add to total
-            return total + (discountedPrice * item.cartData.productCount);
+            return total + (discountedPrice * item?.cartData?.productCount);
         }, 0);
 
         return totalSumWithDiscount;
@@ -320,7 +321,7 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
 
                                                     style={{ border: (touched?.['billingAddress']?.[attribute?.name] && errors?.['billingAddress']?.[attribute?.name]) ? '2px solid red' : '' }}
 
-                                                    placeholder={attribute?.name}
+                                                    placeholder={`Ex: ${attribute?.name}`}
                                                 />
 
                                                 {(touched?.['billingAddress']?.[attribute?.name] && errors?.['billingAddress']?.[attribute?.name]) && (
@@ -370,7 +371,7 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
 
                                                     style={{ border: (touched?.['shippingAddress']?.[attribute?.name] && errors?.['shippingAddress']?.[attribute?.name]) ? '2px solid red' : '' }}
 
-                                                    placeholder={attribute?.name}
+                                                    placeholder={`Ex: ${attribute?.name}`}
                                                 />
 
                                                 {(touched?.['shippingAddress']?.[attribute?.name] && errors?.['shippingAddress']?.[attribute?.name]) && (
@@ -437,7 +438,6 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
                                     </div>
                                 )
                             })
-
                             }
 
 
