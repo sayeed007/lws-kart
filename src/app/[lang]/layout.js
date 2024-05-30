@@ -7,7 +7,10 @@ import { getDictionary } from '../../../public/dictionary/dictionaries';
 import "../../../public/assets/css/main.css";
 import "../globals.css";
 
-
+export const metadata = {
+  title: "LWS-kart | Learn with Sumit",
+  description: "Best Collection For Home Decoration",
+};
 
 export default async function RootLayout({ modal, children, params: { lang } }) {
 

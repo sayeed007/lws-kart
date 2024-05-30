@@ -1,11 +1,7 @@
 import { calculateNewPrice } from '@/utils/data-util'
-import { faHeart, faShoppingBag } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Link from 'next/link'
 import StarRating from '../Rating/StarRating'
 import ImageComponent from './ImageComponent'
 import ShareComponent from './ShareComponent'
-import IncrementOrDecrement from './utilities/IncrementOrDecrement'
 import UserActionOnProductDetails from './UserActionOnProductDetails'
 
 const ProductDetails = ({ dictionary, productInfo }) => {
@@ -134,14 +130,14 @@ const ProductDetails = ({ dictionary, productInfo }) => {
 
                     {/* USER ACTION */}
                     <UserActionOnProductDetails
-                        productInfo={productInfo}
+                        productInfo={JSON.stringify(productInfo)}
                         dictionary={dictionary}
                     />
 
 
                     <div className="flex gap-3 mt-4">
                         <ShareComponent
-                            recipeInfo={{ name: productInfo?.name }}
+                            productInfo={JSON.stringify(productInfo)}
                         />
                     </div>
                 </div>

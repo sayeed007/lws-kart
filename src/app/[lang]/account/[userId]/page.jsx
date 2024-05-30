@@ -8,6 +8,16 @@ import Image from "next/image";
 import EmptyBox from '../../../../../public/assets/images/EmptyBox.jpeg'
 
 
+
+export async function generateMetadata({ params: { lang, userId } }) {
+
+    return {
+        title: "LWS-kart | Learn with Sumit",
+        description: `Personal & Product Purchase Information about user - ${userId}`,
+    }
+};
+
+
 const AccountPage = async ({ params: { lang, userId } }) => {
 
     const dictionary = await getDictionary(lang);

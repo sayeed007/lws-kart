@@ -53,7 +53,6 @@ const SingleProductCard = (props) => {
                             productId={props?.eachNewItem?.id}
                         />
 
-
                     </div>
 
                 </div>
@@ -103,8 +102,9 @@ const SingleProductCard = (props) => {
 
                 {/* ADD TO CART FUNCTIONALITY */}
                 <AddToCartFromProductCard
+                    lang={props?.lang}
                     dictionary={props?.dictionary}
-                    itemInfo={props?.eachNewItem}
+                    itemInfo={JSON.stringify(props?.eachNewItem)}
                 />
             </div>
         </>

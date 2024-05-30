@@ -3,6 +3,16 @@ import RegistrationForm from '@/components/Auth/RegistrationForm';
 import Link from 'next/link';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
+
+export async function generateMetadata() {
+    return {
+        title: "LWS-kart | Learn with Sumit",
+        description: "Register into LWS_Kart",
+    }
+};
+
+
+
 const RegisterPage = async ({ params: { lang } }) => {
 
     const dictionary = await getDictionary(lang);

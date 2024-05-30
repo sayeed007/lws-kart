@@ -1,12 +1,27 @@
 import CheckoutForm from "@/components/Checkout/CheckoutForm";
 import BreadCrumb from "@/components/Common/BreadCrumb";
-import Link from "next/link";
+import { auth } from "../../../../auth";
 import { getDictionary } from "../../../../public/dictionary/dictionaries";
+import { redirect } from 'next/navigation';
+
+
+export async function generateMetadata() {
+    return {
+        title: "LWS-kart | Learn with Sumit",
+        description: `Product Checkout Information of a user.`,
+    }
+};
 
 
 const CheckoutPage = async ({ params: { lang } }) => {
 
     const dictionary = await getDictionary(lang);
+
+    const session = await auth();
+
+    if (!session) {
+        redirect(`/${lang}`);
+    };
 
     return (
         <>

@@ -195,7 +195,7 @@ export async function getAllTrendingWithAverageRatingAndReviewCount() {
             .limit(8)
             .lean();
 
-        const filteredData = latestOrders?.filter((data) => data?.orderDate >= fifteenDaysAgoInMilliseconds);
+        const filteredData = latestOrders?.filter((data) => data?.orderTime >= fifteenDaysAgoInMilliseconds);
         // console.log(filteredData)
 
         const productIds = filteredData?.map((product) => product.productId)

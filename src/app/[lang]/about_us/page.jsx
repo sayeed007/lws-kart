@@ -1,3 +1,12 @@
+export async function generateMetadata() {
+    return {
+        title: "LWS-kart | Learn with Sumit",
+        description: "Information about LWS_Kart",
+    }
+};
+
+
+
 
 const AboutUsPage = () => {
     return (

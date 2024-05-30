@@ -5,6 +5,15 @@ import Link from 'next/link';
 import SocialLogins from '@/components/Auth/SocialLogins';
 import LogInForm from '@/components/Auth/LogInForm';
 
+export async function generateMetadata() {
+    return {
+        title: "LWS-kart | Learn with Sumit",
+        description: "Log into LWS_Kart",
+    }
+};
+
+
+
 const LoginPage = async ({ params: { lang } }) => {
 
     const dictionary = await getDictionary(lang);

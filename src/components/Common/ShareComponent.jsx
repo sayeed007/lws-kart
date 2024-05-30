@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from "react";
 
 
-const ShareComponent = ({ recipeInfo }) => {
+const ShareComponent = ({ productInfo }) => {
 
     const [currentURL, setCurrentURL] = useState(null);
 
@@ -30,24 +30,24 @@ const ShareComponent = ({ recipeInfo }) => {
 
             <FacebookShareButton
                 url={currentURL}
-                quote={`Khana Khazana : ${recipeInfo?.name}`}
-                hashtag={`Recipe-of-${recipeInfo?.name}`}
+                quote={`LWS-KART : ${(JSON.parse(productInfo))?.name}`}
+                hashtag={`Product-Details-of-${(JSON.parse(productInfo))?.name}`}
                 className="socialMediaButton"
             >
                 <FacebookIcon size={36} round={true} />
             </FacebookShareButton>
             <TwitterShareButton
                 url={currentURL}
-                quote={`Khana Khazana : ${recipeInfo?.name}`}
-                hashtag={`Recipe-of-${recipeInfo?.name}`}
+                quote={`LWS-KART : ${(JSON.parse(productInfo))?.name}`}
+                hashtag={`Product-Details-of-${(JSON.parse(productInfo))?.name}`}
                 className="socialMediaButton"
             >
                 <TwitterIcon size={36} round={true} />
             </TwitterShareButton>
             <WhatsappShareButton
                 url={currentURL}
-                quote={`Khana Khazana : ${recipeInfo?.name}`}
-                hashtag={`Recipe-of-${recipeInfo?.name}`}
+                quote={`LWS-KART : ${(JSON.parse(productInfo))?.name}`}
+                hashtag={`Product-Details-of-${(JSON.parse(productInfo))?.name}`}
                 className="socialMediaButton"
             >
                 <WhatsappIcon size={36} round={true} />

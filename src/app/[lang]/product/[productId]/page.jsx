@@ -5,6 +5,19 @@ import ProductDescription from '@/components/Common/ProductDescription';
 import RelatedProducts from '@/components/Common/RelatedProducts';
 import { getSpecificProductWithAverageRatingAndReviewCount } from '@/database/queries';
 
+
+export async function generateMetadata({ params: { lang, productId } }) {
+
+    const productInfo = await getSpecificProductWithAverageRatingAndReviewCount(productId);
+
+    return {
+        title: "LWS-kart | Learn with Sumit",
+        description: `Details about the product - name: ${productInfo.name} , description: ${productInfo.description} , details: ${productInfo.details} , price: ${productInfo.price}`,
+    }
+};
+
+
+
 const ProductDetailsPage = async ({ params: { lang, productId } }) => {
     const dictionary = await getDictionary(lang);
 

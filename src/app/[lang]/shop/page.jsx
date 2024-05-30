@@ -5,6 +5,54 @@ import SmallScreenFloatingFilter from '@/components/ShopSidebar/SmallScreenFloat
 import { getAllCategories, getAllColors, getAllProductsByFiltering, getAllSize } from '@/database/queries';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
+export async function generateMetadata({
+    params: { lang },
+    searchParams: { searchKeyWord, category, minPrice, maxPrice, size, color },
+}) {
+
+    const allCategory = await getAllCategories();
+    const categoryMapping = {};
+    allCategory.forEach(category => categoryMapping[category.name] = category.id);
+
+    const allSizes = await getAllSize();
+    const sizeMapping = {};
+    allSizes.forEach(size => sizeMapping[size.visibleName] = size.id);
+
+    const allColors = await getAllColors();
+    const colorMapping = {};
+    allColors.forEach(color => colorMapping[color.name] = color.id);
+
+
+    const generatedCategoryName = category?.split('|');
+    const generatedCategory = generatedCategoryName?.map(eachCategory => categoryMapping?.[eachCategory]
+    );
+
+    const generatedSize = sizeMapping?.[size];
+
+    const generatedColor = colorMapping?.[color];
+
+    const allProductsByFiltering = await getAllProductsByFiltering({
+        searchKeyWord: searchKeyWord,
+        category: generatedCategory,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+        size: generatedSize,
+        color: generatedColor,
+    });
+
+    // Generate product descriptions
+    const productDescriptions = products.map(productInfo => {
+        return `Product Name: ${productInfo.name}, Price: ${productInfo.price}, Available Count: ${productInfo.availableCount}`;
+    });
+
+    // Combine product descriptions into a single string
+    const productListString = productDescriptions.join('\n');
+
+    return {
+        title: "LWS-kart | Learn with Sumit",
+        description: `List of product - ${productListString}`,
+    }
+};
 
 
 const ShopPage = async ({
@@ -44,6 +92,8 @@ const ShopPage = async ({
         size: generatedSize,
         color: generatedColor,
     });
+
+    console.log(allProductsByFiltering);
 
 
     return (

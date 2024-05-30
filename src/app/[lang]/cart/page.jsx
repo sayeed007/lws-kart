@@ -2,6 +2,16 @@ import BreadCrumb from '@/components/Common/BreadCrumb';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
 import CartContainer from '@/components/Cart/CartContainer';
 
+
+
+export async function generateMetadata() {
+    return {
+        title: "LWS-kart | Learn with Sumit",
+        description: `Product Cart Information of a user.`,
+    }
+};
+
+
 const CartPage = async ({ params: { lang } }) => {
 
     const dictionary = await getDictionary(lang);

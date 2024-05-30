@@ -2,6 +2,14 @@ import BreadCrumb from '@/components/Common/BreadCrumb';
 import WishListContainer from '@/components/WishList/WishListContainer';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
+export async function generateMetadata() {
+    return {
+        title: "LWS-kart | Learn with Sumit",
+        description: `Product Cart Information of a user.`,
+    }
+}; s
+
+
 const WishListPage = async ({ params: { lang } }) => {
 
     const dictionary = await getDictionary(lang);
