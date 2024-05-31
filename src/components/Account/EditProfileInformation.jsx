@@ -4,10 +4,10 @@ import { useFormik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import ErrorTooltip from '../Common/utilities/ErrorToltip';
 import Modal from '../Common/utilities/Modal';
-import Cookies from 'js-cookie';
 
 
 const initialFormData = {
@@ -80,6 +80,7 @@ const EditProfileInformation = ({ lang, dictionary, previousData, modalVisible, 
             setLoading(false);
 
 
+            toast.success('Your information has been updated successfully.');
             setModifiedAuth({
                 ...modifiedAuth,
                 sessionInfo: {
@@ -88,19 +89,12 @@ const EditProfileInformation = ({ lang, dictionary, previousData, modalVisible, 
                 }
             });
 
-            Cookies.set('auth', JSON.stringify({
-                ...modifiedAuth,
-                sessionInfo: {
-                    ...modifiedAuth?.sessionInfo,
-                    user: response?.data
-                }
-            }));
-
-
             setRefetchData(!refetchData);
             setModalVisible(false);
 
         } catch (error) {
+            console.error(error);
+            toast.error(`Error updating your information: ${error}`);
         }
     };
 

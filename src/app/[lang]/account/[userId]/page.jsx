@@ -6,6 +6,9 @@ import { calculateNewPrice } from "@/utils/data-util";
 import Image from "next/image";
 import EmptyBox from '../../../../../public/assets/images/EmptyBox.jpeg';
 import { getDictionary } from "../../../../../public/dictionary/dictionaries";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Link from "next/link";
 
 
 
@@ -56,11 +59,11 @@ const AccountPage = async ({ params: { lang, userId } }) => {
                             return (
                                 <div className="shadow rounded bg-white px-4 pt-6 pb-8" key={ongoingOrder?.id}>
 
-                                    <div className="py-2 flex">
+                                    <div className="py-2 flex justify-center items-center">
 
-                                        <div className="flex flex-col w-1/2">
+                                        <div className="flex flex-col w-2/3">
                                             <div className="py-2">
-                                                {dictionary?.invoiceNumber}:<span className="font-bold">{ongoingOrder?.id}</span>
+                                                {dictionary?.invoiceNumber}:<span className="font-bold ml-2">{ongoingOrder?.id}</span>
                                             </div>
 
                                             <div className="py-2">
@@ -68,11 +71,13 @@ const AccountPage = async ({ params: { lang, userId } }) => {
                                             </div>
                                         </div>
 
-                                        <div className="flex w-1/2 justify-end">
+                                        <Link
+                                            href={`/${lang}/invoice/${ongoingOrder?.id}`}
+                                            className="flex w-1/3 justify-end">
                                             <div className="bg-blue-400 text-white px-4 py-2 h-10 cursor-pointer">
-                                                Print
+                                                Invoice
                                             </div>
-                                        </div>
+                                        </Link>
 
                                     </div>
 
@@ -178,32 +183,34 @@ const AccountPage = async ({ params: { lang, userId } }) => {
                     <div className="grid grid-cols-2 gap-4 mx-auto max-w-5xl">
 
 
-                        {userPreviousOrder?.map((ongoingOrder) => {
+                        {userPreviousOrder?.map((previousOrder) => {
                             return (
-                                <div className="shadow rounded bg-white px-4 pt-6 pb-8" key={ongoingOrder?.id}>
+                                <div className="shadow rounded bg-white px-4 pt-6 pb-8" key={previousOrder?.id}>
 
-                                    <div className="py-2 flex">
+                                    <div className="py-2 flex justify-center items-center">
 
-                                        <div className="flex flex-col w-1/2">
+                                        <div className="flex flex-col w-2/3">
                                             <div className="py-2">
-                                                {dictionary?.invoiceNumber}:<span className="font-bold">{ongoingOrder?.id}</span>
+                                                {dictionary?.invoiceNumber}:<span className="font-bold ml-2">{previousOrder?.id}</span>
                                             </div>
 
                                             <div className="py-2">
-                                                {dictionary?.status}:<span className="font-bold uppercase"> {ongoingOrder?.status}</span>
+                                                {dictionary?.status}:<span className="font-bold uppercase"> {previousOrder?.status}</span>
                                             </div>
                                         </div>
 
-                                        <div className="flex w-1/2 justify-end">
+                                        <Link
+                                            href={`/${lang}/invoice/${previousOrder?.id}`}
+                                            className="flex w-1/3 justify-end">
                                             <div className="bg-blue-400 text-white px-4 py-2 h-10 cursor-pointer">
-                                                Print
+                                                Invoice
                                             </div>
-                                        </div>
+                                        </Link>
 
                                     </div>
 
                                     {/* PRODUCTS */}
-                                    {ongoingOrder?.orderDetailsId?.map((eachIndividualOrder) => {
+                                    {previousOrder?.orderDetailsId?.map((eachIndividualOrder) => {
                                         return (
                                             <div
                                                 key={eachIndividualOrder?.productId?._id}
@@ -259,7 +266,7 @@ const AccountPage = async ({ params: { lang, userId } }) => {
                                             {dictionary?.total}
                                         </div>
                                         <div className='w-[30%] flex justify-end'>
-                                            ${ongoingOrder?.totalPrice}
+                                            ${previousOrder?.totalPrice}
                                         </div>
                                     </div>
 
@@ -313,7 +320,17 @@ const AccountPage = async ({ params: { lang, userId } }) => {
             {/* ./account wrapper */}
 
 
-
+            <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                theme="colored"
+            />
 
         </>
     )

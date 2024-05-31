@@ -43,7 +43,6 @@ const LogInForm = ({ lang, dictionary }) => {
         try {
 
             const response = await login(formData);
-            console.log(response);
 
             // if (response.error) {
 

@@ -7,12 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import IncrementOrDecrement from './utilities/IncrementOrDecrement'
 
 
-const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
+const UserActionOnProductDetails = ({ productInfo, dictionary, lang }) => {
 
     const Router = useRouter();
 
@@ -42,21 +42,22 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
                 });
                 setLoading(false);
 
-                if (response?.data?.newItem) {
+                if (response?.data?.addToCartList) {
+                    toast.success(response?.data?.message, {
+                        onClose: () => { Router.refresh() }
+                    });
+
                     setModifiedAuth({
                         ...modifiedAuth,
                         cartItems: response.data?.cartItems
                     });
-                    Cookies.set('auth', JSON.stringify({
-                        ...modifiedAuth,
-                        cartItems: response.data?.cartItems
-                    }));
                 } else {
-
+                    toast.error(response?.data?.message);
                 }
 
             } catch (error) {
                 setLoading(false);
+                toast.error(`Add to cart error: ${error}`);
                 console.error('Add to wishlist error:', error);
             }
         } else {
@@ -82,28 +83,20 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
                 });
                 setLoading(false);
 
-                if (response?.data?.newItem) {
+                if (response?.data?.wishedProduct) {
                     setModifiedAuth({
                         ...modifiedAuth,
-                        wishlistItems: [
-                            ...modifiedAuth?.wishlistItems,
-                            response?.data?.newItem
-                        ]
+                        wishlistItems: [...response?.data?.wishedProduct]
                     });
 
-                    Cookies.set('auth', JSON.stringify({
-                        ...modifiedAuth,
-                        wishlistItems: [
-                            ...modifiedAuth?.wishlistItems,
-                            response?.data?.newItem
-                        ]
-                    }));
+                    toast.success(response?.data?.message);
 
                 } else {
-
+                    toast.warning(response?.data?.message);
                 }
 
             } catch (error) {
+                toast.error(`Add to wishlist error: ${error}`);
                 setLoading(false);
                 console.error('Add to wishlist error:', error);
             }

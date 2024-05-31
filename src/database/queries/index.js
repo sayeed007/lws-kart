@@ -1,5 +1,6 @@
 
 
+import sendMail from "@/mailSender/SendMail";
 import { cartModel } from "@/models/cart-model";
 import { categoryModel } from "@/models/category-model";
 import { colorModel } from "@/models/color-model";
@@ -20,9 +21,10 @@ import { replaceMongoIdInArray, replaceMongoIdInObject } from "@/utils/data-util
 const LAST_DAY_TO_CONSIDER_AS_NEW_ARRIVAL = 15;
 const lastDayToConsiderAsTrending = 30;
 
+//
+// ###################   UTILITY FUNCTIONS RELATED DB QUERY STARTS  ###################
+// 
 
-
-// UTILITY FUNCTIONS
 async function calculateAverageRatingAndReviewCount(products) {
     const productIds = products.map(product => product._id);
 
@@ -66,10 +68,25 @@ async function getWishlistItemsDetail(wishlists) {
             .limit(8)
             .lean();
 
+        // Calculate actual available count for each product
+        for (const product of products) {
+            // Fetch cart items for this product with expiration time in the future
+            const cartItems = await cartModel.find({
+                productId: product._id,
+                expirationTime: { $gt: new Date() } // Only consider items with expiration time in the future
+            }).lean();
+
+            // Calculate total product count in the cart
+            const totalProductCountInCart = cartItems.reduce((total, item) => total + item.productCount, 0);
+
+            // Subtract total product count in the cart from available count
+            product.availableCount = product.availableCount - totalProductCountInCart;
+        }
+
+
         // Iterate through each product and calculate average rating and review count
         const productsWithAverageRatingAndReviewCount = await calculateAverageRatingAndReviewCount(products);
 
-        // console.log(categoryWiseProductsWithAverageRatingAndReviewCount);
         return replaceMongoIdInArray(productsWithAverageRatingAndReviewCount);
 
 
@@ -81,6 +98,9 @@ async function getWishlistItemsDetail(wishlists) {
 
 
 
+//
+// ###################   UTILITY FUNCTIONS RELATED DB QUERY ENDS  ###################
+//
 
 
 
@@ -92,6 +112,12 @@ async function getWishlistItemsDetail(wishlists) {
 
 
 
+
+
+
+//
+// ###################   GENERAL VISITOR RELATED DB QUERY STARTS  ###################
+// 
 
 
 export async function getAllCategories() {
@@ -101,7 +127,6 @@ export async function getAllCategories() {
 
         const allCategories = await categoryModel.find().lean();
 
-        // console.log(allCategories);
         return replaceMongoIdInArray(allCategories);
 
     } catch (error) {
@@ -118,7 +143,6 @@ export async function getAllSize() {
 
         const allSizes = await sizeModel.find().lean();
 
-        // console.log(allSizes);
         return replaceMongoIdInArray(allSizes);
 
     } catch (error) {
@@ -135,7 +159,6 @@ export async function getAllColors() {
 
         const allColors = await colorModel.find().lean();
 
-        // console.log(allColors);
         return replaceMongoIdInArray(allColors);
 
     } catch (error) {
@@ -160,6 +183,22 @@ export async function getAllNewArrivalWithAverageRatingAndReviewCount() {
             .select(["name", "price", "discountAvailable", "discountPercent", 'images', "availableCount"])
             .limit(8)
             .lean();
+
+        // Calculate actual available count for each product
+        for (const product of newArrivalProducts) {
+            // Fetch cart items for this product with expiration time in the future
+            const cartItems = await cartModel.find({
+                productId: product._id,
+                expirationTime: { $gt: new Date() } // Only consider items with expiration time in the future
+            }).lean();
+
+            // Calculate total product count in the cart
+            const totalProductCountInCart = cartItems.reduce((total, item) => total + item.productCount, 0);
+
+            // Subtract total product count in the cart from available count
+            product.availableCount = product.availableCount - totalProductCountInCart;
+        }
+
 
         // Check if there are any products to process
         if (newArrivalProducts.length === 0) {
@@ -186,29 +225,38 @@ export async function getAllTrendingWithAverageRatingAndReviewCount() {
 
         const fifteenDaysAgoInMilliseconds = fifteenDaysAgo.getTime();
 
-        // console.log(fifteenDaysAgo)
-        // console.log(fifteenDaysAgoInMilliseconds)
 
         const latestOrders = await orderDetailsModel
-            .find()
-            // .find({ orderDate: { $gte: fifteenDaysAgoInMilliseconds } })
+            // .find()
+            .find({ orderTime: { $gte: fifteenDaysAgoInMilliseconds } })
             .limit(8)
             .lean();
 
-        const filteredData = latestOrders?.filter((data) => data?.orderTime >= fifteenDaysAgoInMilliseconds);
-        // console.log(filteredData)
-
-        const productIds = filteredData?.map((product) => product.productId)
+        const productIds = latestOrders?.map((product) => product.productId);
 
         const filteredProducts = await productModel
             .find({ _id: { $in: productIds } })
             .select(["name", "price", "discountAvailable", "discountPercent", 'images', "availableCount"])
             .lean();
 
+        // Calculate actual available count for each product
+        for (const product of filteredProducts) {
+            // Fetch cart items for this product with expiration time in the future
+            const cartItems = await cartModel.find({
+                productId: product._id,
+                expirationTime: { $gt: new Date() } // Only consider items with expiration time in the future
+            }).lean();
+
+            // Calculate total product count in the cart
+            const totalProductCountInCart = cartItems?.reduce((total, item) => total + item?.productCount, 0);
+
+            // Subtract total product count in the cart from available count
+            product.availableCount = product.availableCount - totalProductCountInCart;
+        }
+
         // Iterate through each product and calculate average rating and review count
         const productsWithAverageRatingAndReviewCount = await calculateAverageRatingAndReviewCount(filteredProducts);
 
-        // console.log(productsWithAverageRatingAndReviewCount);
         return replaceMongoIdInArray(productsWithAverageRatingAndReviewCount);
     } catch (error) {
         console.error("Error fetching new arrival products with average rating and review count:", error);
@@ -224,6 +272,18 @@ export async function getSpecificProductWithAverageRatingAndReviewCount(productI
         const specificProduct = await productModel
             .findById(productId)
             .lean();
+
+        // Calculate actual available count for each product
+        const cartItems = await cartModel.find({
+            productId: productId,
+            expirationTime: { $gt: new Date() } // Only consider items with expiration time in the future
+        }).lean();
+
+        // Calculate total product count in the cart
+        const totalProductCountInCart = cartItems.reduce((total, item) => total + item.productCount, 0);
+
+        // Subtract total product count in the cart from available count
+        specificProduct.availableCount = specificProduct.availableCount - totalProductCountInCart;
 
         const ratings = await ratingModel.find({ productId: specificProduct?._id }).lean();
 
@@ -258,7 +318,6 @@ export async function getSpecificProductWithAverageRatingAndReviewCount(productI
 
 
 
-        // console.log(productsWithAverageRatingAndReviewCount);s
         return replaceMongoIdInObject(productsWithAverageRatingAndReviewCount);
     } catch (error) {
         console.error("Error fetching new arrival products with average rating and review count:", error);
@@ -277,10 +336,24 @@ export async function getCategoryWiseProducts(categoryId) {
             .limit(8)
             .lean();
 
+        // Calculate actual available count for each product
+        for (const product of categoryWiseProducts) {
+            // Fetch cart items for this product with expiration time in the future
+            const cartItems = await cartModel.find({
+                productId: product._id,
+                expirationTime: { $gt: new Date() } // Only consider items with expiration time in the future
+            }).lean();
+
+            // Calculate total product count in the cart
+            const totalProductCountInCart = cartItems.reduce((total, item) => total + item.productCount, 0);
+
+            // Subtract total product count in the cart from available count
+            product.availableCount = product.availableCount - totalProductCountInCart;
+        }
+
         // Iterate through each product and calculate average rating and review count
         const categoryWiseProductsWithAverageRatingAndReviewCount = await calculateAverageRatingAndReviewCount(categoryWiseProducts);
 
-        // console.log(categoryWiseProductsWithAverageRatingAndReviewCount);
         return replaceMongoIdInArray(categoryWiseProductsWithAverageRatingAndReviewCount);
 
 
@@ -334,10 +407,24 @@ export async function getAllProductsByFiltering({ searchKeyWord, category, minPr
             .select(["name", "price", "discountAvailable", "discountPercent", 'images', "category", "size", "color", "availableCount"])
             .lean();
 
+        // Calculate actual available count for each product
+        for (const product of products) {
+            // Fetch cart items for this product with expiration time in the future
+            const cartItems = await cartModel.find({
+                productId: product._id,
+                expirationTime: { $gt: new Date() } // Only consider items with expiration time in the future
+            }).lean();
+
+            // Calculate total product count in the cart
+            const totalProductCountInCart = cartItems.reduce((total, item) => total + item.productCount, 0);
+
+            // Subtract total product count in the cart from available count
+            product.availableCount = product.availableCount - totalProductCountInCart;
+        }
+
 
         const productsWithAverageRatingAndReviewCount = await calculateAverageRatingAndReviewCount(products);
 
-        // console.log(productsWithAverageRatingAndReviewCount);
         return replaceMongoIdInArray(productsWithAverageRatingAndReviewCount);
     } catch (error) {
         console.error("Error fetching products by filtering:", error);
@@ -346,6 +433,9 @@ export async function getAllProductsByFiltering({ searchKeyWord, category, minPr
 };
 
 
+//
+// ###################   GENERAL VISITOR RELATED DB QUERY STARTS  ###################
+//
 
 
 
@@ -353,59 +443,15 @@ export async function getAllProductsByFiltering({ searchKeyWord, category, minPr
 
 
 
+//      @@@@@@@@@@@@@@@@@@@@@@@@@@@@      AUTHORIZED QUERY STARTS      @@@@@@@@@@@@@@@@@@@@@@@@@@@@                    
 
 
 
 
 
-// USER PART
-export async function getUserByEmail(email) {
-    try {
-        const users = await userModel.find({ email: email }).lean();
-        return replaceMongoIdInObject(users[0]);
-    } catch (error) {
-        console.error('Error fetching user account by email:', error);
-        throw error;
-    }
-};
-
-
-export async function getUserAccountByUserId(userId) {
-    try {
-
-        const wishlistItems = await wishlistModel.find({ userId: userId }).lean();
-
-        const wishlistItemsDetail = await getWishlistItemsDetail(wishlistItems);
-
-        // Join the two arrays based on productId from array1 and id from array2
-        const wishListWithProductData = (await replaceMongoIdInArray(wishlistItems)).map(wishlistData => {
-            const productData = wishlistItemsDetail.find(product => product.id === wishlistData.productId.toString());
-            return { ...productData, wishlistData };
-        });
-
-
-        const cartItems = await cartModel.find({ userId: userId }).lean();
-
-        const cartItemsDetail = await getWishlistItemsDetail(cartItems);
-
-        // Join the two arrays based on productId from array1 and id from array2
-        const cartWithProductData = (await replaceMongoIdInArray(cartItems)).map(cartData => {
-            const productData = cartItemsDetail.find(product => product.id === cartData.productId.toString());
-            return { ...productData, cartData };
-        });
-
-        return ({
-            wishlistItems: wishListWithProductData,
-            cartItems: cartWithProductData
-        });
-
-
-    } catch (error) {
-        console.error('Error fetching user account by email:', error);
-        throw error;
-    }
-};
-
+//
+// ###################   USER WISHLIST RELATED DB QUERY STARTS  ###################
+// 
 
 // WISHLIST
 export const addToWishlist = async (userId, productId) => {
@@ -426,17 +472,6 @@ export const addToWishlist = async (userId, productId) => {
 
         // If the product is not already in the wishlist, add it
         const newItemResponse = await wishlistModel.create({ userId, productId, addedTime: new Date() });
-        console.log(newItemResponse.toObject());
-
-        // const newItem = newItemResponse.toObject()
-
-        // const newItemDetails = await getWishlistItemsDetail([{ productId: newItem?.productId }]);
-
-
-        // const generatedResponse = {
-        //     ...newItemDetails?.[0],
-        //     wishlistData: await replaceMongoIdInObject(newItem)
-        // };
 
         const wishlistItems = await wishlistModel.find({ userId: userId }).lean();
 
@@ -447,10 +482,6 @@ export const addToWishlist = async (userId, productId) => {
             const productData = wishlistItemsDetail.find(product => product.id === wishlistData.productId.toString());
             return { ...productData, wishlistData };
         });
-
-        console.log(wishListWithProductData);
-
-
 
         return {
             message: "Product added to wishlist successfully.",
@@ -474,88 +505,15 @@ export const removeFromWishlist = async (wishlistItemId) => {
     }
 };
 
-// user profile
-export const getUserAddress = async (userId) => {
-    try {
-
-        // Delete the item from the database
-        const userAddress = await userAddressModel.findOne({ userId }).lean();
-
-        // console.log(userAddress);
-        return userAddress ? userAddress : {};
-    } catch (error) {
-        throw new Error('Error getting user address: ' + error.message);
-    }
-};
-
-export const addToUserAddress = async (userGivenAddress) => {
-    try {
-
-        // Delete the item from the database
-        const userAddress = await userAddressModel.create(userGivenAddress);
-
-        return userAddress ? userAddress.toObject() : {};
-    } catch (error) {
-        throw new Error('Error getting user address: ' + error.message);
-    }
-};
-
-export const updateUserAddress = async (addressId, userGivenAddress) => {
-    try {
-        // Find the user address document by addressId
-        let userAddress = await userAddressModel.findById(addressId);
-
-        if (!userAddress) {
-            throw new Error('User address not found');
-        }
-
-        // Update the shipping address if provided
-        if (userGivenAddress.shippingAddress) {
-            userAddress.shippingAddress = { ...userAddress.shippingAddress, ...userGivenAddress.shippingAddress };
-        }
-
-        // Update the billing address if provided
-        if (userGivenAddress.billingAddress) {
-            userAddress.billingAddress = { ...userAddress.billingAddress, ...userGivenAddress.billingAddress };
-        }
-
-        // Save the updated user address document
-        userAddress = await userAddress.save();
-
-        return userAddress ? userAddress.toObject() : {};
-    } catch (error) {
-        throw new Error('Error updating user address: ' + error.message);
-    }
-};
-
-export const updateUserInfo = async (userId, userProvidedData) => {
-    try {
-        // Find the user document by userId
-        let userData = await userModel.findById(userId);
-
-        if (!userData) {
-            throw new Error('User not found');
-        }
-
-        // Exclude password field from the update
-        delete userProvidedData.password;
-
-        // Update user data with provided data
-        Object.assign(userData, userProvidedData);
-
-        console.log(userData.toObject());
-
-        // Save the updated user document
-        const modifiedUserData = await userData.save();
-
-        return modifiedUserData ? modifiedUserData.toObject() : {};
-    } catch (error) {
-        throw new Error('Error updating user information: ' + error.message);
-    }
-};
+//
+// ###################   USER WISHLIST RELATED DB QUERY STARTS  ###################
+// 
 
 
-// CART LIST
+//
+// ###################   USER CART RELATED DB QUERY STARTS  ###################
+// 
+
 export const addToCartList = async (requestData) => {
     try {
         // Get the product details
@@ -570,13 +528,13 @@ export const addToCartList = async (requestData) => {
         };
 
         // PRODUCT COUNT IN CART
-        const existingCartItems = await cartModel.find({
+        const allExistingCartItems = await cartModel.find({
             productId: requestData.productId,
             expirationTime: { $gt: new Date() } // Only consider items with expiration time in the future
         }).lean();
 
         // Calculate total product count in the cart
-        const totalProductCountInCart = existingCartItems.reduce((total, item) => total + item.productCount, 0);
+        const totalProductCountInCart = allExistingCartItems.reduce((total, item) => total + item.productCount, 0);
 
         // Check if the product is already in the cart for the user
         const existingCartItem = await cartModel.findOne({
@@ -585,13 +543,20 @@ export const addToCartList = async (requestData) => {
             expirationTime: { $gt: new Date() }
         }).lean();
 
+        // Calculate the maximum quantity user can add based on available count and expiration time
+        const availableCount = product.availableCount;
+        // const cartProductCount = existingCartItem.productCount;
+        const totalAvailableCount = availableCount - totalProductCountInCart;
+
         if (existingCartItem) {
-            // Calculate the maximum quantity user can add based on available count and expiration time
-            const availableCount = product.availableCount;
-            // const cartProductCount = existingCartItem.productCount;
-            const totalAvailableCount = availableCount - totalProductCountInCart;
 
             // Check if the requested quantity exceeds the available count
+            if (totalAvailableCount === 0) {
+                return {
+                    addToCartList: false,
+                    message: `${product.name} is not available in stock.`
+                };
+            }
             if (requestData.productCount > totalAvailableCount) {
                 return {
                     addToCartList: false,
@@ -607,13 +572,6 @@ export const addToCartList = async (requestData) => {
             ).lean();
 
             if (updatedCartItem) {
-                // If the item is successfully updated, return the updated item details
-                // const updatedItemDetails = await getWishlistItemsDetail([{ productId: updatedCartItem.productId }]);
-
-                // const generatedResponse = {
-                //     ...updatedItemDetails?.[0],
-                //     cartListData: await replaceMongoIdInObject(updatedCartItem)
-                // };
 
                 const cartData = await getUserCart(requestData.userId);
 
@@ -622,13 +580,22 @@ export const addToCartList = async (requestData) => {
                     message: "Product quantity updated in cart.",
                     cartItems: cartData
                 };
-            }
+            };
+
         } else {
-            // If the product is not already in the cart, check if the requested quantity is available
-            if (requestData.productCount > product.availableCount) {
+
+
+            // Check if the requested quantity exceeds the available count
+            if (totalAvailableCount === 0) {
                 return {
                     addToCartList: false,
-                    message: `Only ${product.availableCount} ${product.name}(s) available in stock.`
+                    message: `${product.name} is not available in stock.`
+                };
+            }
+            if (requestData.productCount > totalAvailableCount) {
+                return {
+                    addToCartList: false,
+                    message: `Only ${totalAvailableCount} ${product.name}(s) available in stock.`
                 };
             }
 
@@ -665,14 +632,12 @@ export const removeFromCartList = async (cartId) => {
 
         // Delete the item from the database
         const deleteFromCart = await cartModel.findByIdAndDelete(cartId).lean();
-        console.log(deleteFromCart);
 
         return deleteFromCart?._id ? true : false;
     } catch (error) {
         throw new Error('Error deleting item from wishlist: ' + error.message);
     }
 };
-
 
 export const getUserCart = async (userId) => {
     try {
@@ -699,9 +664,6 @@ export const getUserCart = async (userId) => {
             });
         };
 
-
-        console.log(formattedCart);
-
         // Return the formatted cart items
         return formattedCart;
     } catch (error) {
@@ -710,6 +672,15 @@ export const getUserCart = async (userId) => {
 };
 
 
+//
+// ###################   USER CART RELATED DB QUERY ENDS  ###################
+//
+
+
+
+//
+// ###################   USER ORDER RELATED DB QUERY STARTS  ###################
+// 
 
 // GET USER Ongoing Order
 export const getUserOngoingOrder = async (userId) => {
@@ -732,7 +703,6 @@ export const getUserOngoingOrder = async (userId) => {
     }
 };
 
-
 // GET USER Previous Order
 export const getUserPreviousOrder = async (userId) => {
     try {
@@ -753,16 +723,40 @@ export const getUserPreviousOrder = async (userId) => {
     }
 };
 
+export const getSpecificOrder = async (invoiceId) => {
+    try {
 
+        const ongoingOrders = await userOrderModel.findById(invoiceId).populate({
+            path: 'orderDetailsId',
+            populate: {
+                path: 'productId',
+                model: 'product',
+                select: ['name', 'discountPercent', 'images']
+            }
+        }).lean();
 
-
-
-
+        return replaceMongoIdInObject(ongoingOrders);
+    } catch (error) {
+        console.error('Error fetching ongoing orders:', error);
+        throw error;
+    }
+};
 
 
 // CREATE ORDER
 export const createOrder = async (requestData) => {
     try {
+
+        // UPDATE USER ADDRESS IF USER MODIFY THIS
+        const userProvidedAddress = requestData?.userAddress;
+
+        if (userProvidedAddress?.id) {
+            const updatedUserAddress = await updateUserAddress(userProvidedAddress?.id, userProvidedAddress);
+        } else {
+            const addUserAddress = addToUserAddress(userProvidedAddress);
+        }
+
+
         const orders = {}; // Object to store orders grouped by user
         const userOrders = []; // Array to store user orders
 
@@ -827,12 +821,180 @@ export const createOrder = async (requestData) => {
                 }
                 product.availableCount -= orderDetail.count;
                 await product.save();
-                console.log(`Updated available count for product ${orderDetail.productId}`);
             }
         }
+
+
+
+
+        // SEND EMAIL
+
+        // Find the user email by userId
+        const userData = await userModel.findById(requestData.userAddress.userId).lean();
+
+        const userEmail = userData.email;
+        const userName = userData.name;
+        const userCurrentOrderInvoice = (userOrders?.[0]?.orderDetailsId).toString();
+
+        const invoiceLink = `${process.env.WEBSITE_URL}/en/invoice/${userCurrentOrderInvoice}`;
+
+        if (userEmail && userCurrentOrderInvoice) {
+            const sentMail = await sendMail({
+                to: userEmail,
+                subject: 'Invoice for your recent order',
+                text: `Hello ${userName},\n\nThank you for your recent order. You can view your invoice by clicking the following link: ${invoiceLink}`,
+                html: `<p>Hello ${userName},</p><p>Thank you for your recent order. You can view your invoice by clicking the following link:</p><p><a href="${invoiceLink}">View Invoice</a></p>`
+            });
+        }
+
 
         return true;
     } catch (error) {
         throw new Error('Error Creating Order: ' + error);
     }
 };
+
+//
+// ###################   USER ORDER RELATED DB QUERY ENDS  ###################
+//
+
+
+
+
+//
+// ###################   USER INFORMATION RELATED DB QUERY STARTS  ###################
+//
+
+// USER PART
+export async function getUserByEmail(email) {
+    try {
+        const users = await userModel.find({ email: email }).lean();
+        return replaceMongoIdInObject(users[0]);
+    } catch (error) {
+        console.error('Error fetching user account by email:', error);
+        throw error;
+    }
+};
+
+export async function getUserAccountByUserId(userId) {
+    try {
+
+        const wishlistItems = await wishlistModel.find({ userId: userId }).lean();
+
+        const wishlistItemsDetail = await getWishlistItemsDetail(wishlistItems);
+
+        // Join the two arrays based on productId from array1 and id from array2
+        const wishListWithProductData = (await replaceMongoIdInArray(wishlistItems)).map(wishlistData => {
+            const productData = wishlistItemsDetail.find(product => product.id === wishlistData.productId.toString());
+            return { ...productData, wishlistData };
+        });
+
+
+        const cartItems = await cartModel.find({
+            userId: userId,
+            expirationTime: { $gt: new Date() } // Only consider items with expiration time in the future
+        }).lean();
+
+        const cartItemsDetail = await getWishlistItemsDetail(cartItems);
+
+        // Join the two arrays based on productId from array1 and id from array2
+        const cartWithProductData = (await replaceMongoIdInArray(cartItems)).map(cartData => {
+            const productData = cartItemsDetail.find(product => product.id === cartData.productId.toString());
+            return { ...productData, cartData };
+        });
+
+        return ({
+            wishlistItems: wishListWithProductData,
+            cartItems: cartWithProductData
+        });
+
+
+    } catch (error) {
+        console.error('Error fetching user account by email:', error);
+        throw error;
+    }
+};
+
+// user profile
+export const getUserAddress = async (userId) => {
+    try {
+
+        // Delete the item from the database
+        const userAddress = await userAddressModel.findOne({ userId }).lean();
+
+        return userAddress ? replaceMongoIdInObject(userAddress) : {};
+    } catch (error) {
+        throw new Error('Error getting user address: ' + error.message);
+    }
+};
+
+export const addToUserAddress = async (userGivenAddress) => {
+    try {
+
+        // Delete the item from the database
+        const userAddress = await userAddressModel.create(userGivenAddress);
+
+        return userAddress ? userAddress.toObject() : {};
+    } catch (error) {
+        throw new Error('Error getting user address: ' + error.message);
+    }
+};
+
+export const updateUserAddress = async (addressId, userGivenAddress) => {
+    try {
+        // Find the user address document by addressId
+        let userAddress = await userAddressModel.findById(addressId);
+
+        if (!userAddress) {
+            throw new Error('User address not found');
+        }
+
+        // Update the shipping address if provided
+        if (userGivenAddress.shippingAddress) {
+            userAddress.shippingAddress = { ...userAddress.shippingAddress, ...userGivenAddress.shippingAddress };
+        }
+
+        // Update the billing address if provided
+        if (userGivenAddress.billingAddress) {
+            userAddress.billingAddress = { ...userAddress.billingAddress, ...userGivenAddress.billingAddress };
+        }
+
+        // Save the updated user address document
+        userAddress = await userAddress.save();
+
+        return userAddress ? userAddress.toObject() : {};
+    } catch (error) {
+        throw new Error('Error updating user address: ' + error.message);
+    }
+};
+
+export const updateUserInfo = async (userId, userProvidedData) => {
+    try {
+        // Find the user document by userId
+        let userData = await userModel.findById(userId);
+
+        if (!userData) {
+            throw new Error('User not found');
+        }
+
+        // Exclude password field from the update
+        delete userProvidedData.password;
+
+        // Update user data with provided data
+        Object.assign(userData, userProvidedData);
+
+        // Save the updated user document
+        const modifiedUserData = await userData.save();
+
+        return modifiedUserData ? modifiedUserData.toObject() : {};
+    } catch (error) {
+        // return modifiedUserData
+        throw new Error('Error updating user information: ' + error.message);
+    }
+};
+
+
+
+//
+// ###################   USER INFORMATION RELATED DB QUERY ENDS  ###################
+//

@@ -13,7 +13,6 @@ import { auth } from "../../../auth";
 async function PrimaryNavbar({ dictionary, lang }) {
 
     const session = await auth();
-    // console.log(session);
 
     return (
         <>

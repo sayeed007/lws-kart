@@ -4,6 +4,7 @@ import ProductDetails from '@/components/Common/ProductDetails';
 import ProductDescription from '@/components/Common/ProductDescription';
 import RelatedProducts from '@/components/Common/RelatedProducts';
 import { getSpecificProductWithAverageRatingAndReviewCount } from '@/database/queries';
+import { ToastContainer } from 'react-toastify';
 
 
 export async function generateMetadata({ params: { lang, productId } }) {
@@ -37,6 +38,7 @@ const ProductDetailsPage = async ({ params: { lang, productId } }) => {
 
             {/* PRODUCT DETAILS */}
             <ProductDetails
+                lang={lang}
                 dictionary={dictionary}
                 productInfo={productInfo}
             />
@@ -53,6 +55,20 @@ const ProductDetailsPage = async ({ params: { lang, productId } }) => {
                 lang={lang}
                 dictionary={dictionary}
                 productInfo={productInfo}
+            />
+
+
+
+            <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                theme="colored"
             />
 
         </>

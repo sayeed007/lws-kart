@@ -1,5 +1,5 @@
 export const replaceMongoIdInArray = (array) => {
-  const mappedArray = array.map(item => {
+  const mappedArray = array?.map(item => {
     return replaceMongoIdInObject(item);
   });
 
@@ -7,7 +7,7 @@ export const replaceMongoIdInArray = (array) => {
 };
 
 export const replaceMongoIdInArrayDuringFiltering = (array) => {
-  const mappedArray = array.map(item => {
+  const mappedArray = array?.map(item => {
     return replaceMongoIdInObjectDuringFiltering(item);
   });
 
@@ -15,17 +15,17 @@ export const replaceMongoIdInArrayDuringFiltering = (array) => {
 };
 
 export const replaceMongoIdInObject = (obj) => {
-  const { _id, ...updatedObj } = { ...obj, id: obj._id.toString() };
+  const { _id, ...updatedObj } = { ...obj, id: obj?._id?.toString() };
   return updatedObj;
 };
 
 export const replaceMongoIdInObjectDuringFiltering = (obj) => {
   const { _id, ...updatedObj } = {
     ...obj,
-    id: obj._id.toString(),
-    category: obj.category.toString(),
-    size: obj.size.toString(),
-    color: obj.color.toString(),
+    id: obj?._id?.toString(),
+    category: obj?.category?.toString(),
+    size: obj?.size?.toString(),
+    color: obj?.color?.toString(),
   };
   return updatedObj;
 };

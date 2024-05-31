@@ -3,10 +3,9 @@
 
 import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
-import { ToastContainer, toast } from "react-toastify";
+import { useState } from 'react';
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
@@ -46,18 +45,13 @@ const AddToCartFromProductCard = ({ lang, dictionary, itemInfo }) => {
                         cartItems: response.data?.cartItems
                     });
 
-                    Cookies.set('auth', JSON.stringify({
-                        ...modifiedAuth,
-                        cartItems: response.data?.cartItems
-                    }));
-
                 } else {
                     toast.error(response?.data?.message);
                 }
 
             } catch (error) {
                 setLoading(false);
-                toast.error('Add to cart error:', error);
+                toast.error(`Add to cart error: ${error}`);
                 console.error('Add to wishlist error:', error);
             }
         } else {

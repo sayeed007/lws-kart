@@ -4,6 +4,7 @@ import ShopSidebar from '@/components/ShopSidebar/ShopSidebar';
 import SmallScreenFloatingFilter from '@/components/ShopSidebar/SmallScreenFloatingFilter';
 import { getAllCategories, getAllColors, getAllProductsByFiltering, getAllSize } from '@/database/queries';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
+import { ToastContainer } from 'react-toastify';
 
 export async function generateMetadata({
     params: { lang },
@@ -93,8 +94,6 @@ const ShopPage = async ({
         color: generatedColor,
     });
 
-    console.log(allProductsByFiltering);
-
 
     return (
         <>
@@ -182,6 +181,21 @@ const ShopPage = async ({
 
             </div>
             {/* shop wrapper */}
+
+
+            <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                theme="colored"
+            />
+
+
 
         </>
     )

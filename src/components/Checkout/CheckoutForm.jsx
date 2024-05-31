@@ -2,16 +2,15 @@
 
 
 import { useModifiedAuth } from '@/hooks/useModifiedAuth';
+import { calculateNewPrice } from '@/utils/data-util';
 import axios from 'axios';
 import { useFormik } from 'formik';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import ErrorTooltip from '../Common/utilities/ErrorToltip';
-import Modal from '../Common/utilities/Modal';
-import Link from 'next/link';
-import { calculateNewPrice } from '@/utils/data-util';
-import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 
 const initialFormData = {
     shippingAddress: {
@@ -177,7 +176,7 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
                 setValues(response?.data?.userId ?
                     { ...response?.data, agreeTerms: false }
                     :
-                    { ...initialFormData, userId: modifiedAuth?.sessionInfo?.user?.id }
+                    { ...response?.data, agreeTerms: false, userId: modifiedAuth?.sessionInfo?.user?.id }
                 );
 
 
@@ -187,11 +186,6 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
         };
 
         if (modifiedAuth?.sessionInfo?.user?.id) {
-            // debugger
-            // if (modifiedAuth?.cartItems?.length && modifiedAuth?.cartItems?.length > 0) {
-            //     router.push(`/${lang}`);
-            // };
-
             fetchUserAddressData();
         };
 
@@ -219,24 +213,22 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
 
             setLoading(false);
 
+            toast.success('Your order is placed successfully.');
+
             if (response?.data) {
                 setModifiedAuth({
                     ...modifiedAuth,
                     cartItems: []
                 });
 
-                Cookies.set('auth', JSON.stringify({
-                    ...modifiedAuth,
-                    cartItems: []
-                }));
-
                 router.push(`/${lang}/account/${value?.userId}`);
             }
 
 
         } catch (error) {
+            toast.success(`Add New Order failed: ${error}`);
             setLoading(false);
-            console.error('Add New Address error:', error);
+            console.error('Add New Order failed:', error);
         }
     };
 
@@ -256,7 +248,6 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
     };
 
 
-    // console.log(values);
 
     return (
         <>

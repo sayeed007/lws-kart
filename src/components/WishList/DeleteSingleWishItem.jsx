@@ -38,19 +38,12 @@ const DeleteSingleWishItem = ({ wishedProduct }) => {
                     ]
                 });
 
-                Cookies.set('auth', JSON.stringify({
-                    ...modifiedAuth,
-                    wishlistItems: [
-                        ...modifiedAuth?.wishlistItems?.filter((wishListItem) => wishListItem?.wishlistData?.id !== wishedProduct?.wishlistData?.id)
-                    ]
-                }));
-
             } else {
                 toast.error(response?.data?.message);
             }
 
         } catch (error) {
-            toast.error('Delete to wishlist error:', error);
+            toast.error(`Delete to wishlist error: ${error}`);
             setLoading(false);
             console.error('Delete to wishlist error:', error);
         }

@@ -12,8 +12,6 @@ import { toast } from 'react-toastify';
 const DeleteSingleCartItem = ({ cartProduct, refetchData, setRefetchData }) => {
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
-    console.log(modifiedAuth);
-    console.log(cartProduct);
 
     const [loading, setLoading] = useState(false);
 
@@ -29,19 +27,17 @@ const DeleteSingleCartItem = ({ cartProduct, refetchData, setRefetchData }) => {
             });
             setLoading(false);
 
-            console.log(response);
-
             if (response?.data?.isDeleted) {
                 toast.success(response?.data?.message);
 
                 setRefetchData(!refetchData);
             } else {
-                toast.success(response?.data?.message);
+                toast.error(response?.data?.message);
             }
 
         } catch (error) {
             setLoading(false);
-            toast.error('Delete to cart error:', error);
+            toast.error(`Delete to cart error: ${error}`);
             console.error('Delete to cart error:', error);
         }
     };

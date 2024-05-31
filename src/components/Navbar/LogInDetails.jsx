@@ -44,14 +44,11 @@ const LogInDetails = ({ lang, dictionary }) => {
                             className='bg-white h-[40px] w-[40px] rounded-full flex items-center cursor-pointer'
                             title="Log Out"
                             onClick={async () => {
-                                debugger
                                 Cookies.remove('auth');
                                 setModifiedAuth(null);
-                                // await signOut({ callbackUrl: `http://localhost:3000/${lang}/login` });
+                                // await signOut({ callbackUrl: `${process.env.WEBSITE_URL}/${lang}/login` });
                                 await signOut();
                                 // router.push(`/${lang}/login`);
-
-
                             }}
                         >
                             <FontAwesomeIcon

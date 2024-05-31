@@ -1,8 +1,9 @@
 import { calculateNewPrice } from '@/utils/data-util'
 import Image from 'next/image'
 import DeleteSingleCartItem from './DeleteSingleCartItem'
+import Link from 'next/link'
 
-const SingleCartProduct = ({ dictionary, cartProduct, refetchData, setRefetchData }) => {
+const SingleCartProduct = ({ lang, dictionary, cartProduct, refetchData, setRefetchData }) => {
 
     return (
         <>
@@ -19,9 +20,12 @@ const SingleCartProduct = ({ dictionary, cartProduct, refetchData, setRefetchDat
                 </div>
 
                 <div className="w-1/3">
-                    <h2 className="text-gray-800 text-xl font-medium uppercase">
+                    <Link
+                        href={`/${lang}/product/${cartProduct?.id}`}
+                        className="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition"
+                    >
                         {cartProduct?.name}
-                    </h2>
+                    </Link>
                     <p className="text-gray-500 text-sm">
                         {dictionary?.availability}:
 

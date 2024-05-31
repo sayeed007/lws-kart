@@ -119,5 +119,7 @@
   "edit": "Edit",
   "add": "Add",
   "noItemInWishList": "No Item In WishList",
-  "noItemInCart": "No Item In Cart"
+  "noItemInCart": "No Item In Cart",
+  "orderTime": "Order Time",
+  "invoice": "Invoice"
 }

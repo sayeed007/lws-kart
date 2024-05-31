@@ -5,11 +5,11 @@ import { FaFacebookSquare, FaGoogle } from "react-icons/fa";
 const SocialLogins = ({ mode }) => {
 
   const handleAuthGoogle = (event) => {
-    signIn("google", { callbackUrl: 'http://localhost:3000' });
+    signIn("google", { callbackUrl: process.env.WEBSITE_URL });
   };
 
   const handleAuthFacebook = (event) => {
-    signIn("facebook", { callbackUrl: 'http://localhost:3000' });
+    signIn("facebook", { callbackUrl: process.env.WEBSITE_URL });
   };
 
 

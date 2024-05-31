@@ -4,7 +4,7 @@ import ImageComponent from './ImageComponent'
 import ShareComponent from './ShareComponent'
 import UserActionOnProductDetails from './UserActionOnProductDetails'
 
-const ProductDetails = ({ dictionary, productInfo }) => {
+const ProductDetails = ({ lang, dictionary, productInfo }) => {
 
 
 
@@ -130,6 +130,7 @@ const ProductDetails = ({ dictionary, productInfo }) => {
 
                     {/* USER ACTION */}
                     <UserActionOnProductDetails
+                        lang={lang}
                         productInfo={JSON.stringify(productInfo)}
                         dictionary={dictionary}
                     />

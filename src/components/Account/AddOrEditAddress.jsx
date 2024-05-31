@@ -5,6 +5,7 @@ import { useState } from 'react';
 import * as Yup from 'yup';
 import ErrorTooltip from '../Common/utilities/ErrorToltip';
 import Modal from '../Common/utilities/Modal';
+import { toast } from 'react-toastify';
 
 
 const initialFormData = {
@@ -132,6 +133,8 @@ const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisi
                         'Content-Type': 'application/json'
                     }
                 });
+
+                toast.success('Your address has been updated successfully.');
             }
             else {
                 const response = await axios.post('/api/auth/userAddress', {
@@ -142,6 +145,9 @@ const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisi
                         'Content-Type': 'application/json'
                     }
                 });
+
+                toast.success('Your address has been added successfully.');
+
             }
 
             setLoading(false);
@@ -151,6 +157,7 @@ const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisi
 
         } catch (error) {
             setLoading(false);
+            toast.error(`Your address modification error: ${error}.`);
             console.error('Add New Address error:', error);
         }
     };

@@ -56,14 +56,6 @@ const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
                         cartItems: response.data?.cartItems
                     });
 
-                    Cookies.set('auth', JSON.stringify({
-                        ...modifiedAuth,
-                        wishlistItems: [
-                            ...modifiedAuth?.wishlistItems?.filter((wishListItem) => wishListItem?.wishlistData?.id !== wishedProduct?.wishlistData?.id)
-                        ],
-                        cartItems: response.data?.cartItems
-                    }));
-
                 } else {
                     toast.error(wishResponse?.data?.message);
                 }
@@ -74,7 +66,7 @@ const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
 
         } catch (error) {
             setLoading(false);
-            toast.error('Add to cart error:', error);
+            toast.error(`Add to cart error: ${error}`);
             console.error('Add to wishlist error:', error);
         }
     };

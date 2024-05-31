@@ -13,9 +13,6 @@ const AccountInfo = ({ lang, dictionary, session }) => {
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
-    // console.log(modifiedAuth);
-    // console.log(session);
-
 
     useEffect(() => {
 
@@ -26,9 +23,6 @@ const AccountInfo = ({ lang, dictionary, session }) => {
 
                     const response = await axios.get(`/api/auth/userSession`);
 
-                    // console.log(response?.data);
-
-                    Cookies.set('auth', JSON.stringify(response?.data));
                     setModifiedAuth(response?.data);
 
                 } catch (error) {

@@ -3,7 +3,6 @@
 import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -20,13 +19,14 @@ const CartContainer = ({ dictionary, lang }) => {
     const [userCartItems, setUserCartItems] = useState(modifiedAuth?.cartItems ? modifiedAuth?.cartItems : []);
     const [refetchData, setRefetchData] = useState(false);
 
+
     useEffect(() => {
 
         if (userId) {
             const getUserCartItems = async () => {
                 try {
 
-                    const response = await axios.get(`/api/auth/cart/${userId}`, {
+                    const response = await axios.get(`/api/auth/cart`, {
                         headers: {
                             'Authorization': `Bearer ${modifiedAuth?.loggedInUserInfo?.access_token}`, // Replace YOUR_TOKEN_HERE with the user's bearer token
                             'Content-Type': 'application/json'
@@ -38,16 +38,10 @@ const CartContainer = ({ dictionary, lang }) => {
                         cartItems: [...response?.data]
                     });
 
-                    Cookies.set('auth', JSON.stringify({
-                        ...modifiedAuth,
-                        cartItems: [...response?.data]
-                    }));
-
                     setUserCartItems([...response?.data]);
 
-
                 } catch (error) {
-                    toast.error('Delete to cart error:', error);
+                    toast.error(`Delete to cart error: ${error}`);
                     console.error('Delete to cart error:', error);
                 }
             };
@@ -56,7 +50,7 @@ const CartContainer = ({ dictionary, lang }) => {
             getUserCartItems();
         }
 
-    }, [refetchData]);
+    }, [userId, refetchData]);
 
 
 
@@ -68,6 +62,7 @@ const CartContainer = ({ dictionary, lang }) => {
                     {userCartItems?.map((cartProduct) => {
                         return (
                             <SingleCartProduct
+                                lang={lang}
                                 dictionary={dictionary}
                                 key={cartProduct?.id}
                                 cartProduct={cartProduct}

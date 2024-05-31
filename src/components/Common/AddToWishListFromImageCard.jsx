@@ -6,9 +6,8 @@ import { useModifiedAuth } from '@/hooks/useModifiedAuth'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
-import Cookies from 'js-cookie'
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 
@@ -36,7 +35,6 @@ const AddToWishListFromImageCard = ({ lang, productId }) => {
                 });
                 setLoading(false);
 
-                console.log(response.data);
 
                 if (response?.data?.wishedProduct) {
                     setModifiedAuth({
@@ -44,24 +42,14 @@ const AddToWishListFromImageCard = ({ lang, productId }) => {
                         wishlistItems: [...response?.data?.wishedProduct]
                     });
 
-                    Cookies.set('auth', JSON.stringify({
-                        ...modifiedAuth,
-                        wishlistItems: [...response?.data?.wishedProduct]
-                        // wishlistItems: [
-                        //     ...modifiedAuth?.wishlistItems,
-                        //     response?.data?.newItem
-                        // ]
-                    }));
-
                     toast.success(response?.data?.message);
-
 
                 } else {
                     toast.warning(response?.data?.message);
                 }
 
             } catch (error) {
-                toast.error('Add to wishlist error:', error);
+                toast.error(`Add to wishlist error: ${error}`);
                 setLoading(false);
                 console.error('Add to wishlist error:', error);
             }
