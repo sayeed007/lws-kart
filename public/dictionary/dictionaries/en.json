@@ -117,5 +117,7 @@
   "updateAccount": "Update Account",
   "personalProfile": "Personal Profile",
   "edit": "Edit",
-  "add": "Add"
+  "add": "Add",
+  "noItemInWishList": "No Item In WishList",
+  "noItemInCart": "No Item In Cart"
 }

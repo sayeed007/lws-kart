@@ -32,7 +32,6 @@ const initialFormData = {
 const RegistrationForm = ({ lang, dictionary }) => {
     const router = useRouter();
 
-    const [error, setError] = useState(null);
 
     const { handleSubmit, handleChange, values, touched, errors, handleBlur, setValues, resetForm, setErrors, handleReset, isSubmitting } = useFormik({
         initialValues: { ...initialFormData },
@@ -69,7 +68,6 @@ const RegistrationForm = ({ lang, dictionary }) => {
             };
 
         } catch (error) {
-            setError(error.message);
         }
     };
 

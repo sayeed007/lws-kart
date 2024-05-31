@@ -17,8 +17,6 @@ const AddToCartFromProductCard = ({ lang, dictionary, itemInfo }) => {
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
 
 
     const addToCart = async () => {
@@ -26,7 +24,7 @@ const AddToCartFromProductCard = ({ lang, dictionary, itemInfo }) => {
         if (modifiedAuth?.sessionInfo?.user?.id) {
             try {
                 setLoading(true);
-                setError(null);
+
                 const response = await axios.post('/api/auth/cart', {
                     productId: (JSON.parse(itemInfo))?.id,
                     userId: modifiedAuth?.sessionInfo?.user?.id,
@@ -39,35 +37,34 @@ const AddToCartFromProductCard = ({ lang, dictionary, itemInfo }) => {
                         'Content-Type': 'application/json'
                     }
                 });
-                setLoading(false);
-                setSuccess(true);
 
-                if (response?.data?.newItem) {
+                if (response?.data?.addToCartList) {
+                    toast.success(response?.data?.message);
+
                     setModifiedAuth({
                         ...modifiedAuth,
-                        cartItems: [
-                            ...modifiedAuth?.cartItems,
-                            response?.data?.newItem
-                        ]
+                        cartItems: response.data?.cartItems
                     });
+
                     Cookies.set('auth', JSON.stringify({
                         ...modifiedAuth,
-                        cartItems: [
-                            ...modifiedAuth?.cartItems,
-                            response?.data?.newItem
-                        ]
+                        cartItems: response.data?.cartItems
                     }));
-                } else {
 
+                } else {
+                    toast.error(response?.data?.message);
                 }
 
             } catch (error) {
                 setLoading(false);
-                setError(error?.response?.data?.message || 'Something went wrong');
+                toast.error('Add to cart error:', error);
                 console.error('Add to wishlist error:', error);
             }
         } else {
-            toast.info("You need to log in to add product in cart, redirecting you to log in.");
+            toast.info("You need to log in to add product in cart, redirecting you to log in.",
+                {
+                    onClose: () => Router.push(`/${lang}/login`)
+                });
         }
 
     };
@@ -81,23 +78,6 @@ const AddToCartFromProductCard = ({ lang, dictionary, itemInfo }) => {
                 {dictionary?.addToCart}
             </div>
 
-
-
-            <ToastContainer
-                position="top-right"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-                onClose={() => {
-                    Router.push(`/${lang}/login`);
-                }}
-            />
         </>
     )
 }

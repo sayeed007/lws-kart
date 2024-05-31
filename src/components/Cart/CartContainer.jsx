@@ -2,25 +2,77 @@
 
 import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 
+import axios from 'axios';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
-import NoProductFound from '../../../public/assets/images/NoProductFound.png';
-import SingleCartProduct from './SingleCartProduct';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import EmptyBox from '../../../public/assets/images/EmptyBox.jpeg';
+import SingleCartProduct from './SingleCartProduct';
 
 const CartContainer = ({ dictionary, lang }) => {
 
-    const { modifiedAuth } = useModifiedAuth();
+    const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
+
+    const userId = modifiedAuth?.id ? modifiedAuth.id : modifiedAuth?.sessionInfo?.user?.id;
+
+    const [userCartItems, setUserCartItems] = useState(modifiedAuth?.cartItems ? modifiedAuth?.cartItems : []);
+    const [refetchData, setRefetchData] = useState(false);
+
+    useEffect(() => {
+
+        if (userId) {
+            const getUserCartItems = async () => {
+                try {
+
+                    const response = await axios.get(`/api/auth/cart/${userId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${modifiedAuth?.loggedInUserInfo?.access_token}`, // Replace YOUR_TOKEN_HERE with the user's bearer token
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    setModifiedAuth({
+                        ...modifiedAuth,
+                        cartItems: [...response?.data]
+                    });
+
+                    Cookies.set('auth', JSON.stringify({
+                        ...modifiedAuth,
+                        cartItems: [...response?.data]
+                    }));
+
+                    setUserCartItems([...response?.data]);
+
+
+                } catch (error) {
+                    toast.error('Delete to cart error:', error);
+                    console.error('Delete to cart error:', error);
+                }
+            };
+
+
+            getUserCartItems();
+        }
+
+    }, [refetchData]);
+
+
+
 
     return (
         <>
-            {(modifiedAuth?.cartItems?.length > 0) ?
+            {(userCartItems?.length > 0) ?
                 <>
-                    {modifiedAuth?.cartItems?.map((cartProduct) => {
+                    {userCartItems?.map((cartProduct) => {
                         return (
                             <SingleCartProduct
                                 dictionary={dictionary}
                                 key={cartProduct?.id}
                                 cartProduct={cartProduct}
+                                refetchData={refetchData}
+                                setRefetchData={setRefetchData}
                             />
                         )
                     })
@@ -37,13 +89,16 @@ const CartContainer = ({ dictionary, lang }) => {
 
                 </>
                 :
-                <div className='flex w-full justify-center items-center'>
+                <div className="flex flex-col w-full justify-center items-center">
                     <Image
-                        src={NoProductFound}
-                        alt="No_Product_Found"
-                    // height={500}
-                    // width={300}
+                        src={EmptyBox}
+                        alt={'No Ongoing Order'}
+                        width={300}
+                        height={150}
                     />
+                    <div className="text-xl my-3 font-bold">
+                        {dictionary?.noItemInCart}
+                    </div>
                 </div>
             }
         </>

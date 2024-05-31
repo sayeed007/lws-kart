@@ -30,8 +30,6 @@ const EditProfileInformation = ({ lang, dictionary, previousData, modalVisible, 
     const router = useRouter();
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
 
     const { handleSubmit, handleChange, values, touched, errors, handleBlur, setValues, resetForm, setErrors, handleReset, isSubmitting } = useFormik({
         initialValues: { ...initialFormData },
@@ -69,7 +67,6 @@ const EditProfileInformation = ({ lang, dictionary, previousData, modalVisible, 
         try {
 
             setLoading(true);
-            setError(null);
 
             const response = await axios.put(`/api/auth/userInfo/${formData?.id}`, {
                 userData: formData,
@@ -81,7 +78,6 @@ const EditProfileInformation = ({ lang, dictionary, previousData, modalVisible, 
             });
 
             setLoading(false);
-            setSuccess(true);
 
 
             setModifiedAuth({
@@ -105,7 +101,6 @@ const EditProfileInformation = ({ lang, dictionary, previousData, modalVisible, 
             setModalVisible(false);
 
         } catch (error) {
-            setError(error.message);
         }
     };
 

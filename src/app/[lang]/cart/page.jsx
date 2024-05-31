@@ -1,7 +1,8 @@
 import BreadCrumb from '@/components/Common/BreadCrumb';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
 import CartContainer from '@/components/Cart/CartContainer';
-
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 
 export async function generateMetadata() {
@@ -24,7 +25,7 @@ const CartPage = async ({ params: { lang } }) => {
             {/* breadcrumb */}
             <BreadCrumb
                 lang={lang}
-                route={dictionary?.wishList}
+                route={dictionary?.cart}
             />
             {/* breadcrumb */}
 
@@ -47,7 +48,17 @@ const CartPage = async ({ params: { lang } }) => {
             </div>
             {/* wrapper */}
 
-
+            <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                theme="colored"
+            />
 
 
         </>

@@ -6,9 +6,9 @@ export const POST = async (request) => {
     const requestData = await request.json();
 
     // Add productId to user's cart
-    const createdCartItem = await addToCartList(requestData);
+    const cartItems = await addToCartList(requestData);
 
-    return new Response(JSON.stringify(createdCartItem), {
+    return new Response(JSON.stringify(cartItems), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });

@@ -9,23 +9,30 @@ export async function login(formData) {
             ...formData,
             redirect: false
         });
+        console.log(response);
 
-        if (response) {
-            console.log(response);
 
+        if (response?.error) {
+            // Handle unsuccessful sign-in
+            return [false, 'Failed to log in.'];
+        } else {
             const session = await auth();
             console.log(session);
 
-            // Fetch user account
-            const userInfo = await getUserAccountByUserId(session?.user?.id);
+            if (session?.user?.id) {
+                // Fetch user account
+                const userInfo = await getUserAccountByUserId(session?.user?.id);
 
-            console.log(session, userInfo, "After Log In response");
+                console.log(session, userInfo, "After Log In response");
 
 
-            return {
-                sessionInfo: session,
-                wishlistItems: userInfo.wishlistItems
-            };
+                return [true, {
+                    sessionInfo: session,
+                    wishlistItems: userInfo.wishlistItems
+                }];
+            } else {
+                return [false, 'Failed to log in.'];
+            }
         }
     } catch (error) {
         throw new Error(error);

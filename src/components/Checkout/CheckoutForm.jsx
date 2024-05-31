@@ -97,8 +97,6 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
 
 
     const { handleSubmit, handleChange, values, touched, errors, handleBlur, setValues, resetForm, setErrors, handleReset, isSubmitting } = useFormik({
@@ -204,7 +202,6 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
     const submitResolver = async (value) => {
         try {
             setLoading(true);
-            setError(null);
 
             // EDIT MODE
             const response = await axios.post(`/api/auth/placeOrder`,
@@ -221,7 +218,6 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
 
 
             setLoading(false);
-            setSuccess(true);
 
             if (response?.data) {
                 setModifiedAuth({
@@ -240,7 +236,6 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
 
         } catch (error) {
             setLoading(false);
-            setError(error || 'Something went wrong');
             console.error('Add New Address error:', error);
         }
     };
@@ -492,7 +487,7 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
                                 htmlFor="agreement"
                                 className="text-gray-600 ml-3 cursor-pointer text-sm">
                                 {dictionary?.iAgree}
-                                <Link href={"#"}
+                                <Link href={`/${lang}/termsAndConditions`}
                                     className="text-primary mx-2">
                                     {dictionary?.termsAndCondition}
 

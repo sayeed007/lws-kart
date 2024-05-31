@@ -20,8 +20,6 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
 
     const [addToCartValue, setAddToCartValue] = useState(4);
 
@@ -29,7 +27,6 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
         if (modifiedAuth?.sessionInfo?.user?.id) {
             try {
                 setLoading(true);
-                setError(null);
 
                 const response = await axios.post('/api/auth/cart', {
                     productId: (JSON.parse(productInfo))?.id,
@@ -44,22 +41,15 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
                     }
                 });
                 setLoading(false);
-                setSuccess(true);
 
                 if (response?.data?.newItem) {
                     setModifiedAuth({
                         ...modifiedAuth,
-                        cartItems: [
-                            ...modifiedAuth?.cartItems,
-                            response?.data?.newItem
-                        ]
+                        cartItems: response.data?.cartItems
                     });
                     Cookies.set('auth', JSON.stringify({
                         ...modifiedAuth,
-                        cartItems: [
-                            ...modifiedAuth?.cartItems,
-                            response?.data?.newItem
-                        ]
+                        cartItems: response.data?.cartItems
                     }));
                 } else {
 
@@ -67,11 +57,13 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
 
             } catch (error) {
                 setLoading(false);
-                setError(error?.response?.data?.message || 'Something went wrong');
                 console.error('Add to wishlist error:', error);
             }
         } else {
-            toast.info("You need to log in to add product in cart, redirecting you to log in.");
+            toast.info("You need to log in to add product in cart, redirecting you to log in.",
+                {
+                    onClose: () => Router.push(`/${lang}/login`)
+                });
         }
     };
 
@@ -79,7 +71,6 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
         if (modifiedAuth?.sessionInfo?.user?.id) {
             try {
                 setLoading(true);
-                setError(null);
                 const response = await axios.post('/api/auth/wishlist', {
                     productId: (JSON.parse(productInfo))?.id,
                     userId: modifiedAuth?.sessionInfo?.user?.id,
@@ -90,7 +81,6 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
                     }
                 });
                 setLoading(false);
-                setSuccess(true);
 
                 if (response?.data?.newItem) {
                     setModifiedAuth({
@@ -115,11 +105,13 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
 
             } catch (error) {
                 setLoading(false);
-                setError(error.response.data.message || 'Something went wrong');
                 console.error('Add to wishlist error:', error);
             }
         } else {
-            toast.info("You need to log in to add product in wishlist, redirecting you to log in.");
+            toast.info("You need to log in to add product in wishlist, redirecting you to log in.",
+                {
+                    onClose: () => Router.push(`/${lang}/login`)
+                });
         }
     };
 
@@ -167,24 +159,6 @@ const UserActionOnProductDetails = ({ productInfo, dictionary }) => {
                     {dictionary?.wishList}
                 </div>
             </div>
-
-
-            <ToastContainer
-                position="top-right"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-                onClose={() => {
-                    Router.push(`/${lang}/login`);
-                }}
-            />
-
         </>
     )
 }

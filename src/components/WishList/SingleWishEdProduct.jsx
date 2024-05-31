@@ -7,19 +7,18 @@ import Image from 'next/image'
 import { useState } from 'react'
 import DeleteSingleWishItem from './DeleteSingleWishItem'
 import { useModifiedAuth } from '@/hooks/useModifiedAuth'
+import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
 
 const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
 
     const addToCart = async () => {
         try {
             setLoading(true);
-            setError(null);
 
             const response = await axios.post('/api/auth/cart', {
                 productId: wishedProduct?.wishlistData?.productId,
@@ -34,7 +33,8 @@ const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
                 }
             });
 
-            if (response?.data?.newItem) {
+            if (response?.data?.addToCartList) {
+                toast.success(response?.data?.message);
 
                 // AS IT IS ADDED TO CART LETS REMOVE IT FROM WISHLIST
                 const wishResponse = await axios.delete(`/api/auth/wishlist/${wishedProduct?.wishlistData?.id}`, {
@@ -44,18 +44,16 @@ const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
                     }
                 });
                 setLoading(false);
-                setSuccess(true);
 
-                if (response?.data) {
+                if (wishResponse?.data?.isDeleted) {
+                    toast.success(wishResponse?.data?.message);
+
                     setModifiedAuth({
                         ...modifiedAuth,
                         wishlistItems: [
                             ...modifiedAuth?.wishlistItems?.filter((wishListItem) => wishListItem?.wishlistData?.id !== wishedProduct?.wishlistData?.id)
                         ],
-                        cartItems: [
-                            ...modifiedAuth?.cartItems,
-                            response?.data?.newItem
-                        ]
+                        cartItems: response.data?.cartItems
                     });
 
                     Cookies.set('auth', JSON.stringify({
@@ -63,24 +61,20 @@ const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
                         wishlistItems: [
                             ...modifiedAuth?.wishlistItems?.filter((wishListItem) => wishListItem?.wishlistData?.id !== wishedProduct?.wishlistData?.id)
                         ],
-                        cartItems: [
-                            ...modifiedAuth?.cartItems,
-                            response?.data?.newItem
-                        ]
+                        cartItems: response.data?.cartItems
                     }));
 
                 } else {
-
+                    toast.error(wishResponse?.data?.message);
                 }
 
-
             } else {
-
+                toast.error(response?.data?.message);
             }
 
         } catch (error) {
             setLoading(false);
-            setError(error?.response?.data?.message || 'Something went wrong');
+            toast.error('Add to cart error:', error);
             console.error('Add to wishlist error:', error);
         }
     };

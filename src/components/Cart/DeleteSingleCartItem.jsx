@@ -7,19 +7,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
-const DeleteSingleCartItem = ({ cartProduct }) => {
+const DeleteSingleCartItem = ({ cartProduct, refetchData, setRefetchData }) => {
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
+    console.log(modifiedAuth);
+    console.log(cartProduct);
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
 
     const removeFromWishlist = async () => {
         try {
             setLoading(true);
-            setError(null);
 
             const response = await axios.delete(`/api/auth/cart/${cartProduct?.cartData?.id}`, {
                 headers: {
@@ -28,30 +28,21 @@ const DeleteSingleCartItem = ({ cartProduct }) => {
                 }
             });
             setLoading(false);
-            setSuccess(true);
 
-            if (response?.data) {
-                setModifiedAuth({
-                    ...modifiedAuth,
-                    cartItems: [
-                        ...modifiedAuth?.cartItems?.filter((cartItem) => cartItem?.cartData?.id !== cartProduct?.cartData?.id)
-                    ]
-                });
+            console.log(response);
 
-                Cookies.set('auth', JSON.stringify({
-                    ...modifiedAuth,
-                    cartItems: [
-                        ...modifiedAuth?.cartItems?.filter((cartItem) => cartItem?.cartData?.id !== cartProduct?.cartData?.id)
-                    ]
-                }));
+            if (response?.data?.isDeleted) {
+                toast.success(response?.data?.message);
+
+                setRefetchData(!refetchData);
             } else {
-
+                toast.success(response?.data?.message);
             }
 
         } catch (error) {
             setLoading(false);
-            setError(error || 'Something went wrong');
-            console.error('Delete to wishlist error:', error);
+            toast.error('Delete to cart error:', error);
+            console.error('Delete to cart error:', error);
         }
     };
 

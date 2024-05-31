@@ -1,11 +1,11 @@
 import PersonalInfo from "@/components/Account/PersonalInfo";
 import UserAddress from "@/components/Account/UserAddress";
 import BreadCrumb from "@/components/Common/BreadCrumb";
-import { getUserAddress, getUserOngoingOrder, getUserPreviousOrder } from "@/database/queries";
-import { getDictionary } from "../../../../../public/dictionary/dictionaries";
+import { getUserOngoingOrder, getUserPreviousOrder } from "@/database/queries";
 import { calculateNewPrice } from "@/utils/data-util";
 import Image from "next/image";
-import EmptyBox from '../../../../../public/assets/images/EmptyBox.jpeg'
+import EmptyBox from '../../../../../public/assets/images/EmptyBox.jpeg';
+import { getDictionary } from "../../../../../public/dictionary/dictionaries";
 
 
 

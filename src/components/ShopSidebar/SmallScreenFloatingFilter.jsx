@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import ShopSidebar from './ShopSidebar';
 
-const SmallScreenFloatingFilter = ({ dictionary }) => {
+const SmallScreenFloatingFilter = ({ dictionary, allCategory, allSizes, allColors, filterObject, mappingObject }) => {
     const [isOpen, setIsOpen] = useState(false);
     const drawerRef = useRef(null);
 
@@ -94,6 +94,11 @@ const SmallScreenFloatingFilter = ({ dictionary }) => {
                 {/* Drawer Content */}
                 <ShopSidebar
                     dictionary={dictionary}
+                    allCategory={allCategory}
+                    allSizes={allSizes}
+                    allColors={allColors}
+                    filterObject={filterObject}
+                    mappingObject={mappingObject}
                 />
 
                 <div className="grid grid-cols-2 gap-4 my-4">

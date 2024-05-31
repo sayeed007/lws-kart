@@ -46,10 +46,16 @@ export const {
             },
 
             async authorize(credentials) {
-                if (credentials == null) return null;
+                if (credentials == null) {
+                    throw new Error('No credentials provided.');
+                    // console.log('No credentials provided.');
+                    // return [false, 'No credentials provided.'];
+                }
 
                 try {
-                    const user = await userModel.findOne({ email: credentials.email });
+                    const user = await userModel.findOne({ email: credentials.email }).lean();
+
+                    console.log(user);
                     if (user) {
 
                         const isMatch = await bcrypt.compare(
@@ -61,13 +67,21 @@ export const {
                             // console.log(user);
                             return user;
                         } else {
-                            throw new Error('Email or password mismatch');
+                            throw new Error('Email or password mismatch.');
+
+                            // console.log('Email or password mismatch.');
+                            // return [false, 'Email or password mismatch.'];
                         }
                     } else {
-                        throw new Error('User not found');
+                        throw new Error('User Not Found');
+
+
+                        // console.log('User Not Found');
+                        // return [false, 'User Not Found'];
                     }
                 } catch (error) {
                     throw new Error(error);
+                    // return [false, 'Unexpected error occurred.']
                 }
             }
         }),
@@ -83,28 +97,14 @@ export const {
     ],
     secret: process.env.NEXT_PUBLIC_SECRET,
     callbacks: {
-        jwt: async ({ token, user }) => {
-            // user is only available the first time a user signs in authorized
-            // console.log(user)
+        async jwt({ token, user }) {
             if (user) {
-
-                token.username = user.username;
-                token.email = user.email;
-                token.id = user.id;
-
-                return token;
+                token.user = user; // Add user data to the JWT
             }
-            // console.log(token)
             return token;
         },
-        session: async ({ session, token }) => {
-            if (token) {
-                session.user.username = token.username;
-                session.user.email = token.email;
-                session.user.id = token.id;
-            }
-
-            // console.log(session)
+        async session({ session, token }) {
+            session.user = token.user; // Add user data to the session
             return session;
         },
     },

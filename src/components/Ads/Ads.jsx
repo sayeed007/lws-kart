@@ -7,15 +7,13 @@ const Ads = () => {
         <>
             {/* ads */}
             <div className="container pb-16">
-                <Link href="#">
-                    <Image
-                        src={Offer}
-                        alt="ads"
-                        className="w-full"
-                        height={3000}
-                        width={3000}
-                    />
-                </Link>
+                <Image
+                    src={Offer}
+                    alt="ads"
+                    className="w-full"
+                    height={3000}
+                    width={3000}
+                />
             </div>
             {/* ./ads */}
         </>

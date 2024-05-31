@@ -41,7 +41,7 @@ export async function generateMetadata({
     });
 
     // Generate product descriptions
-    const productDescriptions = products.map(productInfo => {
+    const productDescriptions = allProductsByFiltering?.map(productInfo => {
         return `Product Name: ${productInfo.name}, Price: ${productInfo.price}, Available Count: ${productInfo.availableCount}`;
     });
 
@@ -115,7 +115,21 @@ const ShopPage = async ({
                 <SmallScreenFloatingFilter
                     dictionary={dictionary}
                     allCategory={allCategory}
-                    filterObject={{ searchKeyWord, category, minPrice, maxPrice, size, color }}
+                    allSizes={allSizes}
+                    allColors={allColors}
+                    filterObject={{
+                        searchKeyWord: searchKeyWord,
+                        category: category,
+                        minPrice: minPrice,
+                        maxPrice: maxPrice,
+                        size: size,
+                        color: color,
+                    }}
+                    mappingObject={{
+                        categoryMapping: categoryMapping,
+                        sizeMapping: sizeMapping,
+                        colorMapping: colorMapping,
+                    }}
                 />
 
 

@@ -8,12 +8,19 @@ export const DELETE = async (request) => {
 
     // Delete the item from the wishlist in the database
     const deleted = await removeFromWishlist(wishlistItemId);
+
     if (!deleted) {
-      return new Response("Item not found in wishlist", { status: 404 });
+      return new Response(JSON.stringify({
+        isDeleted: false,
+        message: "Item not found in wishlist"
+      }), { status: 404 });
     }
 
     // Return success response
-    return new Response("Item deleted from wishlist successfully", {
+    return new Response(JSON.stringify({
+      isDeleted: true,
+      message: "Item deleted from wishlist successfully"
+    }), {
       status: 200,
       headers: {
         'Content-Type': 'text/plain'

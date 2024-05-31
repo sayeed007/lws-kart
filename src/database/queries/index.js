@@ -426,20 +426,35 @@ export const addToWishlist = async (userId, productId) => {
 
         // If the product is not already in the wishlist, add it
         const newItemResponse = await wishlistModel.create({ userId, productId, addedTime: new Date() });
+        console.log(newItemResponse.toObject());
 
-        const newItem = newItemResponse.toObject()
+        // const newItem = newItemResponse.toObject()
 
-        const newItemDetails = await getWishlistItemsDetail([{ productId: newItem?.productId }]);
+        // const newItemDetails = await getWishlistItemsDetail([{ productId: newItem?.productId }]);
 
 
-        const generatedResponse = {
-            ...newItemDetails?.[0],
-            wishlistData: await replaceMongoIdInObject(newItem)
-        }
+        // const generatedResponse = {
+        //     ...newItemDetails?.[0],
+        //     wishlistData: await replaceMongoIdInObject(newItem)
+        // };
+
+        const wishlistItems = await wishlistModel.find({ userId: userId }).lean();
+
+        const wishlistItemsDetail = await getWishlistItemsDetail(wishlistItems);
+
+        // Join the two arrays based on productId from array1 and id from array2
+        const wishListWithProductData = (await replaceMongoIdInArray(wishlistItems)).map(wishlistData => {
+            const productData = wishlistItemsDetail.find(product => product.id === wishlistData.productId.toString());
+            return { ...productData, wishlistData };
+        });
+
+        console.log(wishListWithProductData);
+
+
 
         return {
             message: "Product added to wishlist successfully.",
-            newItem: generatedResponse
+            wishedProduct: wishListWithProductData
         }; // Return the newly created item
     } catch (error) {
         throw new Error('Error adding product to wishlist: ' + error.message);
@@ -451,9 +466,9 @@ export const removeFromWishlist = async (wishlistItemId) => {
     try {
 
         // Delete the item from the database
-        await wishlistModel.findByIdAndDelete(wishlistItemId);
+        const deleteFromWishList = await wishlistModel.findByIdAndDelete(wishlistItemId).lean();
 
-        return true;
+        return deleteFromWishList?._id ? true : false;
     } catch (error) {
         throw new Error('Error deleting item from wishlist: ' + error.message);
     }
@@ -543,54 +558,104 @@ export const updateUserInfo = async (userId, userProvidedData) => {
 // CART LIST
 export const addToCartList = async (requestData) => {
     try {
+        // Get the product details
+        const product = await productModel.findById(requestData.productId).lean();
 
-        // Check if the product is already in the cart
-        const existingCartItem = await cartModel.findOne({ userId: requestData?.userId, productId: requestData?.productId }).lean();
+        if (!product) {
+            return {
+                addToCartList: false,
+                message: 'Product not found',
+            }
+            // throw new Error("Product not found.");
+        };
 
+        // PRODUCT COUNT IN CART
+        const existingCartItems = await cartModel.find({
+            productId: requestData.productId,
+            expirationTime: { $gt: new Date() } // Only consider items with expiration time in the future
+        }).lean();
+
+        // Calculate total product count in the cart
+        const totalProductCountInCart = existingCartItems.reduce((total, item) => total + item.productCount, 0);
+
+        // Check if the product is already in the cart for the user
+        const existingCartItem = await cartModel.findOne({
+            userId: requestData.userId,
+            productId: requestData.productId,
+            expirationTime: { $gt: new Date() }
+        }).lean();
 
         if (existingCartItem) {
+            // Calculate the maximum quantity user can add based on available count and expiration time
+            const availableCount = product.availableCount;
+            // const cartProductCount = existingCartItem.productCount;
+            const totalAvailableCount = availableCount - totalProductCountInCart;
+
+            // Check if the requested quantity exceeds the available count
+            if (requestData.productCount > totalAvailableCount) {
+                return {
+                    addToCartList: false,
+                    message: `Only ${totalAvailableCount} ${product.name}(s) available in stock.`
+                };
+            }
+
             // If the product is already in the cart, update the productCount
             const updatedCartItem = await cartModel.findOneAndUpdate(
                 { userId: requestData.userId, productId: requestData.productId },
-                { $inc: { productCount: requestData.productCount } }, // Increment productCount by 1
+                { $inc: { productCount: requestData.productCount } }, // Set productCount to requested value
                 { new: true } // Return the updated document
             ).lean();
 
-
             if (updatedCartItem) {
                 // If the item is successfully updated, return the updated item details
-                const updatedItemDetails = await getWishlistItemsDetail([{ productId: updatedCartItem.productId }]);
+                // const updatedItemDetails = await getWishlistItemsDetail([{ productId: updatedCartItem.productId }]);
 
-                const generatedResponse = {
-                    ...updatedItemDetails?.[0],
-                    cartListData: await replaceMongoIdInObject(updatedCartItem)
-                };
+                // const generatedResponse = {
+                //     ...updatedItemDetails?.[0],
+                //     cartListData: await replaceMongoIdInObject(updatedCartItem)
+                // };
+
+                const cartData = await getUserCart(requestData.userId);
 
                 return {
+                    addToCartList: true,
                     message: "Product quantity updated in cart.",
-                    newItem: generatedResponse
+                    cartItems: cartData
                 };
             }
         } else {
-            // If the product is not already in the cart, add it
+            // If the product is not already in the cart, check if the requested quantity is available
+            if (requestData.productCount > product.availableCount) {
+                return {
+                    addToCartList: false,
+                    message: `Only ${product.availableCount} ${product.name}(s) available in stock.`
+                };
+            }
+
+            // Add the product to the cart
             const newItemResponse = await cartModel.create(requestData);
 
-            const newItem = newItemResponse.toObject();
+            // const newItem = newItemResponse.toObject();
+            // const newItemDetails = await getWishlistItemsDetail([{ productId: newItem.productId }]);
+            // const generatedResponse = {
+            //     ...newItemDetails?.[0],
+            //     cartListData: await replaceMongoIdInObject(newItem)
+            // };
 
-            const newItemDetails = await getWishlistItemsDetail([{ productId: newItem?.productId }]);
-
-            const generatedResponse = {
-                ...newItemDetails?.[0],
-                cartListData: await replaceMongoIdInObject(newItem)
-            };
+            const cartData = await getUserCart(requestData.userId);
 
             return {
+                addToCartList: true,
                 message: "Product added to cart successfully.",
-                newItem: generatedResponse
+                cartItems: cartData
             };
         }
     } catch (error) {
-        throw new Error('Error adding product to cart: ' + error.message);
+        return {
+            addToCartList: false,
+            message: 'Error adding product to cart: ' + error.message,
+        };
+        // throw new Error('Error adding product to cart: ' + error.message);
     }
 };
 
@@ -599,11 +664,48 @@ export const removeFromCartList = async (cartId) => {
     try {
 
         // Delete the item from the database
-        await cartModel.findByIdAndDelete(cartId);
+        const deleteFromCart = await cartModel.findByIdAndDelete(cartId).lean();
+        console.log(deleteFromCart);
 
-        return true;
+        return deleteFromCart?._id ? true : false;
     } catch (error) {
         throw new Error('Error deleting item from wishlist: ' + error.message);
+    }
+};
+
+
+export const getUserCart = async (userId) => {
+    try {
+        // Fetch the user's cart items with future expiration time
+        const userCart = await cartModel.find({
+            userId: userId,
+            expirationTime: { $gt: new Date() } // Only consider items with expiration time in the future
+        }).lean();
+
+        const modifiedUserCart = await replaceMongoIdInArray(userCart);
+
+        // Define an array to store the formatted cart items
+        const formattedCart = [];
+
+        // Iterate over each cart item
+        for (const cartItem of modifiedUserCart) {
+            // Call getWishlistItemsDetail for each cart item
+            const itemDetails = await getWishlistItemsDetail([{ productId: cartItem.productId }]);
+
+            // Store the return value along with the corresponding cart item
+            formattedCart.push({
+                ...itemDetails?.[0],
+                cartData: cartItem
+            });
+        };
+
+
+        console.log(formattedCart);
+
+        // Return the formatted cart items
+        return formattedCart;
+    } catch (error) {
+        throw new Error('Error getting user cart: ' + error.message);
     }
 };
 

@@ -9,7 +9,8 @@ import { useState } from 'react';
 import { login } from '@/app/actions';
 import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 import Cookies from 'js-cookie';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const initialFormData = {
     email: 'bappy@gmail.com',
@@ -22,7 +23,6 @@ const LogInForm = ({ lang, dictionary }) => {
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
     const router = useRouter();
-    const [error, setError] = useState(null);
 
 
     const { handleSubmit, handleChange, values, touched, errors, handleBlur, setValues, resetForm, setErrors, handleReset, isSubmitting } = useFormik({
@@ -43,20 +43,21 @@ const LogInForm = ({ lang, dictionary }) => {
         try {
 
             const response = await login(formData);
-            // console.log(response);
+            console.log(response);
 
-            if (response.error) {
-                setError(response.error);
-            } else {
+            // if (response.error) {
 
-                Cookies.set('auth', JSON.stringify(response));
-                setModifiedAuth(response);
+            //     toast.error(response.error);
 
-                router.push(`/${lang}`);
-            }
+            // } else {
+
+            //     Cookies.set('auth', JSON.stringify(response));
+            //     setModifiedAuth(response);
+
+            //     router.push(`/${lang}`);
+            // }
 
         } catch (error) {
-            setError(error.message);
         }
 
 
@@ -143,7 +144,7 @@ const LogInForm = ({ lang, dictionary }) => {
 
                 <div className="flex items-center justify-between mt-6">
 
-                    <div className="flex items-center">
+                    {/* <div className="flex items-center">
                         <input
                             type="checkbox"
                             name="remember"
@@ -155,13 +156,13 @@ const LogInForm = ({ lang, dictionary }) => {
                             className="text-gray-600 ml-3 cursor-pointer">
                             {dictionary?.rememberMe}
                         </label>
-                    </div>
+                    </div> */}
 
-                    <Link
-                        href="#"
+                    {/* <Link
+                        // href="#"
                         className="text-primary">
                         {dictionary?.forgotPassword}
-                    </Link>
+                    </Link> */}
 
                 </div>
 
@@ -175,7 +176,6 @@ const LogInForm = ({ lang, dictionary }) => {
                 </div>
 
             </form>
-
 
         </>
     )

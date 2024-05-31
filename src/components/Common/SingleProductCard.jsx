@@ -9,7 +9,6 @@ import StarRating from '../Rating/StarRating';
 import AddToWishListFromImageCard from './AddToWishListFromImageCard';
 import AddToCartFromProductCard from './AddToCartFromProductCard';
 
-
 // key = { eachNewItem?.id }
 // eachNewItem = { eachNewItem }
 // dictionary = { dictionary }
@@ -50,6 +49,7 @@ const SingleProductCard = (props) => {
 
                         {/* ADD TO WISHED LIST */}
                         <AddToWishListFromImageCard
+                            lang={props?.lang}
                             productId={props?.eachNewItem?.id}
                         />
 

@@ -2,7 +2,7 @@ import { calculateNewPrice } from '@/utils/data-util'
 import Image from 'next/image'
 import DeleteSingleCartItem from './DeleteSingleCartItem'
 
-const SingleCartProduct = ({ dictionary, cartProduct }) => {
+const SingleCartProduct = ({ dictionary, cartProduct, refetchData, setRefetchData }) => {
 
     return (
         <>
@@ -51,6 +51,8 @@ const SingleCartProduct = ({ dictionary, cartProduct }) => {
 
                 <DeleteSingleCartItem
                     cartProduct={cartProduct}
+                    refetchData={refetchData}
+                    setRefetchData={setRefetchData}
                 />
 
             </div>

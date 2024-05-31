@@ -7,19 +7,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const DeleteSingleWishItem = ({ wishedProduct }) => {
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
 
     const removeFromWishlist = async () => {
         try {
             setLoading(true);
-            setError(null);
 
             const response = await axios.delete(`/api/auth/wishlist/${wishedProduct?.wishlistData?.id}`, {
                 headers: {
@@ -28,9 +26,11 @@ const DeleteSingleWishItem = ({ wishedProduct }) => {
                 }
             });
             setLoading(false);
-            setSuccess(true);
 
-            if (response?.data) {
+
+            if (response?.data?.isDeleted) {
+                toast.success(response?.data?.message);
+
                 setModifiedAuth({
                     ...modifiedAuth,
                     wishlistItems: [
@@ -44,13 +44,14 @@ const DeleteSingleWishItem = ({ wishedProduct }) => {
                         ...modifiedAuth?.wishlistItems?.filter((wishListItem) => wishListItem?.wishlistData?.id !== wishedProduct?.wishlistData?.id)
                     ]
                 }));
-            } else {
 
+            } else {
+                toast.error(response?.data?.message);
             }
 
         } catch (error) {
+            toast.error('Delete to wishlist error:', error);
             setLoading(false);
-            setError(error || 'Something went wrong');
             console.error('Delete to wishlist error:', error);
         }
     };

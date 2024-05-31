@@ -87,8 +87,6 @@ const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisi
     const { modifiedAuth } = useModifiedAuth();
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
 
     const { handleSubmit, handleChange, values, touched, errors, handleBlur, setValues, resetForm, setErrors, handleReset, isSubmitting } = useFormik({
         initialValues: previousData?.[type] ? { ...previousData } : { ...initialFormData },
@@ -123,7 +121,6 @@ const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisi
     const submitResolver = async (value) => {
         try {
             setLoading(true);
-            setError(null);
 
             // EDIT MODE
             if (previousData?._id) {
@@ -148,14 +145,12 @@ const AddOrEditAddress = ({ dictionary, previousData, type, userId, setModalVisi
             }
 
             setLoading(false);
-            setSuccess(true);
 
             setRefetchData(!refetchData);
             setModalVisible(!modalVisible);
 
         } catch (error) {
             setLoading(false);
-            setError(error || 'Something went wrong');
             console.error('Add New Address error:', error);
         }
     };

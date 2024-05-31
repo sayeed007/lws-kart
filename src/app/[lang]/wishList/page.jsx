@@ -1,13 +1,17 @@
 import BreadCrumb from '@/components/Common/BreadCrumb';
 import WishListContainer from '@/components/WishList/WishListContainer';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
+
 
 export async function generateMetadata() {
     return {
         title: "LWS-kart | Learn with Sumit",
         description: `Product Cart Information of a user.`,
     }
-}; s
+};
 
 
 const WishListPage = async ({ params: { lang } }) => {
@@ -44,7 +48,17 @@ const WishListPage = async ({ params: { lang } }) => {
             </div>
             {/* wrapper */}
 
-
+            <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                theme="colored"
+            />
 
 
         </>
