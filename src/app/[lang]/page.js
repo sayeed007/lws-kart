@@ -4,12 +4,14 @@ import Features from "@/components/Features/Features";
 import HeroBanner from "@/components/HeroSection/HeroBanner";
 import NewArrival from "@/components/NewArrival/NewArrival";
 import Product from "@/components/Product/Product";
-import { getDictionary } from "../../../public/dictionary/dictionaries";
+import connectMongo from "@/service/connectMongo";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getDictionary } from "../../../public/dictionary/dictionaries";
 
 
 export default async function HomePage({ params: { lang } }) {
+  await connectMongo();
 
 
   const dictionary = await getDictionary(lang);

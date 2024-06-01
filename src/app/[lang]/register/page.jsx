@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
 import RegistrationForm from '@/components/Auth/RegistrationForm';
+import SocialLogins from '@/components/Auth/SocialLogins';
+import connectMongo from "@/service/connectMongo";
 import Link from 'next/link';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
-import SocialLogins from '@/components/Auth/SocialLogins';
 
 
 export async function generateMetadata() {
@@ -15,6 +16,7 @@ export async function generateMetadata() {
 
 
 const RegisterPage = async ({ params: { lang } }) => {
+    await connectMongo();
 
     const dictionary = await getDictionary(lang);
 

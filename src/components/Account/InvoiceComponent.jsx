@@ -27,7 +27,6 @@ const InvoiceComponent = ({ orderDetailsFromServer = {}, dictionary }) => {
         return ((price - (price * (discountPercent / 100))) * unit);
     };
 
-
     const exportToPdf = async () => {
         const input = divRef.current;
 
@@ -61,9 +60,6 @@ const InvoiceComponent = ({ orderDetailsFromServer = {}, dictionary }) => {
             console.error('Error generating PDF: ', error);
         }
     };
-
-
-
 
     return (
         <>
@@ -220,7 +216,9 @@ const InvoiceComponent = ({ orderDetailsFromServer = {}, dictionary }) => {
 
                                     {/* TOTAL IN WORD */}
                                     <div>
-                                        Total in words: <span className="ml-6 font-bold">{numberToWords?.toWords(orderDetails?.totalPrice)}</span>
+                                        Total in words: <span className="ml-6 font-bold">
+                                            {numberToWords?.toWords(orderDetails?.totalPrice ? orderDetails?.totalPrice : 0)}
+                                        </span>
                                     </div>
 
                                     {/* TOTAL */}
@@ -235,12 +233,10 @@ const InvoiceComponent = ({ orderDetailsFromServer = {}, dictionary }) => {
                     </div>
                 </div>
 
-
-
                 {/* ADDRESSES */}
                 <UserAddressForPDF
                     dictionary={dictionary}
-                    userId={orderDetails?.userId.toString()}
+                    userId={orderDetails?.userId?.toString()}
                 />
 
                 {/* GREETINGS */}

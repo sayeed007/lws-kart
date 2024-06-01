@@ -1,9 +1,8 @@
+import { getAllCategories } from '@/database/queries';
 import Link from 'next/link';
 import CategoryInfo from './CategoryInfo';
-import NavText from './NavText';
-import { getAllCategories } from '@/database/queries';
 import LogInDetails from './LogInDetails';
-import { auth } from '../../../auth';
+import NavText from './NavText';
 
 const SecondaryNavbar = async ({ lang, dictionary }) => {
 

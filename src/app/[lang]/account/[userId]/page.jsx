@@ -2,13 +2,15 @@ import PersonalInfo from "@/components/Account/PersonalInfo";
 import UserAddress from "@/components/Account/UserAddress";
 import BreadCrumb from "@/components/Common/BreadCrumb";
 import { getUserOngoingOrder, getUserPreviousOrder } from "@/database/queries";
+import connectMongo from "@/service/connectMongo";
 import { calculateNewPrice } from "@/utils/data-util";
+import moment from "moment";
 import Image from "next/image";
-import EmptyBox from '../../../../../public/assets/images/EmptyBox.jpeg';
-import { getDictionary } from "../../../../../public/dictionary/dictionaries";
+import Link from "next/link";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Link from "next/link";
+import EmptyBox from '../../../../../public/assets/images/EmptyBox.jpeg';
+import { getDictionary } from "../../../../../public/dictionary/dictionaries";
 
 
 
@@ -22,10 +24,12 @@ export async function generateMetadata({ params: { lang, userId } }) {
 
 
 const AccountPage = async ({ params: { lang, userId } }) => {
+    await connectMongo();
 
     const dictionary = await getDictionary(lang);
     const userOngoingOrder = await getUserOngoingOrder(userId);
     const userPreviousOrder = await getUserPreviousOrder(userId);
+
 
     return (
         <>
@@ -52,36 +56,24 @@ const AccountPage = async ({ params: { lang, userId } }) => {
 
                 <div className="container items-start gap-6 pt-4 pb-16">
 
-                    <div className="grid grid-cols-2 gap-4 mx-auto max-w-5xl">
+                    <div className="grid grid-cols-3 gap-4 mx-auto max-w-5xl">
 
 
                         {userOngoingOrder?.map((ongoingOrder) => {
                             return (
                                 <div className="shadow rounded bg-white px-4 pt-6 pb-8" key={ongoingOrder?.id}>
 
-                                    <div className="py-2 flex justify-center items-center">
-
-                                        <div className="flex flex-col w-2/3">
-                                            <div className="py-2">
-                                                {dictionary?.invoiceNumber}:<span className="font-bold ml-2">{ongoingOrder?.id}</span>
-                                            </div>
-
-                                            <div className="py-2">
-                                                {dictionary?.status}:<span className="font-bold uppercase"> {ongoingOrder?.status}</span>
-                                            </div>
-                                        </div>
-
-                                        <Link
-                                            href={`/${lang}/invoice/${ongoingOrder?.id}`}
-                                            className="flex w-1/3 justify-end">
-                                            <div className="bg-blue-400 text-white px-4 py-2 h-10 cursor-pointer">
-                                                Invoice
-                                            </div>
-                                        </Link>
-
+                                    <div className="py-2">
+                                        {dictionary?.invoiceNumber}:<span className="font-bold ml-2 break-keep">{ongoingOrder?.id}</span>
                                     </div>
 
+                                    <div className="py-2">
+                                        {dictionary?.orderTime}:<span className="font-bold uppercase ml-2"> {moment(ongoingOrder?.orderTime).format('DD MMM, YYYY')}</span>
+                                    </div>
 
+                                    <div className="py-2">
+                                        {dictionary?.status}:<span className="font-bold uppercase"> {ongoingOrder?.status}</span>
+                                    </div>
 
                                     {/* PRODUCTS */}
                                     {ongoingOrder?.orderDetailsId?.map((eachIndividualOrder) => {
@@ -125,14 +117,14 @@ const AccountPage = async ({ params: { lang, userId } }) => {
                                     })}
 
                                     {/* SHIPPING CHARGE */}
-                                    <div className="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercase">
+                                    {/* <div className="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercase">
                                         <div className='w-[70%]'>
                                             {dictionary?.shipping}
                                         </div>
                                         <div className='w-[30%] flex justify-end'>
                                             {dictionary?.free}
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     {/* TOTAL */}
                                     <div className="flex justify-between text-gray-800 font-medium pt-3 uppercase">
@@ -142,6 +134,16 @@ const AccountPage = async ({ params: { lang, userId } }) => {
                                         <div className='w-[30%] flex justify-end'>
                                             ${ongoingOrder?.totalPrice}
                                         </div>
+                                    </div>
+
+                                    <div className="flex justify-center mt-4">
+                                        <Link
+                                            href={`/${lang}/invoice/${ongoingOrder?.id}`}
+                                            className="flex w-1/3 justify-end">
+                                            <div className="bg-blue-400 text-white px-4 py-2 h-10 cursor-pointer">
+                                                Details
+                                            </div>
+                                        </Link>
                                     </div>
 
 
@@ -187,30 +189,20 @@ const AccountPage = async ({ params: { lang, userId } }) => {
                             return (
                                 <div className="shadow rounded bg-white px-4 pt-6 pb-8" key={previousOrder?.id}>
 
-                                    <div className="py-2 flex justify-center items-center">
+                                    <div className="py-2">
+                                        {dictionary?.invoiceNumber}:<span className="font-bold ml-2 break-keep">{previousOrder?.id}</span>
+                                    </div>
 
-                                        <div className="flex flex-col w-2/3">
-                                            <div className="py-2">
-                                                {dictionary?.invoiceNumber}:<span className="font-bold ml-2">{previousOrder?.id}</span>
-                                            </div>
+                                    <div className="py-2">
+                                        {dictionary?.orderTime}:<span className="font-bold uppercase ml-2"> {moment(previousOrder?.orderTime).format('DD MMM, YYYY')}</span>
+                                    </div>
 
-                                            <div className="py-2">
-                                                {dictionary?.status}:<span className="font-bold uppercase"> {previousOrder?.status}</span>
-                                            </div>
-                                        </div>
-
-                                        <Link
-                                            href={`/${lang}/invoice/${previousOrder?.id}`}
-                                            className="flex w-1/3 justify-end">
-                                            <div className="bg-blue-400 text-white px-4 py-2 h-10 cursor-pointer">
-                                                Invoice
-                                            </div>
-                                        </Link>
-
+                                    <div className="py-2">
+                                        {dictionary?.status}:<span className="font-bold uppercase"> {previousOrder?.status}</span>
                                     </div>
 
                                     {/* PRODUCTS */}
-                                    {previousOrder?.orderDetailsId?.map((eachIndividualOrder) => {
+                                    {/* {previousOrder?.orderDetailsId?.map((eachIndividualOrder) => {
                                         return (
                                             <div
                                                 key={eachIndividualOrder?.productId?._id}
@@ -248,17 +240,17 @@ const AccountPage = async ({ params: { lang, userId } }) => {
                                                 </div>
                                             </div>
                                         )
-                                    })}
+                                    })} */}
 
                                     {/* SHIPPING CHARGE */}
-                                    <div className="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercase">
+                                    {/* <div className="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercase">
                                         <div className='w-[70%]'>
                                             {dictionary?.shipping}
                                         </div>
                                         <div className='w-[30%] flex justify-end'>
                                             {dictionary?.free}
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     {/* TOTAL */}
                                     <div className="flex justify-between text-gray-800 font-medium pt-3 uppercase">
@@ -268,6 +260,16 @@ const AccountPage = async ({ params: { lang, userId } }) => {
                                         <div className='w-[30%] flex justify-end'>
                                             ${previousOrder?.totalPrice}
                                         </div>
+                                    </div>
+
+                                    <div className="flex justify-center mt-4">
+                                        <Link
+                                            href={`/${lang}/invoice/${previousOrder?.id}`}
+                                            className="flex w-1/3 justify-end">
+                                            <div className="bg-blue-400 text-white px-4 py-2 h-10 cursor-pointer">
+                                                Details
+                                            </div>
+                                        </Link>
                                     </div>
 
 

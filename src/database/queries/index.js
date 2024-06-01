@@ -59,7 +59,7 @@ async function getWishlistItemsDetail(wishlists) {
 
 
     try {
-        await connectMongo();
+
 
         // Get  products
         const products = await productModel
@@ -123,7 +123,7 @@ async function getWishlistItemsDetail(wishlists) {
 export async function getAllCategories() {
 
     try {
-        await connectMongo();
+
 
         const allCategories = await categoryModel.find().lean();
 
@@ -139,7 +139,7 @@ export async function getAllCategories() {
 export async function getAllSize() {
 
     try {
-        await connectMongo();
+
 
         const allSizes = await sizeModel.find().lean();
 
@@ -155,7 +155,7 @@ export async function getAllSize() {
 export async function getAllColors() {
 
     try {
-        await connectMongo();
+
 
         const allColors = await colorModel.find().lean();
 
@@ -170,7 +170,7 @@ export async function getAllColors() {
 
 export async function getAllNewArrivalWithAverageRatingAndReviewCount() {
     try {
-        await connectMongo();
+
 
         // Calculate the date 15 days ago
         const fifteenDaysAgo = new Date();
@@ -217,7 +217,7 @@ export async function getAllNewArrivalWithAverageRatingAndReviewCount() {
 
 export async function getAllTrendingWithAverageRatingAndReviewCount() {
     try {
-        await connectMongo();
+
 
         // Calculate the date 15 days ago
         const today = new Date();
@@ -266,7 +266,7 @@ export async function getAllTrendingWithAverageRatingAndReviewCount() {
 
 export async function getSpecificProductWithAverageRatingAndReviewCount(productId) {
     try {
-        await connectMongo();
+
 
         // Get product by product id
         const specificProduct = await productModel
@@ -327,7 +327,7 @@ export async function getSpecificProductWithAverageRatingAndReviewCount(productI
 
 export async function getCategoryWiseProducts(categoryId) {
     try {
-        await connectMongo();
+
 
         // Get  products
         const categoryWiseProducts = await productModel
@@ -365,7 +365,7 @@ export async function getCategoryWiseProducts(categoryId) {
 
 export async function getAllProductsByFiltering({ searchKeyWord, category, minPrice, maxPrice, size, color }) {
     try {
-        await connectMongo();
+
 
         let query = {};
 
@@ -457,6 +457,7 @@ export async function getAllProductsByFiltering({ searchKeyWord, category, minPr
 export const addToWishlist = async (userId, productId) => {
     try {
 
+
         // Check if the product is already in the wishlist
         const existingWishlistItem = await wishlistModel.findOne({ userId, productId });
 
@@ -496,6 +497,7 @@ export const addToWishlist = async (userId, productId) => {
 export const removeFromWishlist = async (wishlistItemId) => {
     try {
 
+
         // Delete the item from the database
         const deleteFromWishList = await wishlistModel.findByIdAndDelete(wishlistItemId).lean();
 
@@ -516,6 +518,8 @@ export const removeFromWishlist = async (wishlistItemId) => {
 
 export const addToCartList = async (requestData) => {
     try {
+
+
         // Get the product details
         const product = await productModel.findById(requestData.productId).lean();
 
@@ -630,6 +634,7 @@ export const addToCartList = async (requestData) => {
 export const removeFromCartList = async (cartId) => {
     try {
 
+
         // Delete the item from the database
         const deleteFromCart = await cartModel.findByIdAndDelete(cartId).lean();
 
@@ -641,6 +646,8 @@ export const removeFromCartList = async (cartId) => {
 
 export const getUserCart = async (userId) => {
     try {
+
+
         // Fetch the user's cart items with future expiration time
         const userCart = await cartModel.find({
             userId: userId,
@@ -686,7 +693,11 @@ export const getUserCart = async (userId) => {
 export const getUserOngoingOrder = async (userId) => {
     try {
 
-        const ongoingOrders = await userOrderModel.find({ userId: userId, status: { $in: ['pending', 'shipping'] } }).populate({
+
+        const ongoingOrders = await userOrderModel.find({
+            userId: userId,
+            status: { $in: ['pending', 'shipping'] }
+        }).populate({
             path: 'orderDetailsId',
             populate: {
                 path: 'productId',
@@ -694,7 +705,6 @@ export const getUserOngoingOrder = async (userId) => {
                 select: ['name', 'discountPercent', 'images']
             }
         }).lean();
-
 
         return replaceMongoIdInArray(ongoingOrders);
     } catch (error) {
@@ -706,6 +716,7 @@ export const getUserOngoingOrder = async (userId) => {
 // GET USER Previous Order
 export const getUserPreviousOrder = async (userId) => {
     try {
+
 
         const previousOrders = await userOrderModel.find({ userId: userId, status: { $in: ['delivered', 'canceled'] } }).populate({
             path: 'orderDetailsId',
@@ -746,6 +757,7 @@ export const getSpecificOrder = async (invoiceId) => {
 // CREATE ORDER
 export const createOrder = async (requestData) => {
     try {
+
 
         // UPDATE USER ADDRESS IF USER MODIFY THIS
         const userProvidedAddress = requestData?.userAddress;
@@ -868,6 +880,8 @@ export const createOrder = async (requestData) => {
 // USER PART
 export async function getUserByEmail(email) {
     try {
+
+
         const users = await userModel.find({ email: email }).lean();
         return replaceMongoIdInObject(users[0]);
     } catch (error) {
@@ -878,6 +892,7 @@ export async function getUserByEmail(email) {
 
 export async function getUserAccountByUserId(userId) {
     try {
+
 
         const wishlistItems = await wishlistModel.find({ userId: userId }).lean();
 
@@ -919,6 +934,7 @@ export async function getUserAccountByUserId(userId) {
 export const getUserAddress = async (userId) => {
     try {
 
+
         // Delete the item from the database
         const userAddress = await userAddressModel.findOne({ userId }).lean();
 
@@ -931,6 +947,7 @@ export const getUserAddress = async (userId) => {
 export const addToUserAddress = async (userGivenAddress) => {
     try {
 
+
         // Delete the item from the database
         const userAddress = await userAddressModel.create(userGivenAddress);
 
@@ -942,6 +959,8 @@ export const addToUserAddress = async (userGivenAddress) => {
 
 export const updateUserAddress = async (addressId, userGivenAddress) => {
     try {
+
+
         // Find the user address document by addressId
         let userAddress = await userAddressModel.findById(addressId);
 
@@ -970,6 +989,8 @@ export const updateUserAddress = async (addressId, userGivenAddress) => {
 
 export const updateUserInfo = async (userId, userProvidedData) => {
     try {
+
+
         // Find the user document by userId
         let userData = await userModel.findById(userId);
 

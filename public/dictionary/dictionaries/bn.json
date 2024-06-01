@@ -108,7 +108,7 @@
   "shippingAddress": "শিপিং ঠিকানা",
   "billingAddress": "বিলিং ঠিকানা",
   "ongoingOrders": "চলমান অর্ডার",
-  "invoiceNumber": "চালান নম্বর",
+  "invoiceNumber": "চালান",
   "status": "অবস্থা",
   "previousOrders": "আগের অর্ডারগুলি",
   "noPreviousOrder": "কোনো আগের অর্ডার নেই",

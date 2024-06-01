@@ -6,6 +6,7 @@ import { getSpecificOrder } from "@/database/queries";
 import { auth } from "../../../../../auth";
 import { getDictionary } from "../../../../../public/dictionary/dictionaries";
 import InvoiceComponent from "@/components/Account/InvoiceComponent";
+import connectMongo from "@/service/connectMongo";
 
 export async function generateMetadata() {
     return {
@@ -16,6 +17,8 @@ export async function generateMetadata() {
 
 
 const InvoicePage = async ({ params: { lang, invoiceId } }) => {
+    await connectMongo();
+
 
     const dictionary = await getDictionary(lang);
 
@@ -25,11 +28,8 @@ const InvoicePage = async ({ params: { lang, invoiceId } }) => {
         redirect(`/${lang}`);
     };
 
+
     const orderDetails = await getSpecificOrder(invoiceId);
-
-
-
-
 
     return (
         <>

@@ -1,8 +1,9 @@
-import BreadCrumb from '@/components/Common/BreadCrumb';
-import { getDictionary } from '../../../../public/dictionary/dictionaries';
 import CartContainer from '@/components/Cart/CartContainer';
+import BreadCrumb from '@/components/Common/BreadCrumb';
+import connectMongo from "@/service/connectMongo";
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
 
 export async function generateMetadata() {
@@ -14,6 +15,7 @@ export async function generateMetadata() {
 
 
 const CartPage = async ({ params: { lang } }) => {
+    await connectMongo();
 
     const dictionary = await getDictionary(lang);
 

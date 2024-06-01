@@ -3,8 +3,9 @@ import SingleProductCard from '@/components/Common/SingleProductCard';
 import ShopSidebar from '@/components/ShopSidebar/ShopSidebar';
 import SmallScreenFloatingFilter from '@/components/ShopSidebar/SmallScreenFloatingFilter';
 import { getAllCategories, getAllColors, getAllProductsByFiltering, getAllSize } from '@/database/queries';
-import { getDictionary } from '../../../../public/dictionary/dictionaries';
+import connectMongo from "@/service/connectMongo";
 import { ToastContainer } from 'react-toastify';
+import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
 export async function generateMetadata({
     params: { lang },
@@ -60,6 +61,7 @@ const ShopPage = async ({
     params: { lang },
     searchParams: { searchKeyWord, category, minPrice, maxPrice, size, color },
 }) => {
+    await connectMongo();
 
 
     const dictionary = await getDictionary(lang);

@@ -1,3 +1,7 @@
+import connectMongo from "@/service/connectMongo";
+
+
+
 export async function generateMetadata() {
     return {
         title: "LWS-kart | Learn with Sumit",
@@ -6,7 +10,9 @@ export async function generateMetadata() {
 };
 
 
-const ContactUsPage = () => {
+const ContactUsPage = async () => {
+    await connectMongo();
+
     return (
         <>
 

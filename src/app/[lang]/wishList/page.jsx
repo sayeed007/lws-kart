@@ -1,8 +1,9 @@
 import BreadCrumb from '@/components/Common/BreadCrumb';
 import WishListContainer from '@/components/WishList/WishListContainer';
-import { getDictionary } from '../../../../public/dictionary/dictionaries';
+import connectMongo from "@/service/connectMongo";
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
 
 
@@ -15,6 +16,7 @@ export async function generateMetadata() {
 
 
 const WishListPage = async ({ params: { lang } }) => {
+    await connectMongo();
 
     const dictionary = await getDictionary(lang);
 

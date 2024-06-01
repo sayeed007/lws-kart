@@ -7,27 +7,27 @@ import * as Yup from 'yup';
 import ErrorTooltip from '../Common/utilities/ErrorToltip';
 import { useState } from 'react';
 
-// const initialFormData = {
-//     name: '',
-//     email: '',
-//     mobile: '',
-//     username: '',
-//     password: '',
-//     gender: '',
-//     photo: '',
-//     agreement: false,
-// };
-
 const initialFormData = {
-    name: 'Bappy',
-    email: 'bappy@gmail.com',
-    mobile: '01701013315',
-    username: 'SHB',
-    password: '123456',
-    gender: 'Male',
-    photo: 'http://ptoto.com',
-    agreement: true,
+    name: '',
+    email: '',
+    mobile: '',
+    username: '',
+    password: '',
+    gender: '',
+    photo: '',
+    agreement: false,
 };
+
+// const initialFormData = {
+//     name: 'Bappy',
+//     email: 'bappy@gmail.com',
+//     mobile: '01701013315',
+//     username: 'SHB',
+//     password: '123456',
+//     gender: 'Male',
+//     photo: 'http://ptoto.com',
+//     agreement: true,
+// };
 
 const RegistrationForm = ({ lang, dictionary }) => {
     const router = useRouter();

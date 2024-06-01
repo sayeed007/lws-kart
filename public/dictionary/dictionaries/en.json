@@ -108,7 +108,7 @@
   "shippingAddress": "Shipping Address",
   "billingAddress": "Billing Address",
   "ongoingOrders": "Ongoing Orders",
-  "invoiceNumber": "Invoice Number",
+  "invoiceNumber": "Invoice",
   "status": "Status",
   "previousOrders": "Previous Orders",
   "noPreviousOrder": "No Previous Order",

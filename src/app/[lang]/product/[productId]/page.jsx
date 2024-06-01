@@ -1,10 +1,11 @@
 import BreadCrumb from '@/components/Common/BreadCrumb';
-import { getDictionary } from '../../../../../public/dictionary/dictionaries';
-import ProductDetails from '@/components/Common/ProductDetails';
 import ProductDescription from '@/components/Common/ProductDescription';
+import ProductDetails from '@/components/Common/ProductDetails';
 import RelatedProducts from '@/components/Common/RelatedProducts';
 import { getSpecificProductWithAverageRatingAndReviewCount } from '@/database/queries';
+import connectMongo from "@/service/connectMongo";
 import { ToastContainer } from 'react-toastify';
+import { getDictionary } from '../../../../../public/dictionary/dictionaries';
 
 
 export async function generateMetadata({ params: { lang, productId } }) {
@@ -20,6 +21,8 @@ export async function generateMetadata({ params: { lang, productId } }) {
 
 
 const ProductDetailsPage = async ({ params: { lang, productId } }) => {
+    await connectMongo();
+
     const dictionary = await getDictionary(lang);
 
     const productInfo = await getSpecificProductWithAverageRatingAndReviewCount(productId);

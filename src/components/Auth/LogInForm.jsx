@@ -13,8 +13,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const initialFormData = {
-    email: 'bappy@gmail.com',
-    password: '123456',
+    email: '',
+    password: '',
 };
 
 

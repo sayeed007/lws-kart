@@ -1,8 +1,9 @@
 import CheckoutForm from "@/components/Checkout/CheckoutForm";
 import BreadCrumb from "@/components/Common/BreadCrumb";
+import connectMongo from "@/service/connectMongo";
+import { redirect } from 'next/navigation';
 import { auth } from "../../../../auth";
 import { getDictionary } from "../../../../public/dictionary/dictionaries";
-import { redirect } from 'next/navigation';
 
 
 export async function generateMetadata() {
@@ -14,6 +15,7 @@ export async function generateMetadata() {
 
 
 const CheckoutPage = async ({ params: { lang } }) => {
+    await connectMongo();
 
     const dictionary = await getDictionary(lang);
 

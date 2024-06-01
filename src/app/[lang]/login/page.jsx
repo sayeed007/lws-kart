@@ -1,9 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react'
-import { getDictionary } from '../../../../public/dictionary/dictionaries';
-import Link from 'next/link';
-import SocialLogins from '@/components/Auth/SocialLogins';
 import LogInForm from '@/components/Auth/LogInForm';
+import SocialLogins from '@/components/Auth/SocialLogins';
+import connectMongo from "@/service/connectMongo";
+import Link from 'next/link';
+import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
 export async function generateMetadata() {
     return {
@@ -15,9 +15,11 @@ export async function generateMetadata() {
 
 
 const LoginPage = async ({ params: { lang } }) => {
+    await connectMongo();
+
 
     const dictionary = await getDictionary(lang);
-
+    const callbackUrl = process.env.WEBSITE_URL;
 
     return (
         <>
@@ -53,6 +55,7 @@ const LoginPage = async ({ params: { lang } }) => {
 
                         <SocialLogins
                             mode={"login"}
+                            callbackUrl={callbackUrl}
                         />
 
                     </div>
