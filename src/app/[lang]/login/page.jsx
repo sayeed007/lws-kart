@@ -3,6 +3,8 @@ import LogInForm from '@/components/Auth/LogInForm';
 import SocialLogins from '@/components/Auth/SocialLogins';
 import connectMongo from "@/service/connectMongo";
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { auth } from '../../../../auth';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
 export async function generateMetadata() {
@@ -17,9 +19,14 @@ export async function generateMetadata() {
 const LoginPage = async ({ params: { lang } }) => {
     await connectMongo();
 
+    const session = await auth();
 
     const dictionary = await getDictionary(lang);
     const callbackUrl = process.env.WEBSITE_URL;
+
+    if (session?.user?._id) {
+        redirect(`/${lang}`);
+    }
 
     return (
         <>
@@ -72,6 +79,7 @@ const LoginPage = async ({ params: { lang } }) => {
                 </div>
             </div>
             {/* ./login */}
+
 
         </>
     )

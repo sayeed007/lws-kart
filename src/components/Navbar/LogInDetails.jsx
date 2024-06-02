@@ -2,18 +2,16 @@
 
 
 import { useModifiedAuth } from '@/hooks/useModifiedAuth';
-import { faBars, faSignIn, faSignOut } from '@fortawesome/free-solid-svg-icons';
+import { faSignIn, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { signOut } from "next-auth/react";
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react'
-import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation'
-import { signOut } from "next-auth/react"
+import { useRouter } from 'next/navigation';
 
 
 
-const LogInDetails = ({ lang, dictionary }) => {
+const LogInDetails = ({ lang, dictionary, websiteURL }) => {
 
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
@@ -44,10 +42,9 @@ const LogInDetails = ({ lang, dictionary }) => {
                             className='bg-white h-[40px] w-[40px] rounded-full flex items-center cursor-pointer'
                             title="Log Out"
                             onClick={async () => {
-                                Cookies.remove('auth');
                                 setModifiedAuth(null);
-                                // await signOut({ callbackUrl: `${process.env.WEBSITE_URL}/${lang}/login` });
-                                await signOut();
+                                await signOut({ callbackUrl: `${websiteURL}/${lang}/login` });
+                                // await signOut();
                                 // router.push(`/${lang}/login`);
                             }}
                         >

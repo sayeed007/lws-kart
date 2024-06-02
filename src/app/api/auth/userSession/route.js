@@ -7,11 +7,17 @@ export const GET = async () => {
     const session = await auth();
 
     // Fetch user account
-    const userInfo = await getUserAccountByUserId(session?.user?.id);
+    const userInfo = await getUserAccountByUserId(session?.user?._id);
 
     // Return user data
     return new Response(JSON.stringify({
-      sessionInfo: session,
+      sessionInfo: {
+        ...session,
+        user: {
+          ...session?.user,
+          id: session?.user?._id ? session.user?._id : session?.user?.id
+        }
+      },
       wishlistItems: userInfo.wishlistItems,
       cartItems: userInfo.cartItems,
     }), {

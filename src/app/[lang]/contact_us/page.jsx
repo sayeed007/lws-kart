@@ -1,7 +1,6 @@
 import connectMongo from "@/service/connectMongo";
 
 
-
 export async function generateMetadata() {
     return {
         title: "LWS-kart | Learn with Sumit",
@@ -30,6 +29,8 @@ const ContactUsPage = async () => {
                     This page is under maintenance
                 </div>
             </div>
+
+
         </>
     )
 }

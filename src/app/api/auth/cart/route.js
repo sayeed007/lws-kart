@@ -32,7 +32,7 @@ export const GET = async (request) => {
 
     const session = await auth();
 
-    const userId = session?.user?.id;
+    const userId = session?.user?._id;
 
     // Delete the item from the cart in the database
     const getUserCartData = await getUserCart(userId);

@@ -72,6 +72,7 @@ const RegisterPage = async ({ params: { lang } }) => {
             </div>
             {/* register */}
 
+
         </>
     )
 }

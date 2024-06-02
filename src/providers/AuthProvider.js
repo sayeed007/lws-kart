@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 
-import Cookies from 'js-cookie';
 import { AuthContext } from '@/contexts';
 import axios from 'axios';
+import { useSession, signOut } from "next-auth/react";
 
 export default function AuthProvider({ children }) {
+
+    const { session } = useSession();
 
     const [modifiedAuth, setModifiedAuth] = useState(null);
 

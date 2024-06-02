@@ -5,7 +5,6 @@ import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 

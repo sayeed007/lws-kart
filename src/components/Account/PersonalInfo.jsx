@@ -25,9 +25,10 @@ const PersonalInfo = ({ lang, dictionary, userId }) => {
                 if (response?.data?.userInfo) {
                     const userInfo = response.data.userInfo;
 
-                    userInfo.photo = userInfo?.image ? userInfo.image : '';
-
-                    delete userInfo.image;
+                    if (userInfo?.image) {
+                        userInfo.photo = userInfo?.image ? userInfo.image : '';
+                        delete userInfo.image;
+                    };
 
                     setUserInfo({ ...userInfo });
                 };
@@ -89,7 +90,9 @@ const PersonalInfo = ({ lang, dictionary, userId }) => {
                         />
                         :
                         <>
-
+                            <div className='bg-[#FD3D57] mr-4 flex justify-center items-center font-bold text-3xl h-[100px] w-[100px] border-2 border-black rounded-full'>
+                                {userInfo?.name?.[0]}
+                            </div>
                         </>
                     }
 

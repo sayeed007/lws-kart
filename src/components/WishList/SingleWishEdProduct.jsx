@@ -1,14 +1,13 @@
 "use client"
 
 
+import { useModifiedAuth } from '@/hooks/useModifiedAuth'
 import { calculateNewPrice } from '@/utils/data-util'
 import axios from 'axios'
 import Image from 'next/image'
 import { useState } from 'react'
-import DeleteSingleWishItem from './DeleteSingleWishItem'
-import { useModifiedAuth } from '@/hooks/useModifiedAuth'
 import { toast } from 'react-toastify'
-import Cookies from 'js-cookie'
+import DeleteSingleWishItem from './DeleteSingleWishItem'
 
 const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
 

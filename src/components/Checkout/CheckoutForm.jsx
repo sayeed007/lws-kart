@@ -186,12 +186,19 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
         };
 
         if (modifiedAuth?.sessionInfo?.user?.id) {
-            fetchUserAddressData();
+
+            if (modifiedAuth?.cartItems && modifiedAuth?.cartItems?.length <= 0) {
+                toast.warning('Your cart list is empty, choose some product to place an order.', {
+                    onClose: () => { router.push(`/${lang}`) },
+                    autoClose: 500
+                });
+            } else {
+                fetchUserAddressData();
+            }
         };
 
 
     }, [modifiedAuth]);
-
 
     const submitResolver = async (value) => {
         try {
@@ -213,15 +220,15 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
 
             setLoading(false);
 
-            toast.success('Your order is placed successfully.');
+            toast.success('Your order is placed successfully.', {
+                onClose: () => { router.push(`/${lang}/account/${value?.userId}`) }
+            });
 
             if (response?.data) {
                 setModifiedAuth({
                     ...modifiedAuth,
                     cartItems: []
                 });
-
-                router.push(`/${lang}/account/${value?.userId}`);
             }
 
 

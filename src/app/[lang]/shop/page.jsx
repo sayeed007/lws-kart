@@ -4,13 +4,13 @@ import ShopSidebar from '@/components/ShopSidebar/ShopSidebar';
 import SmallScreenFloatingFilter from '@/components/ShopSidebar/SmallScreenFloatingFilter';
 import { getAllCategories, getAllColors, getAllProductsByFiltering, getAllSize } from '@/database/queries';
 import connectMongo from "@/service/connectMongo";
-import { ToastContainer } from 'react-toastify';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
 export async function generateMetadata({
     params: { lang },
     searchParams: { searchKeyWord, category, minPrice, maxPrice, size, color },
 }) {
+    await connectMongo();
 
     const allCategory = await getAllCategories();
     const categoryMapping = {};
@@ -183,19 +183,6 @@ const ShopPage = async ({
 
             </div>
             {/* shop wrapper */}
-
-
-            <ToastContainer
-                position="top-right"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                theme="colored"
-            />
 
 
 

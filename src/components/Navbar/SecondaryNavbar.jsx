@@ -8,8 +8,7 @@ const SecondaryNavbar = async ({ lang, dictionary }) => {
 
     const allCategory = await getAllCategories();
 
-
-
+    const websiteURL = process.env.WEBSITE_URL;
 
     return (
         <>
@@ -70,6 +69,7 @@ const SecondaryNavbar = async ({ lang, dictionary }) => {
                         <LogInDetails
                             lang={lang}
                             dictionary={dictionary}
+                            websiteURL={websiteURL}
                         />
 
 

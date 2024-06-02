@@ -4,7 +4,6 @@ import ProductDetails from '@/components/Common/ProductDetails';
 import RelatedProducts from '@/components/Common/RelatedProducts';
 import { getSpecificProductWithAverageRatingAndReviewCount } from '@/database/queries';
 import connectMongo from "@/service/connectMongo";
-import { ToastContainer } from 'react-toastify';
 import { getDictionary } from '../../../../../public/dictionary/dictionaries';
 
 
@@ -60,19 +59,6 @@ const ProductDetailsPage = async ({ params: { lang, productId } }) => {
                 productInfo={productInfo}
             />
 
-
-
-            <ToastContainer
-                position="top-right"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                theme="colored"
-            />
 
         </>
     )

@@ -30,6 +30,9 @@ const AboutUsPage = async () => {
                     This page is under maintenance
                 </div>
             </div>
+
+
+
         </>
     )
 }

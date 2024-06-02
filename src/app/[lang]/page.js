@@ -5,8 +5,6 @@ import HeroBanner from "@/components/HeroSection/HeroBanner";
 import NewArrival from "@/components/NewArrival/NewArrival";
 import Product from "@/components/Product/Product";
 import connectMongo from "@/service/connectMongo";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { getDictionary } from "../../../public/dictionary/dictionaries";
 
 
@@ -45,18 +43,6 @@ export default async function HomePage({ params: { lang } }) {
         dictionary={dictionary}
       />
 
-
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        theme="colored"
-      />
 
     </>
   );

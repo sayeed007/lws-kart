@@ -1,16 +1,12 @@
 "use client"
 
-import Link from 'next/link';
-import * as Yup from 'yup';
-import ErrorTooltip from '../Common/utilities/ErrorToltip';
-import { useFormik } from 'formik';
-import { useRouter } from "next/navigation";
-import { useState } from 'react';
 import { login } from '@/app/actions';
 import { useModifiedAuth } from '@/hooks/useModifiedAuth';
-import Cookies from 'js-cookie';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useFormik } from 'formik';
+import { useRouter } from "next/navigation";
+import * as Yup from 'yup';
+import ErrorTooltip from '../Common/utilities/ErrorToltip';
+import { toast } from 'react-toastify';
 
 const initialFormData = {
     email: '',
@@ -44,17 +40,11 @@ const LogInForm = ({ lang, dictionary }) => {
 
             const response = await login(formData);
 
-            // if (response.error) {
-
-            //     toast.error(response.error);
-
-            // } else {
-
-            //     Cookies.set('auth', JSON.stringify(response));
-            //     setModifiedAuth(response);
-
-            //     router.push(`/${lang}`);
-            // }
+            if (response?.[0]) {
+                router.replace(`/${lang}`);
+            } else {
+                toast.error(response.error);
+            }
 
         } catch (error) {
         }

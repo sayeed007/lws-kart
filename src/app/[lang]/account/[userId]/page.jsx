@@ -7,8 +7,6 @@ import { calculateNewPrice } from "@/utils/data-util";
 import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import EmptyBox from '../../../../../public/assets/images/EmptyBox.jpeg';
 import { getDictionary } from "../../../../../public/dictionary/dictionaries";
 
@@ -322,17 +320,6 @@ const AccountPage = async ({ params: { lang, userId } }) => {
             {/* ./account wrapper */}
 
 
-            <ToastContainer
-                position="top-right"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                theme="colored"
-            />
 
         </>
     )

@@ -1,5 +1,6 @@
 
 
+import InvoiceForEmail from "@/components/Account/InvoiceForEmail";
 import sendMail from "@/mailSender/SendMail";
 import { cartModel } from "@/models/cart-model";
 import { categoryModel } from "@/models/category-model";
@@ -14,8 +15,9 @@ import { userAddressModel } from "@/models/user-addreess-model";
 import { userModel } from "@/models/user-model";
 import { userOrderModel } from "@/models/user-order-model";
 import { wishlistModel } from "@/models/wishlist-model";
-import connectMongo from "@/service/connectMongo";
 import { replaceMongoIdInArray, replaceMongoIdInObject } from "@/utils/data-util";
+import { render } from '@react-email/render';
+import { getDictionary } from "../../../public/dictionary/dictionaries";
 
 
 const LAST_DAY_TO_CONSIDER_AS_NEW_ARRIVAL = 15;
@@ -850,14 +852,33 @@ export const createOrder = async (requestData) => {
 
         const invoiceLink = `${process.env.WEBSITE_URL}/en/invoice/${userCurrentOrderInvoice}`;
 
+        const dictionary = await getDictionary('en');
+
+        console.log(userData, userName, userEmail, userCurrentOrderInvoice, invoiceLink, dictionary);
+
+        const emailBody = `<p>Hello ${userName},</p><p>Thank you for your recent order. You can view your invoice by clicking the following link:</p><p><a href="${invoiceLink}">View Invoice</a></p>`
+
+
+        // render(
+        //     <InvoiceForEmail
+        //         orderDetailsFromServer={userOrders}
+        //         invoiceLink={invoiceLink}
+        //         userName={userName}
+        //         userAddress={requestData.userAddress}
+        //     />
+        // );
+        console.log(emailBody);
+
+
         if (userEmail && userCurrentOrderInvoice) {
+
             const sentMail = await sendMail({
                 to: userEmail,
                 subject: 'Invoice for your recent order',
                 text: `Hello ${userName},\n\nThank you for your recent order. You can view your invoice by clicking the following link: ${invoiceLink}`,
-                html: `<p>Hello ${userName},</p><p>Thank you for your recent order. You can view your invoice by clicking the following link:</p><p><a href="${invoiceLink}">View Invoice</a></p>`
+                html: emailBody
             });
-        }
+        };
 
 
         return true;
@@ -893,7 +914,6 @@ export async function getUserByEmail(email) {
 export async function getUserAccountByUserId(userId) {
     try {
 
-
         const wishlistItems = await wishlistModel.find({ userId: userId }).lean();
 
         const wishlistItemsDetail = await getWishlistItemsDetail(wishlistItems);
@@ -903,7 +923,6 @@ export async function getUserAccountByUserId(userId) {
             const productData = wishlistItemsDetail.find(product => product.id === wishlistData.productId.toString());
             return { ...productData, wishlistData };
         });
-
 
         const cartItems = await cartModel.find({
             userId: userId,
@@ -925,7 +944,7 @@ export async function getUserAccountByUserId(userId) {
 
 
     } catch (error) {
-        console.error('Error fetching user account by email:', error);
+        console.error('Error fetching user wish list items and cart list items by user id:', error);
         throw error;
     }
 };
@@ -1007,7 +1026,7 @@ export const updateUserInfo = async (userId, userProvidedData) => {
         // Save the updated user document
         const modifiedUserData = await userData.save();
 
-        return modifiedUserData ? modifiedUserData.toObject() : {};
+        return modifiedUserData ? replaceMongoIdInObject(modifiedUserData.toObject()) : {};
     } catch (error) {
         // return modifiedUserData
         throw new Error('Error updating user information: ' + error.message);

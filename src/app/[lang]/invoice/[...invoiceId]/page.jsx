@@ -54,7 +54,6 @@ const InvoicePage = async ({ params: { lang, invoiceId } }) => {
             {/* ./wrapper */}
 
 
-
         </>
     )
 }

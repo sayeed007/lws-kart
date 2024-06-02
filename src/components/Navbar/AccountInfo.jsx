@@ -5,14 +5,12 @@ import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import Link from "next/link";
 import { useEffect } from 'react';
 
 const AccountInfo = ({ lang, dictionary, session }) => {
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
-
 
     useEffect(() => {
 
@@ -33,7 +31,6 @@ const AccountInfo = ({ lang, dictionary, session }) => {
             fetchUserDetails();
         }
         // else if (!session) {
-        //     Cookies.remove('auth');
         //     setModifiedAuth(null);
         // }
 

@@ -2,6 +2,8 @@
 import AuthProvider from "@/providers/AuthProvider";
 import "../../public/assets/css/main.css";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
+import ToastProvider from "@/providers/ToastProvider";
 
 
 
@@ -21,17 +23,24 @@ export default async function RootLayout({ children }) {
 
 
       <body>
-        <AuthProvider>
-          <div id="modal-root"></div>
 
-          {/*  Begin Main  */}
-          <main>
+        {/* PROVIDING TOAST POPUP CONTAINER */}
+        <ToastProvider>
 
-            {children}
+          {/* PROVIDING USER SESSION */}
+          <SessionProvider>
 
-          </main>
-        </AuthProvider>
+            {/* PROVIDING MODIFIED AUTH FOR CART AND WISHLIST HANDLING */}
+            <AuthProvider>
+              <div id="modal-root"></div>
 
+              {/*  Begin Main  */}
+              <main>
+                {children}
+              </main>
+            </AuthProvider>
+          </SessionProvider>
+        </ToastProvider>
       </body>
     </html>
   );

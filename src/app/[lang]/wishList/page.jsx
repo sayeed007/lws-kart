@@ -1,8 +1,6 @@
 import BreadCrumb from '@/components/Common/BreadCrumb';
 import WishListContainer from '@/components/WishList/WishListContainer';
 import connectMongo from "@/service/connectMongo";
-import { ToastContainer } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
 
 
@@ -49,18 +47,6 @@ const WishListPage = async ({ params: { lang } }) => {
 
             </div>
             {/* wrapper */}
-
-            <ToastContainer
-                position="top-right"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                theme="colored"
-            />
 
 
         </>
