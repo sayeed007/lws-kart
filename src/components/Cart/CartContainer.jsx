@@ -13,7 +13,7 @@ import SingleCartProduct from './SingleCartProduct';
 
 const CartContainer = ({ dictionary, lang }) => {
 
-    const Router = useRouter();
+    const router = useRouter();
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
@@ -53,7 +53,7 @@ const CartContainer = ({ dictionary, lang }) => {
         } else {
             toast.info('You need to login to see your cart list, redirecting you to log in.', {
                 onClose: () => {
-                    Router.replace(`/${lang}/login`);
+                    router.replace(`/${lang}/login`);
                     countRef.current = 'redirected';
                 }
             });

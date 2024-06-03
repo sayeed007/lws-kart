@@ -6,14 +6,16 @@ import { useModifiedAuth } from '@/hooks/useModifiedAuth'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-
+import { usePathname } from 'next/navigation'
 
 const AddToWishListFromImageCard = ({ lang, productId }) => {
 
-    const Router = useRouter();
+    const router = useRouter();
+    const pathname = usePathname();
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
@@ -56,7 +58,16 @@ const AddToWishListFromImageCard = ({ lang, productId }) => {
         } else {
             toast.info("You need to log in to add product in wishlist, redirecting you to log in.",
                 {
-                    onClose: () => Router.push(`/${lang}/login`),
+                    onClose: () => {
+                        Cookies.set('lastAction', JSON.stringify({
+                            lastRoute: pathname,
+                            action: 'addToWishlist',
+                            productId: productId,
+                            productCount: 1,
+                            lang: lang
+                        }));
+                        router.push(`/${lang}/login`)
+                    },
                     autoClose: 1000
                 }
             );

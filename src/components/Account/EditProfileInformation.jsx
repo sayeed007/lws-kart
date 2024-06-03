@@ -2,7 +2,6 @@ import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -26,8 +25,6 @@ const initialFormData = {
 const EditProfileInformation = ({ lang, dictionary, previousData, modalVisible, setModalVisible, refetchData, setRefetchData }) => {
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
-
-    const router = useRouter();
 
     const [loading, setLoading] = useState(false);
 

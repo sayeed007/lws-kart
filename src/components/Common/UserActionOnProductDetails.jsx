@@ -10,11 +10,14 @@ import { useState } from 'react'
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import IncrementOrDecrement from './utilities/IncrementOrDecrement'
+import { usePathname } from 'next/navigation'
+import Cookies from 'js-cookie'
 
 
 const UserActionOnProductDetails = ({ productInfo, dictionary, lang }) => {
 
-    const Router = useRouter();
+    const router = useRouter();
+    const pathname = usePathname();
 
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
@@ -44,7 +47,7 @@ const UserActionOnProductDetails = ({ productInfo, dictionary, lang }) => {
 
                 if (response?.data?.addToCartList) {
                     toast.success(response?.data?.message, {
-                        onClose: () => { Router.refresh() }
+                        onClose: () => { router.refresh() }
                     });
 
                     setModifiedAuth({
@@ -63,7 +66,16 @@ const UserActionOnProductDetails = ({ productInfo, dictionary, lang }) => {
         } else {
             toast.info("You need to log in to add product in cart, redirecting you to log in.",
                 {
-                    onClose: () => Router.push(`/${lang}/login`)
+                    onClose: () => {
+                        Cookies.set('lastAction', JSON.stringify({
+                            lastRoute: pathname,
+                            action: 'addToCart',
+                            productId: (JSON.parse(productInfo))?.id,
+                            productCount: addToCartValue,
+                            lang: lang
+                        }));
+                        router.push(`/${lang}/login`);
+                    }
                 });
         }
     };
@@ -103,7 +115,16 @@ const UserActionOnProductDetails = ({ productInfo, dictionary, lang }) => {
         } else {
             toast.info("You need to log in to add product in wishlist, redirecting you to log in.",
                 {
-                    onClose: () => Router.push(`/${lang}/login`)
+                    onClose: () => {
+                        Cookies.set('lastAction', JSON.stringify({
+                            lastRoute: pathname,
+                            action: 'addToWishlist',
+                            productId: (JSON.parse(productInfo))?.id,
+                            productCount: 1,
+                            lang: lang
+                        }));
+                        router.push(`/${lang}/login`);
+                    }
                 });
         }
     };

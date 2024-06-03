@@ -9,7 +9,7 @@ import EmptyBox from '../../../public/assets/images/EmptyBox.jpeg';
 import { toast } from 'react-toastify';
 
 const WishListContainer = ({ dictionary, lang }) => {
-    const Router = useRouter();
+    const router = useRouter();
 
     const { modifiedAuth } = useModifiedAuth();
 
@@ -18,7 +18,7 @@ const WishListContainer = ({ dictionary, lang }) => {
     if (!userId) {
         toast.info('You need to login to see your cart list, redirecting you to log in.', {
             onClose: () => {
-                Router.replace(`/${lang}/login`);
+                router.replace(`/${lang}/login`);
                 countRef.current = 'redirected';
             }
         });

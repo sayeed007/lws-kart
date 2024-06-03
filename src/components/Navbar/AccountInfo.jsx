@@ -5,10 +5,14 @@ import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from 'axios';
-import Link from "next/link";
+import Cookies from 'js-cookie';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
+
 const AccountInfo = ({ lang, dictionary, session }) => {
+    const router = useRouter();
+    const pathname = usePathname();
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
@@ -38,8 +42,22 @@ const AccountInfo = ({ lang, dictionary, session }) => {
 
     return (
         <>
-            <Link
-                href={modifiedAuth?.sessionInfo?.user?.id ? `/${lang}/account/${modifiedAuth?.sessionInfo?.user?.id}` : `/${lang}/login`}
+            <div
+                onClick={() => {
+                    if (modifiedAuth?.sessionInfo?.user?.id) {
+                        router.push(`/${lang}/account/${modifiedAuth?.sessionInfo?.user?.id}`);
+                    } else {
+                        Cookies.set('lastAction', JSON.stringify({
+                            lastRoute: pathname,
+                            action: 'profileVisit',
+                            productId: '',
+                            productCount: 0,
+                            lang: lang
+                        }));
+                        router.push(`/${lang}/login`);
+                    }
+                }}
+                // href={modifiedAuth?.sessionInfo?.user?.id ? `/${lang}/account/${modifiedAuth?.sessionInfo?.user?.id}` : `/${lang}/login`}
                 className="flex justify-center items-center text-center text-gray-700 hover:text-primary transition relative  mx-3"
                 title="User Account"
             >
@@ -54,7 +72,7 @@ const AccountInfo = ({ lang, dictionary, session }) => {
 
                 </div>
 
-            </Link>
+            </div>
         </>
     )
 }

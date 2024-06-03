@@ -3,15 +3,17 @@
 
 import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from 'js-cookie';
 
 
 const AddToCartFromProductCard = ({ lang, dictionary, itemInfo }) => {
 
-    const Router = useRouter();
+    const router = useRouter();
+    const pathname = usePathname();
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
@@ -57,7 +59,16 @@ const AddToCartFromProductCard = ({ lang, dictionary, itemInfo }) => {
         } else {
             toast.info("You need to log in to add product in cart, redirecting you to log in.",
                 {
-                    onClose: () => Router.push(`/${lang}/login`)
+                    onClose: () => {
+                        Cookies.set('lastAction', JSON.stringify({
+                            lastRoute: pathname,
+                            action: 'addToCart',
+                            productId: (JSON.parse(itemInfo))?.id,
+                            productCount: 1,
+                            lang: lang
+                        }));
+                        router.push(`/${lang}/login`);
+                    }
                 });
         }
 
