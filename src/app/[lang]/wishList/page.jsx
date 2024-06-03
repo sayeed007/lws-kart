@@ -40,6 +40,7 @@ const WishListPage = async ({ params: { lang } }) => {
 
                     <WishListContainer
                         dictionary={dictionary}
+                        lang={lang}
                     />
 
                 </div>

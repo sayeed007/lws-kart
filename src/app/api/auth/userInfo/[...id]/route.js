@@ -20,7 +20,7 @@ export const PUT = async (request) => {
 
 
   } catch (error) {
-    console.error("Error getting user address:", error);
+    console.error("Error updating user personal information:", error);
     return new Response(JSON.stringify({
       message: error
     }), {

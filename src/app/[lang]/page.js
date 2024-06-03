@@ -6,6 +6,7 @@ import NewArrival from "@/components/NewArrival/NewArrival";
 import Product from "@/components/Product/Product";
 import connectMongo from "@/service/connectMongo";
 import { getDictionary } from "../../../public/dictionary/dictionaries";
+import { sendOrderConfirmationEmail } from "@/database/queries";
 
 
 export default async function HomePage({ params: { lang } }) {

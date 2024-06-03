@@ -16,7 +16,7 @@ export const POST = async (request) => {
 
 
   } catch (error) {
-    console.error("Error adding product to wishlist:", error);
+    console.error("Error adding product to cart:", error);
     return new Response(JSON.stringify({
       message: "Internal Server Error"
     }), {
@@ -32,7 +32,7 @@ export const GET = async (request) => {
 
     const session = await auth();
 
-    const userId = session?.user?._id;
+    const userId = session?.user?.id;
 
     // Delete the item from the cart in the database
     const getUserCartData = await getUserCart(userId);

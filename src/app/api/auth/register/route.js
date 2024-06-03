@@ -30,7 +30,7 @@ export const POST = async (request) => {
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("User creation Error.", error);
     return new NextResponse(error.message, {
       status: 500,
     });

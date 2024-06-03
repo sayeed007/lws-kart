@@ -121,5 +121,7 @@
   "noItemInWishList": "ইচ্ছা তালিকায় কোনো আইটেম নেই",
   "noItemInCart": "কার্টে কোনো আইটেম নেই",
   "orderTime": "অর্ডারের সময়",
-  "invoice": "চালান"
+  "invoice": "চালান",
+  "noNewProductArrived": "নতুন পণ্য আসা হয়নি।",
+  "noTrendingProduct": "কোনও ট্রেন্ডিং পণ্য নেই।"
 }

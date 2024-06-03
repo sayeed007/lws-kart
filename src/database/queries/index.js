@@ -649,7 +649,6 @@ export const removeFromCartList = async (cartId) => {
 export const getUserCart = async (userId) => {
     try {
 
-
         // Fetch the user's cart items with future expiration time
         const userCart = await cartModel.find({
             userId: userId,
@@ -739,7 +738,7 @@ export const getUserPreviousOrder = async (userId) => {
 export const getSpecificOrder = async (invoiceId) => {
     try {
 
-        const ongoingOrders = await userOrderModel.findById(invoiceId).populate({
+        const specificOrderDetails = await userOrderModel.findById(invoiceId).populate({
             path: 'orderDetailsId',
             populate: {
                 path: 'productId',
@@ -748,7 +747,7 @@ export const getSpecificOrder = async (invoiceId) => {
             }
         }).lean();
 
-        return replaceMongoIdInObject(ongoingOrders);
+        return replaceMongoIdInObject(specificOrderDetails);
     } catch (error) {
         console.error('Error fetching ongoing orders:', error);
         throw error;
@@ -763,11 +762,14 @@ export const createOrder = async (requestData) => {
 
         // UPDATE USER ADDRESS IF USER MODIFY THIS
         const userProvidedAddress = requestData?.userAddress;
+        let userCurrentAddress = {};
 
         if (userProvidedAddress?.id) {
             const updatedUserAddress = await updateUserAddress(userProvidedAddress?.id, userProvidedAddress);
+            userCurrentAddress = updatedUserAddress;
         } else {
             const addUserAddress = addToUserAddress(userProvidedAddress);
+            userCurrentAddress = addUserAddress;
         }
 
 
@@ -839,49 +841,19 @@ export const createOrder = async (requestData) => {
         }
 
 
+        // NECESSARY DATA FOR MAIL SENDING
+        const userCurrentOrderInvoiceId = (userOrders?.[0]?._id).toString();
+
+        const currentOrderDetails = await getSpecificOrder(userCurrentOrderInvoiceId);
 
 
-        // SEND EMAIL
-
-        // Find the user email by userId
-        const userData = await userModel.findById(requestData.userAddress.userId).lean();
-
-        const userEmail = userData.email;
-        const userName = userData.name;
-        const userCurrentOrderInvoice = (userOrders?.[0]?.orderDetailsId).toString();
-
-        const invoiceLink = `${process.env.WEBSITE_URL}/en/invoice/${userCurrentOrderInvoice}`;
-
-        const dictionary = await getDictionary('en');
-
-        console.log(userData, userName, userEmail, userCurrentOrderInvoice, invoiceLink, dictionary);
-
-        const emailBody = `<p>Hello ${userName},</p><p>Thank you for your recent order. You can view your invoice by clicking the following link:</p><p><a href="${invoiceLink}">View Invoice</a></p>`
-
-
-        // render(
-        //     <InvoiceForEmail
-        //         orderDetailsFromServer={userOrders}
-        //         invoiceLink={invoiceLink}
-        //         userName={userName}
-        //         userAddress={requestData.userAddress}
-        //     />
-        // );
-        console.log(emailBody);
-
-
-        if (userEmail && userCurrentOrderInvoice) {
-
-            const sentMail = await sendMail({
-                to: userEmail,
-                subject: 'Invoice for your recent order',
-                text: `Hello ${userName},\n\nThank you for your recent order. You can view your invoice by clicking the following link: ${invoiceLink}`,
-                html: emailBody
-            });
+        const returnObject = {
+            userId: requestData.userAddress.userId,
+            userOrders: currentOrderDetails,
+            userAddress: userCurrentAddress,
         };
 
-
-        return true;
+        return returnObject;
     } catch (error) {
         throw new Error('Error Creating Order: ' + error);
     }
@@ -913,6 +885,7 @@ export async function getUserByEmail(email) {
 
 export async function getUserAccountByUserId(userId) {
     try {
+
 
         const wishlistItems = await wishlistModel.find({ userId: userId }).lean();
 
@@ -1038,3 +1011,62 @@ export const updateUserInfo = async (userId, userProvidedData) => {
 //
 // ###################   USER INFORMATION RELATED DB QUERY ENDS  ###################
 //
+
+
+
+
+
+// Function to send order confirmation email
+export const sendOrderConfirmationEmail = async (userId, userOrders, userAddress) => {
+    try {
+
+        // Find the user email by userId
+        const userData = await userModel.findById(userId).lean();
+
+        const userEmail = userData.email;
+
+        const userName = userData.name;
+
+        const userCurrentOrderInvoice = userOrders?.id;
+
+        const invoiceLink = `${process.env.WEBSITE_URL}/en/invoice/${userCurrentOrderInvoice}`;
+
+        // const emailBody = `<p>Hello ${userName},</p><p>Thank you for your recent order. You can view your invoice by clicking the following link:</p><p><a href="${invoiceLink}">View Invoice</a></p>`;
+
+        const emailBody = render(<InvoiceForEmail
+            userName={userName}
+            userOrders={userOrders}
+            userAddress={userAddress}
+            invoiceLink={invoiceLink}
+        />
+        );
+
+        if (userEmail && userCurrentOrderInvoice) {
+            await sendMail({
+                to: userEmail,
+                subject: 'Invoice for your recent order',
+                text: `Hello ${userName},\n\nThank you for your recent order. You can view your invoice by clicking the following link: ${invoiceLink}`,
+                html: emailBody
+            });
+        };
+
+        return true;
+
+    } catch (error) {
+        console.error('Error sending order confirmation email:', error);
+        throw new Error('Error sending order confirmation email');
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+

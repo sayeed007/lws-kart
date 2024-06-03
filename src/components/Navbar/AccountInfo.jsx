@@ -24,22 +24,22 @@ const AccountInfo = ({ lang, dictionary, session }) => {
                     setModifiedAuth(response?.data);
 
                 } catch (error) {
-                    console.error('Fetch error:', error);
+                    console.error('User Session Information fetching error:', error);
                 }
             };
 
             fetchUserDetails();
+        } else {
+
         }
-        // else if (!session) {
-        //     setModifiedAuth(null);
-        // }
 
     }, [modifiedAuth, session]);
+
 
     return (
         <>
             <Link
-                href={modifiedAuth ? `/${lang}/account/${modifiedAuth?.sessionInfo?.user?.id}` : `/${lang}/login`}
+                href={modifiedAuth?.sessionInfo?.user?.id ? `/${lang}/account/${modifiedAuth?.sessionInfo?.user?.id}` : `/${lang}/login`}
                 className="flex justify-center items-center text-center text-gray-700 hover:text-primary transition relative  mx-3"
                 title="User Account"
             >

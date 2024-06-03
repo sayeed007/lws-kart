@@ -23,8 +23,6 @@ const ShopSidebar = ({ dictionary, allCategory, allSizes, allColors, filterObjec
 
                 />
 
-
-
                 {/* FILTER BY PRICE */}
                 <FilterByPrice
                     dictionary={dictionary}

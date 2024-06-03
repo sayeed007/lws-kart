@@ -7,7 +7,7 @@ export const GET = async () => {
     const session = await auth();
 
     // Fetch user account
-    const userInfo = await getUserAccountByUserId(session?.user?._id);
+    const userInfo = await getUserAccountByUserId(session?.user?._id ? session.user?._id : session?.user?.id);
 
     // Return user data
     return new Response(JSON.stringify({
@@ -27,7 +27,7 @@ export const GET = async () => {
       }
     });
   } catch (error) {
-    console.error('Error fetching user account by email:', error);
+    console.error('Error fetching user account by userId:', error);
     // Return generic error response
     return new Response("Internal Server Error", { status: 500 });
   }

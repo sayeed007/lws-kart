@@ -23,7 +23,7 @@ const UserAddressForPDF = ({ dictionary, userId }) => {
 
 
             } catch (error) {
-                console.error('Fetch error:', error);
+                console.error('User Address getting error:', error);
             }
         };
 

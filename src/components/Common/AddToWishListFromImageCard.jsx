@@ -56,7 +56,8 @@ const AddToWishListFromImageCard = ({ lang, productId }) => {
         } else {
             toast.info("You need to log in to add product in wishlist, redirecting you to log in.",
                 {
-                    onClose: () => Router.push(`/${lang}/login`)
+                    onClose: () => Router.push(`/${lang}/login`),
+                    autoClose: 1000
                 }
             );
         }

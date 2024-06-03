@@ -158,8 +158,6 @@ const ShopPage = async ({
                 </div>
 
 
-
-
                 {/* products */}
                 <div className="col-span-3">
                     <div className='mb-4 font-bold'>

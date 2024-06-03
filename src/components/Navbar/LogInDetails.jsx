@@ -17,9 +17,10 @@ const LogInDetails = ({ lang, dictionary, websiteURL }) => {
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
     const router = useRouter();
 
+
     return (
         <>
-            {(modifiedAuth?.sessionInfo?.user) ?
+            {(modifiedAuth?.sessionInfo?.user?.name) ?
                 <>
                     <div className='flex items-center'>
                         {(modifiedAuth?.sessionInfo?.user?.image) ?

@@ -1,4 +1,7 @@
+"use client";
+
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const FilterByCategory = ({ dictionary, filterObject, allCategory }) => {
 
@@ -12,6 +15,8 @@ const FilterByCategory = ({ dictionary, filterObject, allCategory }) => {
     const category = filterObject?.category?.length > 0 ? filterObject?.category?.split('|') : [];
 
     const handleCategoryChange = (checked, value) => {
+
+
         if (checked) {
             let currentCategory = [...category]; // Create a copy of the category array
             currentCategory.push(value);
@@ -33,6 +38,7 @@ const FilterByCategory = ({ dictionary, filterObject, allCategory }) => {
             }
         }
 
+        toast.info('Getting filtered data', { autoClose: 500 });
         replace(`${pathname}?${params.toString()}`);
     };
 

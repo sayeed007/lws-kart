@@ -24,9 +24,9 @@ const LoginPage = async ({ params: { lang } }) => {
     const dictionary = await getDictionary(lang);
     const callbackUrl = process.env.WEBSITE_URL;
 
-    if (session?.user?._id) {
+    if (session?.user?.id) {
         redirect(`/${lang}`);
-    }
+    };
 
     return (
         <>

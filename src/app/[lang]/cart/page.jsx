@@ -18,7 +18,6 @@ const CartPage = async ({ params: { lang } }) => {
     const dictionary = await getDictionary(lang);
 
 
-
     return (
         <>
 

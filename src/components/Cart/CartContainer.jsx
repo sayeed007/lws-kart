@@ -5,12 +5,15 @@ import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import EmptyBox from '../../../public/assets/images/EmptyBox.jpeg';
 import SingleCartProduct from './SingleCartProduct';
 
 const CartContainer = ({ dictionary, lang }) => {
+
+    const Router = useRouter();
 
     const { modifiedAuth, setModifiedAuth } = useModifiedAuth();
 
@@ -46,8 +49,14 @@ const CartContainer = ({ dictionary, lang }) => {
                 }
             };
 
-
             getUserCartItems();
+        } else {
+            toast.info('You need to login to see your cart list, redirecting you to log in.', {
+                onClose: () => {
+                    Router.replace(`/${lang}/login`);
+                    countRef.current = 'redirected';
+                }
+            });
         }
 
     }, [userId, refetchData]);

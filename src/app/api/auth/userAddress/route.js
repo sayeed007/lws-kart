@@ -17,7 +17,7 @@ export const POST = async (request) => {
 
 
   } catch (error) {
-    console.error("Error adding product to wishlist:", error);
+    console.error("Error adding user address:", error);
     return new Response(JSON.stringify({
       message: "Internal Server Error"
     }), {

@@ -35,7 +35,7 @@ const PersonalInfo = ({ lang, dictionary, userId }) => {
 
 
             } catch (error) {
-                console.error('Fetch error:', error);
+                console.error('User information get error:', error);
             }
         };
 

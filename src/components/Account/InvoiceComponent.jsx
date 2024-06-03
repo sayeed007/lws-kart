@@ -1,15 +1,14 @@
 "use client"
 
 
-
+import { NumberToWord } from "@/utils/NumberToWord";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import moment from "moment";
-import numberToWords from 'number-to-words';
+import Image from "next/image";
+import { useRef } from "react";
 import LWSLogo from '../../../public/assets/images/logo.svg';
 import UserAddressForPDF from './UserAddressForPDF';
-import { useRef } from "react";
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import Image from "next/image";
 
 
 
@@ -136,12 +135,6 @@ const InvoiceComponent = ({ orderDetailsFromServer = {}, dictionary }) => {
                     <div className="overflow-x-auto">
                         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                             <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
-                            // style={{
-                            //     backgroundImage: "url('../../../../../public/assets/images/logo.svg')",
-                            //     backgroundSize: 'cover',
-                            //     backgroundRepeat: 'no-repeat',
-                            //     backgroundPosition: 'center'
-                            // }}
                             >
 
                                 <table className="min-w-full divide-y divide-gray-200">
@@ -217,7 +210,8 @@ const InvoiceComponent = ({ orderDetailsFromServer = {}, dictionary }) => {
                                     {/* TOTAL IN WORD */}
                                     <div>
                                         Total in words: <span className="ml-6 font-bold">
-                                            {numberToWords?.toWords(orderDetails?.totalPrice ? orderDetails?.totalPrice : 0)}
+                                            {/* {numberToWords?.toWords(orderDetails?.totalPrice ? orderDetails?.totalPrice : 0)} */}
+                                            {NumberToWord(orderDetails?.totalPrice ? Number(orderDetails?.totalPrice) : 0)}
                                         </span>
                                     </div>
 

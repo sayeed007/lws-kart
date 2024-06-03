@@ -57,6 +57,8 @@ const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
 
                 } else {
                     toast.error(wishResponse?.data?.message);
+                    console.error('Remove from wishlist error:', error);
+
                 }
 
             } else {
@@ -66,7 +68,7 @@ const SingleWishEdProduct = ({ dictionary, wishedProduct }) => {
         } catch (error) {
             setLoading(false);
             toast.error(`Add to cart error: ${error}`);
-            console.error('Add to wishlist error:', error);
+            console.error('Add to cart error:', error);
         }
     };
 

@@ -4,6 +4,8 @@ import SocialLogins from '@/components/Auth/SocialLogins';
 import connectMongo from "@/service/connectMongo";
 import Link from 'next/link';
 import { getDictionary } from '../../../../public/dictionary/dictionaries';
+import { auth } from '../../../../auth';
+import { redirect } from 'next/navigation';
 
 
 export async function generateMetadata() {
@@ -17,8 +19,13 @@ export async function generateMetadata() {
 
 const RegisterPage = async ({ params: { lang } }) => {
     await connectMongo();
+    const session = await auth();
 
     const dictionary = await getDictionary(lang);
+
+    if (session?.user?.id) {
+        redirect(`/${lang}`);
+    };
 
 
     return (

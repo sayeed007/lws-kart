@@ -181,7 +181,7 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
 
 
             } catch (error) {
-                console.error('Fetch error:', error);
+                console.error('User Address getting error:', error);
             }
         };
 
@@ -221,16 +221,14 @@ const CheckoutForm = ({ dictionary, lang, previousData }) => {
             setLoading(false);
 
             toast.success('Your order is placed successfully.', {
-                onClose: () => { router.push(`/${lang}/account/${value?.userId}`) }
+                onClose: () => {
+                    setModifiedAuth({
+                        ...modifiedAuth,
+                        cartItems: []
+                    });
+                    router.push(`/${lang}/account/${value?.userId}`)
+                }
             });
-
-            if (response?.data) {
-                setModifiedAuth({
-                    ...modifiedAuth,
-                    cartItems: []
-                });
-            }
-
 
         } catch (error) {
             toast.success(`Add New Order failed: ${error}`);

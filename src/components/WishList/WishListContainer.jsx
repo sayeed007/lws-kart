@@ -2,13 +2,27 @@
 
 import { useModifiedAuth } from '@/hooks/useModifiedAuth';
 import SingleWishEdProduct from './SingleWishEdProduct';
+import { useRouter } from 'next/navigation';
 
 import Image from 'next/image';
 import EmptyBox from '../../../public/assets/images/EmptyBox.jpeg';
+import { toast } from 'react-toastify';
 
-const WishListContainer = ({ dictionary }) => {
+const WishListContainer = ({ dictionary, lang }) => {
+    const Router = useRouter();
 
     const { modifiedAuth } = useModifiedAuth();
+
+    const userId = modifiedAuth?.id ? modifiedAuth.id : modifiedAuth?.sessionInfo?.user?.id;
+
+    if (!userId) {
+        toast.info('You need to login to see your cart list, redirecting you to log in.', {
+            onClose: () => {
+                Router.replace(`/${lang}/login`);
+                countRef.current = 'redirected';
+            }
+        });
+    };
 
     return (
         <>

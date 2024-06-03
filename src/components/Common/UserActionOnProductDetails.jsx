@@ -58,7 +58,7 @@ const UserActionOnProductDetails = ({ productInfo, dictionary, lang }) => {
             } catch (error) {
                 setLoading(false);
                 toast.error(`Add to cart error: ${error}`);
-                console.error('Add to wishlist error:', error);
+                console.error('Add to cart error:', error);
             }
         } else {
             toast.info("You need to log in to add product in cart, redirecting you to log in.",

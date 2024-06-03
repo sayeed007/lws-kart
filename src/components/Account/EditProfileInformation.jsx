@@ -93,7 +93,7 @@ const EditProfileInformation = ({ lang, dictionary, previousData, modalVisible, 
             setModalVisible(false);
 
         } catch (error) {
-            console.error(error);
+            console.error("Error updating your information:", error);
             toast.error(`Error updating your information: ${error}`);
         }
     };

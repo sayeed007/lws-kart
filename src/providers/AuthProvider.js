@@ -23,7 +23,7 @@ export default function AuthProvider({ children }) {
                     setModifiedAuth(response?.data);
 
                 } catch (error) {
-                    console.error('Fetch error:', error);
+                    console.error('User Session information fetching error:', error);
                 }
             };
 

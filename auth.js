@@ -41,7 +41,7 @@ async function refreshAccessToken(token) {
             refreshToken: refreshedTokens?.refresh_token,
         }
     } catch (error) {
-        console.error(error);
+        console.error("Access token generation using refresh token failed.", error);
 
         return {
             ...token,

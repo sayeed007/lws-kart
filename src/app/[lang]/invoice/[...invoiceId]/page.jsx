@@ -28,7 +28,6 @@ const InvoicePage = async ({ params: { lang, invoiceId } }) => {
         redirect(`/${lang}`);
     };
 
-
     const orderDetails = await getSpecificOrder(invoiceId);
 
     return (

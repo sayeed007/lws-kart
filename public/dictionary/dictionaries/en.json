@@ -121,5 +121,7 @@
   "noItemInWishList": "No Item In WishList",
   "noItemInCart": "No Item In Cart",
   "orderTime": "Order Time",
-  "invoice": "Invoice"
+  "invoice": "Invoice",
+  "noNewProductArrived": "No Product has newly arrived.",
+  "noTrendingProduct": "No Trending Product."
 }

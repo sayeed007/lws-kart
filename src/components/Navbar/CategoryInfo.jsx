@@ -50,7 +50,6 @@ const CategoryInfo = ({ lang, dictionary, allCategory }) => {
                             </Link>
                         )
                     })
-
                     }
 
                 </div>
