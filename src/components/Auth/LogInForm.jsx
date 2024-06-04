@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import ErrorTooltip from '../Common/utilities/ErrorToltip';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const initialFormData = {
     email: '',
