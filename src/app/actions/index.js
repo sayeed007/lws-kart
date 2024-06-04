@@ -16,6 +16,18 @@ export async function login(formData) {
             return [true, 'Log in successful.'];
         }
     } catch (error) {
-        throw new Error(error);
+        console.error('Log in error:', error);
+
+        // Check for specific error properties and handle accordingly
+        if (error?.response && error?.response?.data && error?.response?.data?.error) {
+            console.error('API Error:', error?.response?.data?.error);
+            return [false, (error?.response?.data?.error)];
+        } else if (error?.cause?.err?.message) {
+            console.error('Nested Error:', error?.cause?.err?.message);
+            return [false, (error?.cause?.err?.message)];
+        } else {
+            // Handle other types of errors
+            return [false, ('An unexpected error occurred.')];
+        }
     }
 }

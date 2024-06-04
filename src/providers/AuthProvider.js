@@ -26,7 +26,7 @@ export default function AuthProvider({ children }) {
 
                     // IF USER REQUESTED ANYTHING ON LAST HIT
 
-                    const lastAction = JSON.parse(Cookies?.get('lastAction'));
+                    const lastAction = Cookies?.get('lastAction') ? JSON.parse(Cookies?.get('lastAction')) : {};
 
                     if (lastAction.action && response?.data?.sessionInfo?.user?.id) {
                         madeActionOnLastRequest(lastAction, response);

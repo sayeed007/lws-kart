@@ -89,6 +89,7 @@ export const {
             },
 
             async authorize(credentials) {
+
                 if (credentials == null) {
                     throw new Error('No credentials provided.');
                 }
@@ -102,7 +103,7 @@ export const {
 
                         const isMatch = await bcrypt.compare(
                             credentials.password,
-                            user.password
+                            (user?.password ? user?.password : '')
                         );
 
                         if (isMatch) {
@@ -111,7 +112,7 @@ export const {
                             throw new Error('Email or password mismatch.');
                         }
                     } else {
-                        throw new Error('User Not Found');
+                        throw new Error('User Not Found.');
                     }
                 } catch (error) {
                     throw new Error(error);
